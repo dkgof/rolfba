@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Rolf
  */
-public class Problem7 implements Problem {
+public class ProblemRolf7 implements Problem {
 
     private long result;
 
