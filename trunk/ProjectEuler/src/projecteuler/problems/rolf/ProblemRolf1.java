@@ -11,7 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class Problem1 implements Problem {
+public class ProblemRolf1 implements Problem {
 
     private int result;
 
