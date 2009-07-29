@@ -35,5 +35,7 @@ public class Main {
         pe.addProblem("rolf", new ProblemRolf6());
         pe.addProblem("rolf", new ProblemRolf7());
         pe.addProblem("rolf", new ProblemRolf8());
+
+        pe.runProblems();
     }
 }
