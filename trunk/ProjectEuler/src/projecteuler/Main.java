@@ -21,6 +21,7 @@ public class Main {
     public static void main(String[] args) {
         ProjectEuler pe = ProjectEuler.singleton();
 
+        /*
         pe.addProblem(new ProblemRolf1());
         pe.addProblem(new ProblemRolf2());
         pe.addProblem(new ProblemRolf3());
@@ -29,7 +30,10 @@ public class Main {
         pe.addProblem(new ProblemRolf6());
         pe.addProblem(new ProblemRolf7());
         pe.addProblem(new ProblemRolf8());
+        */
+        pe.addProblem(new ProblemRolf10());
 
+        /*
         pe.addProblem(new ProblemThor1());
         pe.addProblem(new ProblemThor2());
         pe.addProblem(new ProblemThor3());
@@ -39,7 +43,8 @@ public class Main {
         pe.addProblem(new ProblemThor7());
         pe.addProblem(new ProblemThor8());
         pe.addProblem(new ProblemThor9());
-        pe.addProblem(new ProblemThor10());
+        */
+        //pe.addProblem(new ProblemThor10());
 
         pe.runProblems();
     }
