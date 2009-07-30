@@ -25,16 +25,18 @@ public class ProblemRolf1 extends ProblemRolf {
     }
 
     public void run() {
-        //All numbers that are multiples of 3 below 1000
-        for(int i = 3; i<1000; i += 3) {
-            if( i%5 != 0) {
-                result += i;
-            }
-        }
+        int max = 1000 / 3;
+        int t;
 
-        //All numbers that are multiples of 5 below 1000
-        for(int i = 5; i<1000; i += 5) {
-            result += i;
+        //All numbers that are multiples of 3 below 1000
+        for(int i = 1; i<=max; i += 1) {
+            result += i*3;
+
+            t = i*5;
+
+            if( t<1000 && t%3 != 0 ) {
+                result += t;
+            }
         }
     }
 

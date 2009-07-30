@@ -34,11 +34,14 @@ public class ProjectEuler {
     }
 
     public void runProblems() {
+        Map<Integer,Map<String,Double>> times = new HashMap<Integer, Map<String, Double>>();
         for(int key : problems.keySet()) {
             List<Problem> probs = problems.get(key);
 
-            Solver.solve(probs);
+            times.put(key, Solver.solve(probs));
         }
+
+        System.out.println("\n");
     }
 
     public void addProblem(Problem p) {

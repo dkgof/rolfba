@@ -23,7 +23,7 @@ public class ProblemRolf2 extends ProblemRolf {
      */
 
     public void init() {
-        result = 2;
+        result = 0;
     }
 
     public void run() {
@@ -31,18 +31,14 @@ public class ProblemRolf2 extends ProblemRolf {
         int b = 2;
         int c;
 
-        while( true ) {
-            c = a;
-            a = b;
-            b = c+a;
-
-            if( b >= 4 * 1000000) {
-                break;
-            }
-
+        while( b <= 4000000 ) {
             if( b % 2 == 0 ) {
                 result += b;
             }
+
+            c = a;
+            a = b;
+            b = c+a;
         }
     }
 

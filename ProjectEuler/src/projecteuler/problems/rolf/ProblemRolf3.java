@@ -26,9 +26,11 @@ public class ProblemRolf3 extends ProblemRolf {
     public void run() {
         long number = 600851475143l;
 
-        long factor = 0;
-
-        for(long f = 2; f < number / 2; f++) {
+        while( number % 2 == 0 ) {
+            number /= 2;
+        }
+        
+        for(long f = 3; f < number / 2; f+=2) {
             while( number % f == 0 ) {
                 number /= f;
             }
