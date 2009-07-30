@@ -29,17 +29,12 @@ public class ProblemRolf3 extends ProblemRolf {
         long factor = 0;
 
         for(long f = 2; f < number / 2; f++) {
-            if( number % f == 0 ) {
-                factor = Math.max(factor, f);
+            while( number % f == 0 ) {
                 number /= f;
             }
         }
 
-        if( number != 1) {
-            factor = Math.max(factor, number);
-        }
-
-        result = factor;
+        result = number;
 
     }
 
