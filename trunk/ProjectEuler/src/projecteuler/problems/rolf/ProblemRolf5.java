@@ -25,20 +25,25 @@ public class ProblemRolf5 extends ProblemRolf {
         result = 0;
     }
 
+    int[] divisors = {20,19,18,17,16,15,14,13,12,11};
+
     public void run() {
         int number = 20;
-        boolean ok = true;
+        boolean found;
 
         while(true) {
             number += 20;
 
-            ok = true;
+            found = true;
 
-            for(int f = 3; f < 21; f++) {
-                ok = ok && (number % f == 0);
+            for(int f : divisors) {
+                if(number%f != 0) {
+                    found = false;
+                    break;
+                }
             }
 
-            if( ok ) {
+            if( found ) {
                 result = number;
                 break;
             }

@@ -26,7 +26,7 @@ public class ProblemRolf4 extends ProblemRolf {
 
     public void run() {
         for(int i = 100; i<1000; i++) {
-            for(int j = 100; j<1000; j++) {
+            for(int j = 100; j<i; j++) {
                 int t = i * j;
 
                 if(checkPalindrome(t)) {
@@ -51,13 +51,13 @@ public class ProblemRolf4 extends ProblemRolf {
             sub2 = palin.substring(palin.length()/2+1);
         }
 
-        String sub22 = "";
-
-        for(int i = sub2.length()-1; i>=0; i--) {
-            sub22 += sub2.charAt(i);
+        for(int i = 0; i<sub1.length();i++) {
+            if( sub1.charAt(i) != sub2.charAt(sub2.length()-i-1) ) {
+                return false;
+            }
         }
 
-        return sub22.equals(sub1);
+        return true;
     }
 
     public int problemNumber() {
