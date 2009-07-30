@@ -5,15 +5,9 @@
 
 package projecteuler;
 
-import projecteuler.problems.rolf.ProblemRolf2;
-import projecteuler.problems.rolf.ProblemRolf7;
-import projecteuler.problems.rolf.ProblemRolf5;
-import projecteuler.problems.rolf.ProblemRolf6;
-import projecteuler.problems.rolf.ProblemRolf1;
-import projecteuler.problems.rolf.ProblemRolf4;
-import projecteuler.problems.rolf.ProblemRolf8;
-import projecteuler.problems.rolf.ProblemRolf3;
+import projecteuler.problems.rolf.*;
 import projecteuler.framework.ProjectEuler;
+import projecteuler.problems.thor.*;
 
 /**
  *
@@ -35,6 +29,8 @@ public class Main {
         pe.addProblem(new ProblemRolf6());
         pe.addProblem(new ProblemRolf7());
         pe.addProblem(new ProblemRolf8());
+
+        pe.addProblem(new ProblemThor1());
 
         pe.runProblems();
     }
