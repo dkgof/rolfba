@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf4 implements Problem {
-
-    private long result;
+public class ProblemRolf4 extends ProblemRolf {
 
     /**
      * A palindromic number reads the same both ways. The largest palindrome
@@ -38,10 +36,6 @@ public class ProblemRolf4 implements Problem {
         }
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 4 ["+result+"]");
-    }
-
     private boolean checkPalindrome(int t) {
         String palin = ""+t;
 
@@ -59,5 +53,9 @@ public class ProblemRolf4 implements Problem {
         }
 
         return sub22.equals(sub1);
+    }
+
+    public int problemNumber() {
+        return 4;
     }
 }

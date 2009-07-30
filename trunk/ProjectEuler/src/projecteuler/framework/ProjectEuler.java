@@ -19,10 +19,10 @@ public class ProjectEuler {
 
     private static ProjectEuler singleton;
 
-    private Map<String, List<Problem>> problems;
+    private Map<Integer, List<Problem>> problems;
 
     private ProjectEuler() {
-        problems = new HashMap<String, List<Problem>>();
+        problems = new HashMap<Integer, List<Problem>>();
     }
 
     public static ProjectEuler singleton() {
@@ -34,19 +34,19 @@ public class ProjectEuler {
     }
 
     public void runProblems() {
-        for(String key : problems.keySet()) {
+        for(int key : problems.keySet()) {
             List<Problem> probs = problems.get(key);
 
-            Solver.solve(probs, key);
+            Solver.solve(probs);
         }
     }
 
-    public void addProblem(String identifier, Problem p) {
-        List<Problem> probs = problems.get(identifier);
+    public void addProblem(Problem p) {
+        List<Problem> probs = problems.get(p.problemNumber());
 
         if( probs == null ) {
             probs = new ArrayList<Problem>();
-            problems.put(identifier, probs);
+            problems.put(p.problemNumber(), probs);
         }
 
         probs.add(p);

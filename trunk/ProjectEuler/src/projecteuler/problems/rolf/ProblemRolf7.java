@@ -14,9 +14,7 @@ import java.util.List;
  *
  * @author Rolf
  */
-public class ProblemRolf7 implements Problem {
-
-    private long result;
+public class ProblemRolf7 extends ProblemRolf {
 
     /**
      * By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can
@@ -57,7 +55,7 @@ public class ProblemRolf7 implements Problem {
         }
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 7 ["+result+"]");
+    public int problemNumber() {
+        return 7;
     }
 }

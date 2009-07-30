@@ -14,8 +14,8 @@ import projecteuler.utils.Timer;
  * @author Rolf
  */
 public class Solver {
-    public static void solve(List<Problem> problems, String identifier) {
-        System.out.println("Starting problem solver ("+identifier+")...");
+    public static void solve(List<Problem> problems) {
+        System.out.println("\nStarting problem solver for problem "+problems.get(0).problemNumber()+"...");
 
         double slowest = 0;
         double fastest = Double.MAX_VALUE;
@@ -28,8 +28,7 @@ public class Solver {
             Timer unitTimer = Timer.startTimer();
             p.init();
             p.run();
-            p.printResult();
-            System.out.println("\tTime: "+unitTimer.printTime()+"\n");
+            System.out.println("\tProblem "+p.problemNumber()+" - "+p.getUser()+": ["+p.getResult()+"] - "+unitTimer.printTime());
 
             double unitTime = unitTimer.time();
 
@@ -37,7 +36,8 @@ public class Solver {
                 fastest = unitTime;
                 fastestProblem = p;
             }
-            else if(unitTime > slowest) {
+
+            if(unitTime > slowest) {
                 slowest = unitTime;
                 slowestProblem = p;
             }
@@ -46,9 +46,8 @@ public class Solver {
         double time = totalTimer.time();
         double avg = time / problems.size();
 
+        System.out.println("\n\tFastest: "+fastestProblem);
+        System.out.println("\tSlowest: "+slowestProblem);
         System.out.println("Done: "+totalTimer.printTime()+" Avg time / problem: "+String.format("%.4f", avg)+" seconds");
-
-        System.out.println("Fastest problem was: "+fastestProblem+" ("+String.format("%.4f", fastest)+") seconds");
-        System.out.println("Slowest problem was: "+slowestProblem+" ("+String.format("%.4f", slowest)+") seconds");
     }
 }

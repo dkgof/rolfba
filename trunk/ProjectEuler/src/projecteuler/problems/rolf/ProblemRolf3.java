@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf3 implements Problem {
-
-    private long result;
+public class ProblemRolf3 extends ProblemRolf {
 
     /**
      * The prime factors of 13195 are 5, 7, 13 and 29.
@@ -45,7 +43,7 @@ public class ProblemRolf3 implements Problem {
 
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 3 ["+result+"]");
+    public int problemNumber() {
+        return 3;
     }
 }
