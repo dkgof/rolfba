@@ -27,14 +27,14 @@ public class Main {
     public static void main(String[] args) {
         ProjectEuler pe = ProjectEuler.singleton();
 
-        pe.addProblem("rolf", new ProblemRolf1());
-        pe.addProblem("rolf", new ProblemRolf2());
-        pe.addProblem("rolf", new ProblemRolf3());
-        pe.addProblem("rolf", new ProblemRolf4());
-        pe.addProblem("rolf", new ProblemRolf5());
-        pe.addProblem("rolf", new ProblemRolf6());
-        pe.addProblem("rolf", new ProblemRolf7());
-        pe.addProblem("rolf", new ProblemRolf8());
+        pe.addProblem(new ProblemRolf1());
+        pe.addProblem(new ProblemRolf2());
+        pe.addProblem(new ProblemRolf3());
+        pe.addProblem(new ProblemRolf4());
+        pe.addProblem(new ProblemRolf5());
+        pe.addProblem(new ProblemRolf6());
+        pe.addProblem(new ProblemRolf7());
+        pe.addProblem(new ProblemRolf8());
 
         pe.runProblems();
     }

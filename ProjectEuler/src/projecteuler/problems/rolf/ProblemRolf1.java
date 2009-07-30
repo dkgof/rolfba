@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf1 implements Problem {
-
-    private int result;
+public class ProblemRolf1 extends ProblemRolf {
 
     /**
      * If we list all the natural numbers below 10 that are multiples of 3 or 5,
@@ -40,7 +38,7 @@ public class ProblemRolf1 implements Problem {
         }
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 1 ["+result+"]");
+    public int problemNumber() {
+        return 1;
     }
 }

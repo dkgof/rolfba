@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf5 implements Problem {
-
-    private long result;
+public class ProblemRolf5 extends ProblemRolf {
 
     /**
      * 2520 is the smallest number that can be divided by each of the numbers
@@ -47,7 +45,7 @@ public class ProblemRolf5 implements Problem {
         }
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 5 ["+result+"]");
+    public int problemNumber() {
+        return 5;
     }
 }

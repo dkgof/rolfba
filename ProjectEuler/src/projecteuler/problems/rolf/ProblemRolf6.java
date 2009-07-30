@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf6 implements Problem {
-
-    private long result;
+public class ProblemRolf6 extends ProblemRolf {
 
     /**
      * The sum of the squares of the first ten natural numbers is,
@@ -47,7 +45,7 @@ public class ProblemRolf6 implements Problem {
         result = Math.abs(squareofsum - sumofsquares);
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 6 ["+result+"]");
+    public int problemNumber() {
+        return 6;
     }
 }

@@ -11,9 +11,7 @@ import projecteuler.problems.*;
  *
  * @author Rolf
  */
-public class ProblemRolf8 implements Problem {
-
-    private long result;
+public class ProblemRolf8 extends ProblemRolf {
 
     /**
      * Find the greatest product of five consecutive digits in the 1000-digit number.
@@ -65,7 +63,7 @@ public class ProblemRolf8 implements Problem {
         }
     }
 
-    public void printResult() {
-        System.out.println("\tResult of problem 8 ["+result+"]");
+    public int problemNumber() {
+        return 8;
     }
 }

@@ -12,5 +12,8 @@ package projecteuler.problems;
 public interface Problem {
     public void init();
     public void run();
-    public void printResult();
+    public long getResult();
+    public int problemNumber();
+    public String getUser();
+    public void setResult(long r);
 }
