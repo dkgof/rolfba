@@ -32,7 +32,7 @@ public class Solver {
             Timer unitTimer = Timer.startTimer();
             p.init();
             p.run();
-            System.out.println("\tProblem "+p.problemNumber()+" - "+p.getUser()+": ["+p.getResult()+"] - "+unitTimer.printTime());
+            System.out.println("\tProblem "+p.problemNumber()+" - "+p.getUser()+": ["+p.getResult()+"] - "+unitTimer.time());
 
             avgSum += p.getResult();
 
