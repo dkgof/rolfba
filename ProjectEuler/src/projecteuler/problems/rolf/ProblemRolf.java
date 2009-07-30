@@ -3,7 +3,9 @@
  * and open the template in the editor.
  */
 
-package projecteuler.problems;
+package projecteuler.problems.rolf;
+
+import projecteuler.problems.*;
 
 /**
  *
