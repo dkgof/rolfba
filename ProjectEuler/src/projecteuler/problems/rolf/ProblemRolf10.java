@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Rolf
  */
-public class ProblemRolf7 extends ProblemRolf {
+public class ProblemRolf10 extends ProblemRolf {
 
     /**
      * By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can
@@ -24,40 +24,44 @@ public class ProblemRolf7 extends ProblemRolf {
      */
 
     public void init() {
-        result = 0;
+        result = 2;
     }
 
     public void run() {
         List<Integer> primes = new LinkedList<Integer>();
 
-        int max = 105000;
-        int count = 0;
-
         primes.add(2);
 
-        for(int i = 3; i <= max; i+=2) {
-            primes.add(i);
-        }
+        int testNumber = 3;
+        int halfTestNumber;
+        boolean isPrime;
 
-        while( count < 10001 ) {
-            count++;
+        while(testNumber <= 2000000) {
 
-            int p = primes.get(0);
+            isPrime = true;
 
-            result = p;
+            halfTestNumber = testNumber / 2;
 
-            Iterator<Integer> it = primes.iterator();
-            while(it.hasNext()) {
-                int i = it.next();
-
-                if( i % p == 0 ) {
-                    it.remove();
+            for(int f : primes) {
+                if( f > halfTestNumber) {
+                    break;
+                }
+                if(testNumber%f == 0) {
+                    isPrime = false;
+                    break;
                 }
             }
+
+            if(isPrime) {
+                primes.add(testNumber);
+                result += testNumber;
+            }
+
+            testNumber++;
         }
     }
 
     public int problemNumber() {
-        return 7;
+        return 10;
     }
 }
