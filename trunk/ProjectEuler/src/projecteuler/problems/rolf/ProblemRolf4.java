@@ -39,12 +39,17 @@ public class ProblemRolf4 extends ProblemRolf {
     private boolean checkPalindrome(int t) {
         String palin = ""+t;
 
-        if( palin.length() % 2 != 0) {
-            return false;
-        }
+        String sub1;
+        String sub2;
 
-        String sub1 = palin.substring(0, palin.length()/2);
-        String sub2 = palin.substring(palin.length()/2);
+        if( palin.length() % 2 == 0) {
+            sub1 = palin.substring(0, palin.length()/2);
+            sub2 = palin.substring(palin.length()/2);
+        }
+        else {
+            sub1 = palin.substring(0, palin.length()/2);
+            sub2 = palin.substring(palin.length()/2+1);
+        }
 
         String sub22 = "";
 
