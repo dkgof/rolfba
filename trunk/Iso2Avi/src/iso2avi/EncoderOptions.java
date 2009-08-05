@@ -243,7 +243,7 @@ public class EncoderOptions {
         return subtitles;
     }
 
-    private String x264Options = "keyint=2500:frameref=6:bframes=16:b_pyramid:weight_b:8x8dct:mixed_refs:crf=20:direct=auto:subme=5:trellis=1:no-fast-pskip";
+    private String x264Options = "keyint=2500:frameref=6:bframes=16:b_pyramid:weight_b:8x8dct:mixed_refs:crf=20:direct=auto:subme=6:trellis=1:no-fast-pskip";
 
     public String getEncodex264CmdPass1() {
         String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -nosound -o nul -ovc x264 -x264encopts "+x264Options+":pass=1:turbo=1:threads=auto" + " -vf "+cropValue;
