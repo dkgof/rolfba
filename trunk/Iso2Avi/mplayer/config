@@ -1,0 +1,18 @@
+## Mplayer for win32 Configuration
+## Build by Gianluigi Tiesi <sherpya@netfarm.it>
+
+## Frame drop
+framedrop=yes
+
+## It's better to leave this enabled, since win32 console sucks and it's slow as hell
+quiet=yes
+
+## Enter drive letter for your DVD Device
+dvd-device=h:
+
+## Uncomment this to have ac3 pass-through
+#afm=hwac3
+
+## You can use directx or opengl video output, default is directx
+#vo=directx
+#vo=gl2
