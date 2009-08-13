@@ -90,7 +90,7 @@ public class EncoderOptions {
     
     public void findCropValue(Process p, EncoderGui gui) {
         try {
-            String command = "mplayer -v -nosound -vo null -benchmark -vf cropdetect=:2 -dvd-device "+this.getInputFile()+" dvd://1";
+            String command = "mplayer -v -nosound -vo null -benchmark -vf cropdetect -dvd-device "+this.getInputFile()+" dvd://1";
             
             System.out.println("\tCommand: "+command);
 
@@ -139,17 +139,6 @@ public class EncoderOptions {
                         int i = line.indexOf("-vf ");
                         cropValue = line.substring(i+4).trim();
                         cropValue = cropValue.substring(0, cropValue.indexOf(")"));
-                        
-                        count++;
-                        
-                        int percent = (int) (count / 1000.0f * 100.0f);
-                        
-                        gui.getJProgress().setValue(percent);
-                        
-                        if(count >= 1100) {
-                            System.out.println("\tFound crop value: "+cropValue);
-                            break;
-                        }
                     }
                 }
                 else {
@@ -243,22 +232,22 @@ public class EncoderOptions {
         return subtitles;
     }
 
-    private String x264Options = "keyint=2500:me=umh:frameref=8:bframes=16:b_pyramid:weight_b:8x8dct:mixed_refs:crf=20:direct=auto:subme=7:trellis=1:no-fast-pskip";
+    private String x264Options = "keyint=2500:me=umh:frameref=6:bframes=16:b_pyramid:weight_b:crf=20:direct=auto:subme=7:trellis=1:no-fast-pskip:threads=auto";
 
     public String getEncodex264CmdPass1() {
-        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -nosound -o nul -ovc x264 -x264encopts "+x264Options+":pass=1:turbo=1:threads=auto" + " -vf "+cropValue;
+        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -nosound -o nul -ovc x264 -x264encopts "+x264Options+":pass=1:turbo=1" + " -vf "+cropValue;
                 
         return cmd;
     }
 
     public String getEncodex264CmdPass2() {
-        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -of lavf -oac mp3lame -lameopts fast:preset=standard -o "+this.getOutputFile()+" -ovc x264 -x264encopts "+x264Options+":pass=2:threads=auto" + " -vf "+cropValue;
+        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -of lavf -oac mp3lame -lameopts fast:preset=standard -o "+this.getOutputFile()+" -ovc x264 -x264encopts "+x264Options+":pass=2" + " -vf "+cropValue;
                 
         return cmd;
     }
 
     public String getEncodex264CmdSinglePass() {
-        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -of lavf -oac mp3lame -lameopts fast:preset=standard -o "+this.getOutputFile()+" -ovc x264 -x264encopts "+x264Options+":threads=auto" + " -vf "+cropValue;
+        String cmd = "mencoder -dvd-device "+this.getInputFile()+" dvd://1 -of lavf -oac mp3lame -lameopts fast:preset=standard -o "+this.getOutputFile()+" -ovc x264 -x264encopts "+x264Options+" -vf "+cropValue;
 
         return cmd;
     }
