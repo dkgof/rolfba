@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import wiiusej.WiiUseApiManager;
@@ -68,6 +67,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
             ActionListener exitListener = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
+                    deactivate();
                     WiiUseApiManager.definitiveShutdown();
                     System.exit(0);
                 }
@@ -88,7 +88,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
             robo = new Robot(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
             
-            Wiimote[] motes = WiiUseApiManager.getWiimotes(1, true);
+            Wiimote[] motes = WiiUseApiManager.getWiimotes(1, false);
             for (Wiimote mote : motes) {
                 System.out.println("Found mote: " + mote);
                 foundMote = mote;
@@ -112,6 +112,8 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                 System.out.println("Interupted!");
             }
 
+            deactivate();
+
             foundMote.setSensorBarBelowScreen();
             foundMote.setVirtualResolution(width, height);
             
@@ -128,105 +130,103 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onButtonsEvent(WiimoteButtonsEvent e) {
-        if( e.isButtonHomeJustPressed() ) {
-            if( windowsMode ) {
-                WiiUseApiManager.definitiveShutdown();
+        if( active ) {
+            if( e.isButtonHomeJustPressed() ) {
+                if( windowsMode ) {
+                    deactivate();
+                    WiiUseApiManager.definitiveShutdown();
+                }
+                else {
+                    robo.keyPress(KeyEvent.VK_WINDOWS);
+                    robo.keyPress(KeyEvent.VK_ALT);
+                    robo.keyPress(KeyEvent.VK_ENTER);
+
+                    robo.keyRelease(KeyEvent.VK_ENTER);
+                    robo.keyRelease(KeyEvent.VK_ALT);
+                    robo.keyRelease(KeyEvent.VK_WINDOWS);
+                }
             }
-            else {
-                robo.keyPress(KeyEvent.VK_WINDOWS);
-                robo.keyPress(KeyEvent.VK_ALT);
-                robo.keyPress(KeyEvent.VK_ENTER);
 
-                robo.keyRelease(KeyEvent.VK_ENTER);
-                robo.keyRelease(KeyEvent.VK_ALT);
-                robo.keyRelease(KeyEvent.VK_WINDOWS);
+            if( e.isButtonAJustReleased() ) {
+                robo.mouseRelease(InputEvent.BUTTON1_MASK);
             }
-        }
 
-        if( e.isButtonAJustReleased() ) {
-            robo.mouseRelease(InputEvent.BUTTON1_MASK);
-        }
-
-        if( e.isButtonAJustPressed() ) {
-            robo.mousePress(InputEvent.BUTTON1_MASK);
-            delay = System.currentTimeMillis() + BUTTON_PRESS_DELAY;
-        }
-
-        if( e.isButtonBJustPressed() ) {
-            if( windowsMode ) {
-                robo.mousePress(InputEvent.BUTTON3_MASK);
+            if( e.isButtonAJustPressed() ) {
+                robo.mousePress(InputEvent.BUTTON1_MASK);
                 delay = System.currentTimeMillis() + BUTTON_PRESS_DELAY;
             }
-            else {
-                robo.keyPress(KeyEvent.VK_BACK_SPACE);
-                robo.keyRelease(KeyEvent.VK_BACK_SPACE);
+
+            if( e.isButtonBJustPressed() ) {
+                if( windowsMode ) {
+                    robo.mousePress(InputEvent.BUTTON3_MASK);
+                    delay = System.currentTimeMillis() + BUTTON_PRESS_DELAY;
+                }
+                else {
+                    robo.keyPress(KeyEvent.VK_BACK_SPACE);
+                    robo.keyRelease(KeyEvent.VK_BACK_SPACE);
+                }
             }
-        }
-        if( e.isButtonBJustReleased() ) {
-            if( windowsMode ) {
-                robo.mouseRelease(InputEvent.BUTTON3_MASK);
+            if( e.isButtonBJustReleased() ) {
+                if( windowsMode ) {
+                    robo.mouseRelease(InputEvent.BUTTON3_MASK);
+                }
             }
-        }
 
-        if( e.isButtonPlusJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_PAGE_UP);
-            robo.keyRelease(KeyEvent.VK_PAGE_UP);
-        }
+            if( e.isButtonPlusJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_PAGE_UP);
+                robo.keyRelease(KeyEvent.VK_PAGE_UP);
+            }
 
-        if( e.isButtonMinusJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_PAGE_DOWN);
-            robo.keyRelease(KeyEvent.VK_PAGE_DOWN);
-        }
+            if( e.isButtonMinusJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_PAGE_DOWN);
+                robo.keyRelease(KeyEvent.VK_PAGE_DOWN);
+            }
 
-        if( e.isButtonUpJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_UP);
-            robo.keyRelease(KeyEvent.VK_UP);
-        }
+            if( e.isButtonUpJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_UP);
+                robo.keyRelease(KeyEvent.VK_UP);
+            }
 
-        if( e.isButtonDownJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_DOWN);
-            robo.keyRelease(KeyEvent.VK_DOWN);
-        }
+            if( e.isButtonDownJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_DOWN);
+                robo.keyRelease(KeyEvent.VK_DOWN);
+            }
 
-        if( e.isButtonLeftJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_LEFT);
-            robo.keyRelease(KeyEvent.VK_LEFT);
-        }
+            if( e.isButtonLeftJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_LEFT);
+                robo.keyRelease(KeyEvent.VK_LEFT);
+            }
 
-        if( e.isButtonRightJustPressed() ) {
-            robo.keyPress(KeyEvent.VK_RIGHT);
-            robo.keyRelease(KeyEvent.VK_RIGHT);
+            if( e.isButtonRightJustPressed() ) {
+                robo.keyPress(KeyEvent.VK_RIGHT);
+                robo.keyRelease(KeyEvent.VK_RIGHT);
+            }
+
+            if( e.isButtonTwoJustPressed() ) {
+                windowsMode = true;
+                foundMote.setLeds(true, false, false, true);
+            }
         }
 
         if( e.isButtonOneJustPressed() ) {
-            windowsMode = false;
-            foundMote.getStatus();
+            if( active ) {
+                windowsMode = false;
+                foundMote.getStatus();
+            }
+
             pressTime = System.currentTimeMillis();
         }
 
-        if( e.isButtonTwoJustPressed() ) {
-            windowsMode = true;
-            foundMote.setLeds(true, false, false, true);
-        }
-
         if( e.isButtonOneHeld() ) {
-            if( System.currentTimeMillis() > pressTime + 1000 ) {
+            if( System.currentTimeMillis() > pressTime + 1500 ) {
                 if( active ) {
-                    deactivate();
                     active = false;
-                    foundMote.setLeds(false, false, false, false);
+                    deactivate();
                 }
                 else {
-                    activate();
                     active = true;
-                    if( windowsMode ) {
-                        foundMote.setLeds(true, false, false, true);
-                    }
-                    else {
-                        foundMote.getStatus();
-                    }
+                    activate();
                 }
-
                 pressTime = System.currentTimeMillis();
             }
         }
@@ -332,6 +332,22 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     private void activate() {
         foundMote.activateIRTRacking();
         foundMote.activateMotionSensing();
+
+        if( windowsMode ) {
+            foundMote.setLeds(true, false, false, true);
+        }
+        else {
+            foundMote.getStatus();
+        }
+
+        foundMote.activateRumble();
+        try {
+            Thread.sleep(500);
+        }
+        catch(Exception ex) {
+
+        }
+        foundMote.deactivateRumble();
     }
 
     private void deactivate() {
@@ -340,6 +356,6 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         foundMote.deactivateMotionSensing();
         foundMote.deactivateRumble();
         foundMote.deactivateSmoothing();
-
+        foundMote.setLeds(false, false, false, false);
     }
 }
