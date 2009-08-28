@@ -42,7 +42,7 @@ import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
  */
 public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
 
-    public static final int BUTTON_PRESS_DELAY = 100;
+    public static final int BUTTON_PRESS_DELAY = 300;
 
     /**
      * @param args the command line arguments
@@ -135,6 +135,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                 if( windowsMode ) {
                     deactivate();
                     WiiUseApiManager.definitiveShutdown();
+                    System.exit(0);
                 }
                 else {
                     robo.keyPress(KeyEvent.VK_WINDOWS);
@@ -239,6 +240,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onMotionSensingEvent(MotionSensingEvent e) {
+        /*
         GForce force = e.getGforce();
 
         if( force.getX() > 3 ) {
@@ -258,6 +260,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
             robo.keyPress(KeyEvent.VK_DOWN);
             robo.keyRelease(KeyEvent.VK_DOWN);
         }
+         */
     }
 
     public void onExpansionEvent(ExpansionEvent e) {
@@ -327,7 +330,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
     private void activate() {
         foundMote.activateIRTRacking();
-        foundMote.activateMotionSensing();
+        //foundMote.activateMotionSensing();
 
         if( windowsMode ) {
             foundMote.setLeds(true, false, false, true);
