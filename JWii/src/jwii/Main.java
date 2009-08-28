@@ -1,0 +1,194 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package jwii;
+
+import java.awt.AWTException;
+import java.awt.GraphicsEnvironment;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import wiiusej.WiiUseApiManager;
+import wiiusej.Wiimote;
+import wiiusej.wiiusejevents.physicalevents.ExpansionEvent;
+import wiiusej.wiiusejevents.physicalevents.IREvent;
+import wiiusej.wiiusejevents.physicalevents.MotionSensingEvent;
+import wiiusej.wiiusejevents.physicalevents.WiimoteButtonsEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.ClassicControllerInsertedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.ClassicControllerRemovedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.DisconnectionEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.GuitarHeroInsertedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.GuitarHeroRemovedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.NunchukInsertedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.NunchukRemovedEvent;
+import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
+
+/**
+ *
+ * @author Rolf
+ */
+public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
+
+    public static final int BUTTON_PRESS_DELAY = 250;
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        new Main().start(2048, 1152);
+    }
+    
+    private Robot robo;
+    private Wiimote foundMote;
+    private long delay;
+
+    public void start(int width, int height) {
+        try {
+            System.out.println("Starting up...");
+
+            robo = new Robot(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
+            
+            Wiimote[] motes = WiiUseApiManager.getWiimotes(1, true);
+            for (Wiimote mote : motes) {
+                System.out.println("Found mote: " + mote);
+                foundMote = mote;
+                break;
+            }
+
+            delay = 0;
+
+            foundMote.addWiiMoteEventListeners(this);
+
+            try {
+                Thread.sleep(500);
+            }
+            catch(Exception e) {
+                System.out.println("Interupted!");
+            }
+
+            foundMote.deactivateContinuous();
+            foundMote.deactivateMotionSensing();
+            foundMote.deactivateRumble();
+            foundMote.deactivateIRTRacking();
+            foundMote.deactivateSmoothing();
+
+            foundMote.activateIRTRacking();
+            foundMote.setSensorBarBelowScreen();
+            foundMote.setVirtualResolution(width, height);
+
+            foundMote.setLeds(true, false, false, false);
+            
+            foundMote.getStatus();
+
+        } catch (AWTException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void onButtonsEvent(WiimoteButtonsEvent e) {
+        if( e.isButtonHomeJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_WINDOWS);
+            robo.keyPress(KeyEvent.VK_ALT);
+            robo.keyPress(KeyEvent.VK_ENTER);
+
+            robo.keyRelease(KeyEvent.VK_ENTER);
+            robo.keyRelease(KeyEvent.VK_ALT);
+            robo.keyRelease(KeyEvent.VK_WINDOWS);
+        }
+
+        if( e.isButtonAJustReleased() ) {
+            robo.mouseRelease(InputEvent.BUTTON1_MASK);
+        }
+
+        if( e.isButtonAJustPressed() ) {
+            robo.mousePress(InputEvent.BUTTON1_MASK);
+            delay = System.currentTimeMillis() + BUTTON_PRESS_DELAY;
+        }
+
+        if( e.isButtonBJustPressed() ) {
+            robo.mousePress(InputEvent.BUTTON3_MASK);
+            delay = System.currentTimeMillis() + BUTTON_PRESS_DELAY;
+        }
+        if( e.isButtonBJustReleased() ) {
+            robo.mouseRelease(InputEvent.BUTTON3_MASK);
+        }
+
+        if( e.isButtonPlusJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_PAGE_UP);
+            robo.keyRelease(KeyEvent.VK_PAGE_UP);
+        }
+
+        if( e.isButtonMinusJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_PAGE_DOWN);
+            robo.keyRelease(KeyEvent.VK_PAGE_DOWN);
+        }
+
+        if( e.isButtonUpJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_UP);
+            robo.keyRelease(KeyEvent.VK_UP);
+        }
+
+        if( e.isButtonDownJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_DOWN);
+            robo.keyRelease(KeyEvent.VK_DOWN);
+        }
+
+        if( e.isButtonLeftJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_LEFT);
+            robo.keyRelease(KeyEvent.VK_LEFT);
+        }
+
+        if( e.isButtonRightJustPressed() ) {
+            robo.keyPress(KeyEvent.VK_RIGHT);
+            robo.keyRelease(KeyEvent.VK_RIGHT);
+        }
+    }
+
+    public void onIrEvent(IREvent e) {
+
+        System.out.println(""+e);
+
+        boolean canSee = false;
+
+        canSee = (e.getIRPoints().length > 0);
+
+        if( canSee && System.currentTimeMillis() >= delay ) {
+            robo.mouseMove(e.getX(), e.getY());
+        }
+    }
+
+    public void onMotionSensingEvent(MotionSensingEvent e) {
+    }
+
+    public void onExpansionEvent(ExpansionEvent e) {
+    }
+
+    public void onStatusEvent(StatusEvent e) {
+        System.out.println(""+e);
+    }
+
+    public void onDisconnectionEvent(DisconnectionEvent e) {
+    }
+
+    public void onNunchukInsertedEvent(NunchukInsertedEvent e) {
+    }
+
+    public void onNunchukRemovedEvent(NunchukRemovedEvent e) {
+    }
+
+    public void onGuitarHeroInsertedEvent(GuitarHeroInsertedEvent e) {
+    }
+
+    public void onGuitarHeroRemovedEvent(GuitarHeroRemovedEvent e) {
+    }
+
+    public void onClassicControllerInsertedEvent(ClassicControllerInsertedEvent e) {
+    }
+
+    public void onClassicControllerRemovedEvent(ClassicControllerRemovedEvent e) {
+    }
+}
