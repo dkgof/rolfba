@@ -206,28 +206,21 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                 windowsMode = true;
                 foundMote.setLeds(true, false, false, true);
             }
-        }
 
-        if( e.isButtonOneJustPressed() ) {
-            if( active ) {
+            if( e.isButtonOneJustPressed() ) {
                 windowsMode = false;
                 foundMote.getStatus();
             }
-
-            pressTime = System.currentTimeMillis();
         }
 
-        if( e.isButtonOneHeld() ) {
-            if( System.currentTimeMillis() > pressTime + 1500 ) {
-                if( active ) {
-                    active = false;
-                    deactivate();
-                }
-                else {
-                    active = true;
-                    activate();
-                }
-                pressTime = System.currentTimeMillis();
+        if( e.isButtonOneHeld() && e.isButtonTwoHeld() ) {
+            if( active ) {
+                active = false;
+                deactivate();
+            }
+            else {
+                active = true;
+                activate();
             }
         }
     }
@@ -320,7 +313,10 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     public void run() {
         while(true) {
             try {
-                foundMote.getStatus();
+                if( !windowsMode && active ) {
+                    foundMote.getStatus();
+                }
+
                 Thread.sleep(5000);
             }
             catch(Exception e) {
