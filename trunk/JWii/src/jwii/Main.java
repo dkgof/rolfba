@@ -58,6 +58,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     private boolean windowsMode;
     private TrayIcon trayIcon;
     private boolean active;
+    private long pressTime;
 
     public void start(int width, int height) {
         try {
@@ -200,6 +201,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         if( e.isButtonOneJustPressed() ) {
             windowsMode = false;
             foundMote.getStatus();
+            pressTime = System.currentTimeMillis();
         }
 
         if( e.isButtonTwoJustPressed() ) {
@@ -208,15 +210,24 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         }
 
         if( e.isButtonOneHeld() ) {
-            if( active ) {
-                deactivate();
-                active = false;
-                foundMote.setLeds(false, false, false, false);
-            }
-            else {
-                activate();
-                active = true;
-                foundMote.getStatus();
+            if( System.currentTimeMillis() > pressTime + 1000 ) {
+                if( active ) {
+                    deactivate();
+                    active = false;
+                    foundMote.setLeds(false, false, false, false);
+                }
+                else {
+                    activate();
+                    active = true;
+                    if( windowsMode ) {
+                        foundMote.setLeds(true, false, false, true);
+                    }
+                    else {
+                        foundMote.getStatus();
+                    }
+                }
+
+                pressTime = System.currentTimeMillis();
             }
         }
     }
