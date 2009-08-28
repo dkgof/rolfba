@@ -33,13 +33,13 @@ import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
  */
 public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
 
-    public static final int BUTTON_PRESS_DELAY = 250;
+    public static final int BUTTON_PRESS_DELAY = 100;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new Main().start(2048, 1152);
+        new Main().start(1360, 768);
     }
     
     private Robot robo;
@@ -79,11 +79,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
             foundMote.activateIRTRacking();
             foundMote.setSensorBarBelowScreen();
             foundMote.setVirtualResolution(width, height);
-
-            foundMote.setLeds(true, false, false, false);
             
-            foundMote.getStatus();
-
         } catch (AWTException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -168,7 +164,27 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onStatusEvent(StatusEvent e) {
-        System.out.println(""+e);
+        float batteryLevel = e.getBatteryLevel() * 100;
+
+        boolean led1 = false;
+        boolean led2 = false;
+        boolean led3 = false;
+        boolean led4 = false;
+
+        if(batteryLevel >= 20) {
+            led1 = true;
+        }
+        if(batteryLevel >= 40) {
+            led2 = true;
+        }
+        if(batteryLevel >= 60) {
+            led3 = true;
+        }
+        if(batteryLevel >= 80) {
+            led4 = true;
+        }
+
+        foundMote.setLeds(led1, led2, led3, led4);
     }
 
     public void onDisconnectionEvent(DisconnectionEvent e) {
@@ -190,5 +206,17 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onClassicControllerRemovedEvent(ClassicControllerRemovedEvent e) {
+    }
+
+    public void run() {
+        while(true) {
+            try {
+                foundMote.getStatus();
+                Thread.sleep(5000);
+            }
+            catch(Exception e) {
+                
+            }
+        }
     }
 }
