@@ -213,7 +213,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
             }
         }
 
-        if( e.isButtonOneHeld() && e.isButtonTwoHeld() ) {
+        if( e.isButtonOnePressed() && e.isButtonTwoPressed() ) {
             if( active ) {
                 active = false;
                 deactivate();
@@ -241,20 +241,20 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     public void onMotionSensingEvent(MotionSensingEvent e) {
         GForce force = e.getGforce();
 
-        if( force.getX() > 2 ) {
+        if( force.getX() > 3 ) {
             robo.keyPress(KeyEvent.VK_LEFT);
             robo.keyRelease(KeyEvent.VK_LEFT);
         }
-        else if( force.getX() < -2 ) {
+        else if( force.getX() < -3 ) {
             robo.keyPress(KeyEvent.VK_RIGHT);
             robo.keyRelease(KeyEvent.VK_RIGHT);
         }
 
-        if( force.getY() > 2 ) {
+        if( force.getY() > 4 ) {
             robo.keyPress(KeyEvent.VK_UP);
             robo.keyRelease(KeyEvent.VK_UP);
         }
-        else if( force.getY() < -2 ) {
+        else if( force.getY() < 0 ) {
             robo.keyPress(KeyEvent.VK_DOWN);
             robo.keyRelease(KeyEvent.VK_DOWN);
         }
