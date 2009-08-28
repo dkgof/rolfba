@@ -57,6 +57,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     private long delay;
     private boolean windowsMode;
     private TrayIcon trayIcon;
+    private boolean active;
 
     public void start(int width, int height) {
         try {
@@ -110,15 +111,11 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                 System.out.println("Interupted!");
             }
 
-            foundMote.deactivateSmoothing();
-            foundMote.deactivateContinuous();
-            foundMote.deactivateMotionSensing();
-            foundMote.deactivateRumble();
-            foundMote.deactivateIRTRacking();
-
-            foundMote.activateIRTRacking();
             foundMote.setSensorBarBelowScreen();
             foundMote.setVirtualResolution(width, height);
+            
+            activate();
+            active = true;
 
             Thread powerThread = new Thread(this);
             powerThread.setDaemon(true);
@@ -201,13 +198,26 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         }
 
         if( e.isButtonOneJustPressed() ) {
+            windowsMode = false;
+            foundMote.getStatus();
+        }
+
+        if( e.isButtonTwoJustPressed() ) {
             windowsMode = true;
             foundMote.setLeds(true, false, false, true);
         }
 
-        if( e.isButtonTwoJustPressed() ) {
-            windowsMode = false;
-            foundMote.getStatus();
+        if( e.isButtonOneHeld() ) {
+            if( active ) {
+                deactivate();
+                active = false;
+                foundMote.setLeds(false, false, false, false);
+            }
+            else {
+                activate();
+                active = true;
+                foundMote.getStatus();
+            }
         }
     }
 
@@ -227,14 +237,30 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     public void onMotionSensingEvent(MotionSensingEvent e) {
         GForce force = e.getGforce();
 
-        System.out.println(""+force);
+        if( force.getX() > 2 ) {
+            robo.keyPress(KeyEvent.VK_LEFT);
+            robo.keyRelease(KeyEvent.VK_LEFT);
+        }
+        else if( force.getX() < -2 ) {
+            robo.keyPress(KeyEvent.VK_RIGHT);
+            robo.keyRelease(KeyEvent.VK_RIGHT);
+        }
+
+        if( force.getY() > 2 ) {
+            robo.keyPress(KeyEvent.VK_UP);
+            robo.keyRelease(KeyEvent.VK_UP);
+        }
+        else if( force.getY() < -2 ) {
+            robo.keyPress(KeyEvent.VK_DOWN);
+            robo.keyRelease(KeyEvent.VK_DOWN);
+        }
     }
 
     public void onExpansionEvent(ExpansionEvent e) {
     }
 
     public void onStatusEvent(StatusEvent e) {
-        if( !windowsMode ) {
+        if( !windowsMode && active ) {
             float batteryLevel = e.getBatteryLevel() * 100;
 
             boolean led1 = false;
@@ -290,5 +316,19 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                 
             }
         }
+    }
+
+    private void activate() {
+        foundMote.activateIRTRacking();
+        foundMote.activateMotionSensing();
+    }
+
+    private void deactivate() {
+        foundMote.deactivateContinuous();
+        foundMote.deactivateIRTRacking();
+        foundMote.deactivateMotionSensing();
+        foundMote.deactivateRumble();
+        foundMote.deactivateSmoothing();
+
     }
 }
