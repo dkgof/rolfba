@@ -42,7 +42,10 @@ import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
  */
 public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
 
-    public static final int BUTTON_PRESS_DELAY = 300;
+    private static final int BUTTON_PRESS_DELAY = 300;
+    private static final int MOTION_DELAY = 300;
+    private static final float idleThreshold = 0.1f;
+    private static final int IDLE_TIMER = 10000;
 
     /**
      * @param args the command line arguments
@@ -57,53 +60,21 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     private boolean windowsMode;
     private TrayIcon trayIcon;
     private boolean active;
-    private long pressTime;
+    private boolean idle;
 
     public void start(int width, int height) {
         try {
-            SystemTray tray = SystemTray.getSystemTray();
-
-            Image image = Toolkit.getDefaultToolkit().getImage("tray.png");
-
-            ActionListener exitListener = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    deactivate();
-                    WiiUseApiManager.definitiveShutdown();
-                    System.exit(0);
-                }
-            };
-
-            PopupMenu pop = new PopupMenu();
-            MenuItem defaultItem = new MenuItem("Exit");
-            defaultItem.addActionListener(exitListener);
-
-            pop.add(defaultItem);
-
-            trayIcon = new TrayIcon(image, "JWii", pop);
-            trayIcon.setImageAutoSize(true);
-
-            tray.add(trayIcon);
-
             System.out.println("Starting up...");
-
-            robo = new Robot(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
-            
-            Wiimote[] motes = WiiUseApiManager.getWiimotes(1, false);
-            for (Wiimote mote : motes) {
-                System.out.println("Found mote: " + mote);
-                foundMote = mote;
-                break;
-            }
 
             delay = 0;
             windowsMode = false;
+            idle = false;
 
-            if( foundMote == null ) {
-                WiiUseApiManager.definitiveShutdown();
-                System.exit(0);
-            }
+            setupTray();
 
-            foundMote.addWiiMoteEventListeners(this);
+            findMote();
+
+            robo = new Robot(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());
 
             try {
                 Thread.sleep(500);
@@ -130,7 +101,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onButtonsEvent(WiimoteButtonsEvent e) {
-        if( active ) {
+        if( active && !idle ) {
             if( e.isButtonHomeJustPressed() ) {
                 if( windowsMode ) {
                     deactivate();
@@ -174,13 +145,17 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
             }
 
             if( e.isButtonPlusJustPressed() ) {
-                robo.keyPress(KeyEvent.VK_PAGE_UP);
-                robo.keyRelease(KeyEvent.VK_PAGE_UP);
+                robo.keyPress(KeyEvent.VK_CONTROL);
+                robo.keyPress(KeyEvent.VK_F);
+                robo.keyRelease(KeyEvent.VK_F);
+                robo.keyRelease(KeyEvent.VK_CONTROL);
             }
 
             if( e.isButtonMinusJustPressed() ) {
-                robo.keyPress(KeyEvent.VK_PAGE_DOWN);
-                robo.keyRelease(KeyEvent.VK_PAGE_DOWN);
+                robo.keyPress(KeyEvent.VK_CONTROL);
+                robo.keyPress(KeyEvent.VK_B);
+                robo.keyRelease(KeyEvent.VK_B);
+                robo.keyRelease(KeyEvent.VK_CONTROL);
             }
 
             if( e.isButtonUpJustPressed() ) {
@@ -226,54 +201,76 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         }
     }
 
+    private boolean canSee;
+
     public void onIrEvent(IREvent e) {
-
-        System.out.println(""+e);
-
-        boolean canSee = false;
 
         canSee = (e.getIRPoints().length > 0);
 
         if( canSee && System.currentTimeMillis() >= delay ) {
+
             robo.mouseMove(e.getX(), e.getY());
         }
     }
 
+    private long motionDelay;
+
     public void onMotionSensingEvent(MotionSensingEvent e) {
-        /*
-        GForce force = e.getGforce();
+        if( System.currentTimeMillis() > motionDelay && !idle) {
+            GForce force = e.getGforce();
 
-        if( force.getX() > 3 ) {
-            robo.keyPress(KeyEvent.VK_LEFT);
-            robo.keyRelease(KeyEvent.VK_LEFT);
-        }
-        else if( force.getX() < -3 ) {
-            robo.keyPress(KeyEvent.VK_RIGHT);
-            robo.keyRelease(KeyEvent.VK_RIGHT);
+            float x = force.getX();
+            float z = force.getZ() - 1;
+
+            if( Math.abs(x) > Math.abs(z) ) {
+                if( Math.abs(x) > 3 ) {
+                    if( x < 0 ) {
+                        System.out.println("Right!");
+                        robo.keyPress(KeyEvent.VK_RIGHT);
+                        robo.keyRelease(KeyEvent.VK_RIGHT);
+                    }
+                    else {
+                        System.out.println("Left!");
+                        robo.keyPress(KeyEvent.VK_LEFT);
+                        robo.keyRelease(KeyEvent.VK_LEFT);
+                    }
+                    motionDelay = System.currentTimeMillis() + MOTION_DELAY;
+                }
+            }
+            else {
+                if( Math.abs(z) > 2 ) {
+                    if( z < 0 ) {
+                        System.out.println("Down!");
+                        robo.keyPress(KeyEvent.VK_DOWN);
+                        robo.keyRelease(KeyEvent.VK_DOWN);
+                    }
+                    else {
+                        System.out.println("Up!");
+                        robo.keyPress(KeyEvent.VK_UP);
+                        robo.keyRelease(KeyEvent.VK_UP);
+                    }
+                    motionDelay = System.currentTimeMillis() + MOTION_DELAY;
+                }
+            }
         }
 
-        if( force.getY() > 4 ) {
-            robo.keyPress(KeyEvent.VK_UP);
-            robo.keyRelease(KeyEvent.VK_UP);
-        }
-        else if( force.getY() < 0 ) {
-            robo.keyPress(KeyEvent.VK_DOWN);
-            robo.keyRelease(KeyEvent.VK_DOWN);
-        }
-         */
+        pauseMoteIfIdle(e.getGforce());
     }
 
     public void onExpansionEvent(ExpansionEvent e) {
     }
 
+    private boolean led1, led2, led3, led4;
+    private float batteryLevel;
+
     public void onStatusEvent(StatusEvent e) {
         if( !windowsMode && active ) {
-            float batteryLevel = e.getBatteryLevel() * 100;
+            batteryLevel = e.getBatteryLevel() * 100;
 
-            boolean led1 = false;
-            boolean led2 = false;
-            boolean led3 = false;
-            boolean led4 = false;
+            led1 = false;
+            led2 = false;
+            led3 = false;
+            led4 = false;
 
             if(batteryLevel >= 20) {
                 led1 = true;
@@ -314,13 +311,20 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void run() {
+        boolean blink = true;
+
         while(true) {
             try {
-                if( !windowsMode && active ) {
+                if( !windowsMode && active && !idle) {
                     foundMote.getStatus();
                 }
 
-                Thread.sleep(5000);
+                if( idle ) {
+                    foundMote.setLeds(false, false, false, blink);
+                    blink = !blink;
+                }
+
+                Thread.sleep(2000);
             }
             catch(Exception e) {
                 
@@ -330,7 +334,8 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
     private void activate() {
         foundMote.activateIRTRacking();
-        //foundMote.activateMotionSensing();
+        foundMote.activateMotionSensing();
+        foundMote.activateSmoothing();
 
         if( windowsMode ) {
             foundMote.setLeds(true, false, false, true);
@@ -356,5 +361,75 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         foundMote.deactivateRumble();
         foundMote.deactivateSmoothing();
         foundMote.setLeds(false, false, false, false);
+    }
+
+    private long lastMovement = Long.MAX_VALUE;
+
+    private void pauseMoteIfIdle(GForce gforce) {
+        float x = Math.abs(gforce.getX());
+        float y = Math.abs(gforce.getY());
+        float z = Math.abs(gforce.getZ() - 1);
+
+        long now = System.currentTimeMillis();
+
+        if( x > idleThreshold || y > idleThreshold || z > idleThreshold ) {
+            lastMovement = now;
+        }
+
+        if(now > lastMovement + IDLE_TIMER) {
+            if( !idle ) {
+                idle = true;
+                foundMote.deactivateContinuous();
+                foundMote.deactivateIRTRacking();
+                foundMote.deactivateRumble();
+                foundMote.setLeds(false, false, false, false);
+            }
+        }
+        else {
+            if( idle ) {
+                idle = false;
+                foundMote.activateIRTRacking();
+            }
+        }
+    }
+
+    private void setupTray() {
+        try {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage("tray.png");
+            ActionListener exitListener = new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    deactivate();
+                    WiiUseApiManager.definitiveShutdown();
+                    System.exit(0);
+                }
+            };
+            PopupMenu pop = new PopupMenu();
+            MenuItem defaultItem = new MenuItem("Exit");
+            defaultItem.addActionListener(exitListener);
+            pop.add(defaultItem);
+            trayIcon = new TrayIcon(image, "JWii", pop);
+            trayIcon.setImageAutoSize(true);
+            tray.add(trayIcon);
+        } catch (AWTException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void findMote() {
+        Wiimote[] motes = WiiUseApiManager.getWiimotes(1, false);
+        for (Wiimote mote : motes) {
+            System.out.println("Found mote: " + mote);
+            foundMote = mote;
+            break;
+        }
+
+        if( foundMote == null ) {
+            WiiUseApiManager.definitiveShutdown();
+            System.exit(0);
+        }
+
+        foundMote.addWiiMoteEventListeners(this);
     }
 }
