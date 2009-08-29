@@ -44,8 +44,8 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
     private static final int BUTTON_PRESS_DELAY = 300;
     private static final int MOTION_DELAY = 300;
-    private static final float idleThreshold = 0.05f;
-    private static final int IDLE_TIMER = 2000;
+    private static final float idleThreshold = 0.6f;
+    private static final int IDLE_TIMER = 10000;
 
     /**
      * @param args the command line arguments
@@ -101,7 +101,9 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onButtonsEvent(WiimoteButtonsEvent e) {
-        if( active && !idle ) {
+        lastMovement = System.currentTimeMillis();
+
+        if( active ) {
             if( e.isButtonHomeJustPressed() ) {
                 if( windowsMode ) {
                     deactivate();
@@ -213,7 +215,7 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         }
     }
 
-    private long motionDelay;
+    //private long motionDelay;
 
     public void onMotionSensingEvent(MotionSensingEvent e) {
         /*
