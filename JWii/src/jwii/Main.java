@@ -43,9 +43,9 @@ import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
 public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
 
     private static final int BUTTON_PRESS_DELAY = 300;
-    private static final int MOTION_DELAY = 300;
-    private static final float idleThreshold = 0.1f;
+    private static final float idleThreshold = 0.5f;
     private static final int IDLE_TIMER = 1000 * 60 * 1;
+    //private static final int MOTION_DELAY = 300;
 
     /**
      * @param args the command line arguments
@@ -303,6 +303,10 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     }
 
     public void onDisconnectionEvent(DisconnectionEvent e) {
+        deactivate();
+        WiiUseApiManager.definitiveShutdown();
+        try { Thread.sleep(1000); } catch(Exception ex){ }
+        System.exit(0);
     }
 
     public void onNunchukInsertedEvent(NunchukInsertedEvent e) {
