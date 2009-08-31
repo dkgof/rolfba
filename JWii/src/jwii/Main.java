@@ -208,9 +208,8 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
     private int avgX = 0;
     private int avgY = 0;
-    private int count = 0;
 
-    private static final int SMOOTH_VALUE = 3;
+    private static final double SMOOTH_VALUE = 0.2;
 
     public void onIrEvent(IREvent e) {
 
@@ -218,15 +217,8 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
 
         if( canSee && System.currentTimeMillis() >= delay ) {
 
-            if( count < SMOOTH_VALUE ) {
-                count++;
-            }
-
-            avgX += e.getX();
-            avgY += e.getY();
-
-            avgX /= count;
-            avgY /= count;
+            avgX = (int)Math.round(avgX * (1-SMOOTH_VALUE) + e.getX()*SMOOTH_VALUE);
+            avgY = (int)Math.round(avgY * (1-SMOOTH_VALUE) + e.getY()*SMOOTH_VALUE);
 
             robo.mouseMove(avgX, avgY);
         }
