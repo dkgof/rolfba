@@ -341,12 +341,27 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
                     blink = !blink;
                 }
 
+                sleepDetect();
+
                 Thread.sleep(2000);
             }
             catch(Exception e) {
                 
             }
         }
+    }
+
+    private static final int SLEEP_DETECT_TIMER = 1000 * 60; // 1min
+    private long lastCheck = Long.MAX_VALUE;
+
+    private void sleepDetect() {
+        if(System.currentTimeMillis() > lastCheck + SLEEP_DETECT_TIMER) {
+            WiiUseApiManager.definitiveShutdown();
+            try { Thread.sleep(1000); } catch(Exception e) {}
+            System.exit(0);
+        }
+
+        lastCheck = System.currentTimeMillis();
     }
 
     private void activate() {
