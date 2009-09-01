@@ -43,7 +43,7 @@ import wiiusej.wiiusejevents.wiiuseapievents.StatusEvent;
 public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnable {
 
     private static final int BUTTON_PRESS_DELAY = 300;
-    private static final float idleThreshold = 0.5f;
+    private static final float idleThreshold = 0.2f;
     private static final int IDLE_TIMER = 1000 * 60 * 1;
     //private static final int MOTION_DELAY = 300;
 
@@ -355,13 +355,13 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
     private long lastCheck = Long.MAX_VALUE;
 
     private void sleepDetect() {
-        if(System.currentTimeMillis() > lastCheck + SLEEP_DETECT_TIMER) {
+        if(System.currentTimeMillis() > lastCheck) {
             WiiUseApiManager.definitiveShutdown();
             try { Thread.sleep(1000); } catch(Exception e) {}
             System.exit(0);
         }
 
-        lastCheck = System.currentTimeMillis();
+        lastCheck = System.currentTimeMillis() + SLEEP_DETECT_TIMER;
     }
 
     private void activate() {
@@ -405,10 +405,10 @@ public class Main implements wiiusej.wiiusejevents.utils.WiimoteListener, Runnab
         long now = System.currentTimeMillis();
 
         if( x > idleThreshold || y > idleThreshold || z > idleThreshold ) {
-            lastMovement = now;
+            lastMovement = now + IDLE_TIMER;
         }
 
-        if(now > lastMovement + IDLE_TIMER) {
+        if(now > lastMovement) {
             if( !idle ) {
                 idle = true;
                 foundMote.deactivateContinuous();
