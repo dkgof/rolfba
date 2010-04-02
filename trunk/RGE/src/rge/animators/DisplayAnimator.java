@@ -1,12 +1,9 @@
 
 package rge.animators;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
-import rge.Application;
+import rge.RGEApplication;
 import rge.RGEDisplay;
 
 /**
@@ -14,7 +11,7 @@ import rge.RGEDisplay;
  * @author Rolf
  */
 public class DisplayAnimator extends Animator {
-    private Application app;
+    private RGEApplication app;
 
     private boolean needToCreateDisplay;
     private final int width;
@@ -22,7 +19,7 @@ public class DisplayAnimator extends Animator {
     private final int colorDepth;
     private final boolean fullscreen;
 
-    public DisplayAnimator(Application app, int width, int height, int colorDepth, boolean fullscreen, double fps) {
+    public DisplayAnimator(RGEApplication app, int width, int height, int colorDepth, boolean fullscreen, double fps) {
         super(fps);
         this.app = app;
         needToCreateDisplay = true;

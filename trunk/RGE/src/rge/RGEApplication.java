@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
  * 
  * @author Rolf
  */
-public class Application {
+public class RGEApplication {
     //The scenes of this application
     private List<Scene> scenes;
 
@@ -19,7 +19,7 @@ public class Application {
 
     private boolean firstFrame;
 
-    public Application() {
+    public RGEApplication() {
         scenes = new ArrayList<Scene>();
         firstFrame = true;
     }
