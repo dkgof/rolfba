@@ -3,6 +3,8 @@ package rge.nodes;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.opengl.GL11;
+import rge.math.AxisAngle;
+import rge.math.Quaternion;
 import rge.math.Vector3;
 
 /**
@@ -20,10 +22,14 @@ public abstract class Node {
     //The current scale of this node
     private Vector3 scale;
 
+    //The current rotation of this node
+    private Quaternion rotation;
+
     public Node() {
         children = new ArrayList<Node>();
         position = new Vector3(0,0,0);
         scale = new Vector3(1,1,1);
+        rotation = Quaternion.createFromAxisAngle(0, Vector3.UnitX);
     }
 
     /**
@@ -35,6 +41,10 @@ public abstract class Node {
         GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
 
         GL11.glScaled(getScale().getX(), getScale().getY(), getScale().getZ());
+
+        AxisAngle aa = getRotation().toAxisAngle();
+
+        GL11.glRotatef((float)aa.getAngle(), (float)aa.getAxis().getX(), (float)aa.getAxis().getY(), (float)aa.getAxis().getZ());
 
         for(Node n : getChildren()) {
             n.recursiveRender();
@@ -137,5 +147,19 @@ public abstract class Node {
      */
     public void setScale(Vector3 scale) {
         this.scale = scale;
+    }
+
+    /**
+     * @return the rotation
+     */
+    public Quaternion getRotation() {
+        return rotation;
+    }
+
+    /**
+     * @param rotation the rotation to set
+     */
+    public void setRotation(Quaternion rotation) {
+        this.rotation = rotation;
     }
 }
