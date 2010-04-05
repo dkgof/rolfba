@@ -6,8 +6,6 @@ import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.demos.opengl.GLDebugDrawer;
-import com.bulletphysics.demos.opengl.LWJGL;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -17,8 +15,6 @@ import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import javax.vecmath.Vector3f;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 
 /**
  *
@@ -46,7 +42,7 @@ public class PhysicsCore {
     }
 
     public void step(double deltaTime) {
-        dynamicsWorld.stepSimulation((float) deltaTime);
+        dynamicsWorld.stepSimulation((float) deltaTime, 5);
     }
 
     public static synchronized PhysicsCore singleton() {

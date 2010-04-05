@@ -48,7 +48,7 @@ public class RGEDisplay {
                 Display.setDisplayMode(chosenMode);
             }
             Display.setTitle("RGE Window");
-            Display.create(new PixelFormat(32, 8, 24, 8, 4));
+            Display.create();
         }
         catch(LWJGLException ex) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Unable to create display", ex);
