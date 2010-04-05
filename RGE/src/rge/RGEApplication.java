@@ -7,7 +7,8 @@ import java.util.logging.Logger;
 import org.lwjgl.opengl.GL11;
 
 /**
- * 
+ * RGEApplication is the top most part of the engine. Scenes are added to the app
+ * and can then be rendered.
  * @author Rolf
  */
 public class RGEApplication {
