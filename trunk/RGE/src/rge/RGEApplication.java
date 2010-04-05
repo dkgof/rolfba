@@ -58,5 +58,7 @@ public class RGEApplication {
         currentScene = scenes.get(0);
 
         GL11.glClearColor(0,0,0,0);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
     }
 }
