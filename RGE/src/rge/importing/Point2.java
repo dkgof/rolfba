@@ -10,8 +10,8 @@ public class Point2 {
     private double t;
 
     public Point2(double s, double t) {
-        this.t = t;
         this.s = s;
+        this.t = t;
     }
 
     /**

@@ -64,6 +64,10 @@ public class ModelData {
         return normals.get(normalIndex-1);
     }
 
+    public Point2 getTextureCoords(int tpIndex) {
+        return textureCoords.get(tpIndex-1);
+    }
+
     String getStats() {
         Set<Integer> vertexSet = new HashSet<Integer>();
         Set<Integer> normalSet = new HashSet<Integer>();
@@ -82,9 +86,5 @@ public class ModelData {
         return "* Vertices: "+vertexCount+"\n" +
         "* Normals:  "+normalCount+"\n" +
         "* Faces:    "+faceCount+"\n";
-    }
-
-    public Point2 getTextureCoords(int tpIndex) {
-        return textureCoords.get(tpIndex-1);
     }
 }

@@ -29,4 +29,8 @@ public class Face {
     public boolean isTriangle() {
         return points.size() == 3;
     }
+
+    public boolean isQuad() {
+        return points.size() == 4;
+    }
 }

@@ -3,15 +3,19 @@ package rge.nodes;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import rge.math.AxisAngle;
 import rge.math.Quaternion;
 import rge.math.Vector3;
+import rge.texture.Texture;
 
 /**
  * A node is the basic component of the scene graph
  * @author Rolf
  */
 public abstract class Node {
+
+    public static int[] TEXTURE_UNIT = {GL13.GL_TEXTURE0, GL13.GL_TEXTURE1, GL13.GL_TEXTURE2, GL13.GL_TEXTURE3, GL13.GL_TEXTURE4, GL13.GL_TEXTURE5, GL13.GL_TEXTURE6, GL13.GL_TEXTURE7, GL13.GL_TEXTURE8, GL13.GL_TEXTURE9};
 
     //The children of this node in the scene graph
     private List<Node> children;
@@ -25,11 +29,14 @@ public abstract class Node {
     //The current rotation of this node
     private Quaternion rotation;
 
+    private List<Texture> textures;
+
     public Node() {
         children = new ArrayList<Node>();
         position = new Vector3(0,0,0);
         scale = new Vector3(1,1,1);
         rotation = Quaternion.createFromAxisAngle(0, Vector3.UnitX);
+        textures = new ArrayList<Texture>();
     }
 
     /**
@@ -50,7 +57,10 @@ public abstract class Node {
             n.recursiveRender();
         }
 
+        GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+        activateTextures();
         this.render();
+        GL11.glPopAttrib();
 
         GL11.glPopMatrix();
     }
@@ -161,5 +171,33 @@ public abstract class Node {
      */
     public void setRotation(Quaternion rotation) {
         this.rotation = rotation;
+    }
+
+    private void activateTextures() {
+        int textureUnitIndex = 0;
+        for(Texture tex : textures) {
+            GL13.glActiveTexture(TEXTURE_UNIT[textureUnitIndex]);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            tex.bind();
+            textureUnitIndex++;
+        }
+    }
+
+    /**
+     * Set the texture of this node to the given texture,
+     * this clears all other textures from this node
+     * @param tex the texture to set
+     */
+    public void setTexture(Texture tex) {
+        textures.clear();
+        textures.add(tex);
+    }
+
+    /**
+     * Add another texture to this node
+     * @param tex the texture to add
+     */
+    public void addTexture(Texture tex) {
+        textures.add(tex);
     }
 }
