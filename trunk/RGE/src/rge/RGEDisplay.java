@@ -8,7 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 /**
- *
+ * RGEDisplay controls the opengl display
  * @author Rolf
  */
 public class RGEDisplay {
