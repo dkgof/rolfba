@@ -1,5 +1,7 @@
 package rge.texture;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -26,7 +28,7 @@ public class TextureIO {
      * @return Loaded texture or null
      */
     public static Texture loadTexture(String textureFile) {
-        return TextureIO.loadTexture(textureFile, false);
+        return TextureIO.loadTexture(textureFile, true);
     }
 
     /**
@@ -44,7 +46,13 @@ public class TextureIO {
             BufferedImage inputImage = ImageIO.read(new File(textureFile));
 
             BufferedImage convertedImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-            convertedImage.getGraphics().drawImage(inputImage, 0, 0, null);
+
+            if(flip) {
+                convertedImage.getGraphics().drawImage(flipY(inputImage), 0, 0, null);
+            }
+            else {
+                convertedImage.getGraphics().drawImage(inputImage, 0, 0, null);
+            }
 
             DataBufferByte pixelDataBuffer = (DataBufferByte) convertedImage.getRaster().getDataBuffer();
             ByteBuffer pixelData = BufferUtils.createByteBuffer(pixelDataBuffer.getSize());
@@ -72,9 +80,10 @@ public class TextureIO {
             int textureId = textureIds.get(0);
 
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+            GL11.glTexParameteri (GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-
             GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL13.GL_COMPRESSED_RGBA, convertedImage.getWidth(), convertedImage.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixelData);
 
             texture = new DynamicTexture(textureId);
@@ -98,5 +107,16 @@ public class TextureIO {
             pow *= 2;
         }
         return pow;
+    }
+
+    /**
+     * Flip the given BufferedImage vertically.
+     * Return the new flipped BufferedImage.
+     */
+    public static BufferedImage flipY(BufferedImage bsrc) {
+        AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+        tx.translate(0, -bsrc.getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        return op.filter(bsrc, null);
     }
 }
