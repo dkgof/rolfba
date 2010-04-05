@@ -38,7 +38,8 @@ public class ObjImporter implements ModelImporter {
         Pattern vertexPattern = Pattern.compile("v (.+?) (.+?) (.+?)");
         Pattern normalPattern = Pattern.compile("vn (.+?) (.+?) (.+?)");
         Pattern textureCoordPattern = Pattern.compile("vt (.+?) (.+?)");
-        Pattern facePattern = Pattern.compile("f (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*)");
+        Pattern faceTrianglePattern = Pattern.compile("f (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*)");
+        Pattern faceQuadPattern = Pattern.compile("f (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*) (\\d*)/(\\d*)/(\\d*)");
         Pattern modelPattern = Pattern.compile("o (.+)");
 
         boolean insideCorrectModel = false;
@@ -53,6 +54,10 @@ public class ObjImporter implements ModelImporter {
             BufferedReader reader = new BufferedReader(new FileReader(objFile));
 
             String line = reader.readLine();
+
+            int v = -1;
+            int n = -1;
+            int tc = -1;
 
             while(line != null) {
 
@@ -85,32 +90,117 @@ public class ObjImporter implements ModelImporter {
                 }
 
                 if(insideCorrectModel) {
-                    Matcher faceMatcher = facePattern.matcher(line);
+                    Matcher faceMatcher = faceTrianglePattern.matcher(line);
                     if(faceMatcher.matches()) {
                         Face f = new Face();
 
-                        int v1 = Integer.parseInt(faceMatcher.group(1));
-                        int t1 = Integer.parseInt(faceMatcher.group(2));
-                        int n1 = Integer.parseInt(faceMatcher.group(3));
-                        FacePoint fp = new FacePoint(v1,n1);
-                        fp.addTextureCoord(t1);
+                        v = Integer.parseInt(faceMatcher.group(1));
+                        try {
+                            tc = Integer.parseInt(faceMatcher.group(2));
+                        }
+                        catch(Exception e) {
+                            tc = -1;
+                        }
+                        n = Integer.parseInt(faceMatcher.group(3));
+                        FacePoint fp = new FacePoint(v,n);
+                        if(tc != -1) {
+                            fp.addTextureCoord(tc);
+                        }
                         f.addFacePoint(fp);
 
-                        int v2 = Integer.parseInt(faceMatcher.group(4));
-                        int t2 = Integer.parseInt(faceMatcher.group(5));
-                        int n2 = Integer.parseInt(faceMatcher.group(6));
-                        fp = new FacePoint(v2,n2);
-                        fp.addTextureCoord(t2);
+                        v = Integer.parseInt(faceMatcher.group(4));
+                        try {
+                            tc = Integer.parseInt(faceMatcher.group(5));
+                        }
+                        catch(Exception e) {
+                            tc = -1;
+                        }
+                        n = Integer.parseInt(faceMatcher.group(6));
+                        fp = new FacePoint(v,n);
+                        if(tc != -1) {
+                            fp.addTextureCoord(tc);
+                        }
                         f.addFacePoint(fp);
 
-                        int v3 = Integer.parseInt(faceMatcher.group(7));
-                        int t3 = Integer.parseInt(faceMatcher.group(8));
-                        int n3 = Integer.parseInt(faceMatcher.group(9));
-                        fp = new FacePoint(v3,n3);
-                        fp.addTextureCoord(t3);
+                        v = Integer.parseInt(faceMatcher.group(7));
+                        try {
+                            tc = Integer.parseInt(faceMatcher.group(8));
+                        }
+                        catch(Exception e) {
+                            tc = -1;
+                        }
+                        n = Integer.parseInt(faceMatcher.group(9));
+                        fp = new FacePoint(v,n);
+                        if(tc != -1) {
+                            fp.addTextureCoord(tc);
+                        }
                         f.addFacePoint(fp);
 
                         data.addFace(f);
+                    }
+                    else {
+                        faceMatcher = faceQuadPattern.matcher(line);
+                        if(faceMatcher.matches()) {
+                            Face f = new Face();
+
+                            v = Integer.parseInt(faceMatcher.group(1));
+                            try {
+                                tc = Integer.parseInt(faceMatcher.group(2));
+                            }
+                            catch(Exception e) {
+                                tc = -1;
+                            }
+                            n = Integer.parseInt(faceMatcher.group(3));
+                            FacePoint fp = new FacePoint(v,n);
+                            if(tc != -1) {
+                                fp.addTextureCoord(tc);
+                            }
+                            f.addFacePoint(fp);
+
+                            v = Integer.parseInt(faceMatcher.group(4));
+                            try {
+                                tc = Integer.parseInt(faceMatcher.group(5));
+                            }
+                            catch(Exception e) {
+                                tc = -1;
+                            }
+                            n = Integer.parseInt(faceMatcher.group(6));
+                            fp = new FacePoint(v,n);
+                            if(tc != -1) {
+                                fp.addTextureCoord(tc);
+                            }
+                            f.addFacePoint(fp);
+
+                            v = Integer.parseInt(faceMatcher.group(7));
+                            try {
+                                tc = Integer.parseInt(faceMatcher.group(8));
+                            }
+                            catch(Exception e) {
+                                tc = -1;
+                            }
+                            n = Integer.parseInt(faceMatcher.group(9));
+                            fp = new FacePoint(v,n);
+                            if(tc != -1) {
+                                fp.addTextureCoord(tc);
+                            }
+                            f.addFacePoint(fp);
+
+                            v = Integer.parseInt(faceMatcher.group(10));
+                            try {
+                                tc = Integer.parseInt(faceMatcher.group(11));
+                            }
+                            catch(Exception e) {
+                                tc = -1;
+                            }
+                            n = Integer.parseInt(faceMatcher.group(12));
+                            fp = new FacePoint(v,n);
+                            if(tc != -1) {
+                                fp.addTextureCoord(tc);
+                            }
+                            f.addFacePoint(fp);
+
+                            data.addFace(f);
+                        }
                     }
                 }
 

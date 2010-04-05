@@ -4,7 +4,6 @@ package rge.nodes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import rge.importing.Face;
 import rge.importing.FacePoint;
@@ -53,28 +52,39 @@ public class ModelNode extends Node {
     public void update(double deltaTime) {
     }
 
-    private int[] TEXTURE_UNIT = {GL13.GL_TEXTURE0, GL13.GL_TEXTURE1, GL13.GL_TEXTURE2, GL13.GL_TEXTURE3, GL13.GL_TEXTURE4, GL13.GL_TEXTURE5, GL13.GL_TEXTURE6, GL13.GL_TEXTURE7, GL13.GL_TEXTURE8, GL13.GL_TEXTURE9};
-
     private void renderModel() {
+        boolean inTriangleMode = true;
+        
         GL11.glBegin(GL11.GL_TRIANGLES);
             for(Face f : data.getFaces()) {
-                if(!f.isTriangle()) {
-                    Logger.getAnonymousLogger().log(Level.WARNING, "Face is not a triangle!");
+                if(f.isTriangle()) {
+                    if(!inTriangleMode) {
+                        GL11.glEnd();
+                        GL11.glBegin(GL11.GL_TRIANGLES);
+                    }
                 }
-                
+                else if( f.isQuad()) {
+                    if(inTriangleMode) {
+                        GL11.glEnd();
+                        GL11.glBegin(GL11.GL_QUADS);
+                    }
+                }
+                else {
+                    Logger.getAnonymousLogger().log(Level.WARNING, "Face is not a triangle or quad!");
+                }
                 for(FacePoint fp : f.getPoints()) {
                     Vector3 vertex = data.getVertex(fp.getVertex());
                     Vector3 normal = data.getNormal(fp.getNormal());
 
-                    GL11.glVertex3d(vertex.getX(), vertex.getY(), vertex.getZ());
-                    GL11.glNormal3d(normal.getX(), normal.getY(), normal.getZ());
-
                     int textureUnitIndex = 0;
                     for(int tpIndex : fp.getTextureCoords()) {
                         Point2 tp = data.getTextureCoords(tpIndex);
-                        GL13.glMultiTexCoord2d(TEXTURE_UNIT[textureUnitIndex], tp.getS(), tp.getT());
+                        GL13.glMultiTexCoord2d(Node.TEXTURE_UNIT[textureUnitIndex], tp.getS(), tp.getT());
                         textureUnitIndex++;
                     }
+
+                    GL11.glVertex3d(vertex.getX(), vertex.getY(), vertex.getZ());
+                    GL11.glNormal3d(normal.getX(), normal.getY(), normal.getZ());
                 }
             }
         GL11.glEnd();
