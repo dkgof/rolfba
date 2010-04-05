@@ -1,6 +1,8 @@
 
 package rge.importing;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,7 +70,34 @@ public class ModelData {
         return textureCoords.get(tpIndex-1);
     }
 
-    String getStats() {
+    private boolean countDone = false;
+
+    public int getVertexCount() {
+        if(!countDone) {
+            doCount();
+        }
+
+        return vertexCount;
+    }
+
+    public int getNormalCount() {
+        if(!countDone) {
+            doCount();
+        }
+
+        return normalCount;
+    }
+
+    public String getStats() {
+        return "* Vertices: "+getVertexCount()+"\n" +
+        "* Normals:  "+getNormalCount()+"\n" +
+        "* Faces:    "+faces.size()+"\n";
+    }
+
+    private int vertexCount;
+    private int normalCount;
+
+    private synchronized void doCount() {
         Set<Integer> vertexSet = new HashSet<Integer>();
         Set<Integer> normalSet = new HashSet<Integer>();
 
@@ -78,13 +107,54 @@ public class ModelData {
                 normalSet.add(fp.getNormal());
             }
         }
-        
-        int vertexCount = vertexSet.size();
-        int normalCount = normalSet.size();
-        int faceCount = faces.size();
 
-        return "* Vertices: "+vertexCount+"\n" +
-        "* Normals:  "+normalCount+"\n" +
-        "* Faces:    "+faceCount+"\n";
+        vertexCount = vertexSet.size();
+        normalCount = normalSet.size();
+
+        countDone = true;
+    }
+
+    private ByteBuffer triangleData, vertexData;
+    private boolean triangleVertexDataAvaliable = false;
+
+    public ByteBuffer getTriangleData() {
+        if(!triangleVertexDataAvaliable) {
+            makeTriangleVertexData();
+        }
+
+        return triangleData;
+    }
+
+    public ByteBuffer getVertexData() {
+        if(!triangleVertexDataAvaliable) {
+            makeTriangleVertexData();
+        }
+
+        return vertexData;
+    }
+
+    private synchronized void makeTriangleVertexData() {
+        triangleData = ByteBuffer.allocateDirect(faces.size() * 3 * 4).order(ByteOrder.nativeOrder());
+        vertexData = ByteBuffer.allocateDirect(vertices.size() * 3 * 4).order(ByteOrder.nativeOrder());
+
+        for(Face f : faces) {
+            if(!f.isTriangle()) {
+                throw new IllegalStateException("Only triangle mesh supported for physics creation!");
+            }
+            for(FacePoint fp : f.getPoints()) {
+                triangleData.putInt(fp.getVertex()-1);
+            }
+        }
+
+        for(Vector3 v : vertices) {
+            vertexData.putFloat((float)v.getX());
+            vertexData.putFloat((float)v.getY());
+            vertexData.putFloat((float)v.getZ());
+        }
+
+        triangleData.flip();
+        vertexData.flip();
+
+        triangleVertexDataAvaliable = true;
     }
 }

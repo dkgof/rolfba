@@ -3,6 +3,7 @@ package rge.animators;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rge.timer.Timer;
 
 /**
  * An animator is used to run something at a fixed framerate, for example the
@@ -35,9 +36,12 @@ public abstract class Animator implements Runnable {
 
     @Override
     public void run() {
-        double start, diff;
+        double start, diff, last;
 
         double sleepTime = Math.round(1000.0 / fps);
+
+        Timer timer = new Timer();
+        timer.start();
 
         while(true) {
             while(paused) {
@@ -50,7 +54,7 @@ public abstract class Animator implements Runnable {
 
             start = System.nanoTime();
 
-            animate();
+            animate(timer.getDelta());
 
             diff = System.nanoTime() - start;
 
@@ -78,5 +82,5 @@ public abstract class Animator implements Runnable {
         this.notifyAll();
     }
 
-    protected abstract void animate();
+    protected abstract void animate(double deltaTime);
 }
