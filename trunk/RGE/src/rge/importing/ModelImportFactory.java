@@ -18,7 +18,7 @@ public class ModelImportFactory {
 
     private static boolean first = true;
 
-    public static ModelData importModel(String modelFile, String objectName) {
+    public static ModelData importModel(String modelFile, String modelName) {
 
         if(first) {
             registerImporters();
@@ -28,13 +28,12 @@ public class ModelImportFactory {
         ModelImporter importer = importers.get(getExtension(modelFile));
 
         if( importer != null ) {
-            ModelData data = importer.importModel(modelFile, objectName);
+            ModelData data = importer.importModel(modelFile, modelName);
 
             String importStats =
                     "\n********************\n" +
-                    "* Vertices: "+data.getVertices().size()+"\n" +
-                    "* Normals:  "+data.getNormals().size()+"\n" +
-                    "* Faces:    "+data.getFaces().size()+"\n" +
+                    "* ["+modelFile+" - "+modelName+"] \n" +
+                    data.getStats()+
                     "********************";
 
             Logger.getAnonymousLogger().log(Level.INFO, importStats);
