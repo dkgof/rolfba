@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
 
 /**
  * RGEDisplay controls the opengl display
@@ -47,7 +48,7 @@ public class RGEDisplay {
                 Display.setDisplayMode(chosenMode);
             }
             Display.setTitle("RGE Window");
-            Display.create();
+            Display.create(new PixelFormat(32, 8, 24, 8, 4));
         }
         catch(LWJGLException ex) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Unable to create display", ex);
