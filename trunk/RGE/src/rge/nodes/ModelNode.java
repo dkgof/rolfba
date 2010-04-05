@@ -1,8 +1,12 @@
 
 package rge.nodes;
 
+import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
+import com.bulletphysics.extras.gimpact.GImpactMeshShape;
+import com.bulletphysics.linearmath.Transform;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.vecmath.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import rge.importing.Face;
@@ -10,14 +14,15 @@ import rge.importing.FacePoint;
 import rge.importing.ModelData;
 import rge.importing.Point2;
 import rge.math.Vector3;
+import rge.physics.PhysicsCore;
 
 /**
  *
  * @author Rolf
  */
 public class ModelNode extends Node {
-    private final ModelData data;
-    private final boolean useDisplayList;
+    private ModelData data;
+    private boolean useDisplayList;
     private int displayList;
 
     public ModelNode(ModelData data) {
@@ -88,6 +93,22 @@ public class ModelNode extends Node {
                 }
             }
         GL11.glEnd();
+    }
+
+    @Override
+    public void createPhysics(float mass) {
+        TriangleIndexVertexArray indexVertexArray = new TriangleIndexVertexArray(
+                data.getFaces().size(), data.getTriangleData(), 3 * 4,
+                data.getVertices().size(), data.getVertexData(), 3 * 4);
+
+        GImpactMeshShape trimesh = new GImpactMeshShape(indexVertexArray);
+        trimesh.setLocalScaling(new Vector3f((float) getScale().getX(), (float) getScale().getY(), (float) getScale().getZ()));
+        trimesh.updateBound();
+
+        Transform startTransform = new Transform();
+        startTransform.setFromOpenGLMatrix(getTransformMatrix());
+
+        setPhysicsBody(PhysicsCore.singleton().localCreateRigidBody(mass, startTransform, trimesh));
     }
 
 }

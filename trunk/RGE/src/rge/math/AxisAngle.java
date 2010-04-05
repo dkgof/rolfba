@@ -1,6 +1,8 @@
 
 package rge.math;
 
+import javax.vecmath.Quat4f;
+
 /**
  *
  * @author Rolf
@@ -14,6 +16,14 @@ public class AxisAngle {
         this.axis = axis;
     }
 
+    public AxisAngle(double angle, double x, double y, double z) {
+        this(angle, new Vector3(x,y,z));
+    }
+
+    public AxisAngle(Quat4f q) {
+        this(Math.toDegrees(2*Math.acos(q.w)), new Vector3(q.x, q.z, q.y).scale(1/Math.sqrt(1 - q.w * q.w)));
+    }
+    
     /**
      * @return the angle
      */

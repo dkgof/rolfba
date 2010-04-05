@@ -15,6 +15,11 @@ public class Quaternion {
         this.v = v.clone();
     }
 
+    public Quaternion(double w, double x, double y, double z) {
+        this.w = w;
+        this.v = new Vector3(x,y,z);
+    }
+
     public Quaternion add(Quaternion q) {
         return new Quaternion(w+q.w, v.add(q.v));
     }

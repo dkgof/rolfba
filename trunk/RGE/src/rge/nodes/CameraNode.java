@@ -94,4 +94,9 @@ public class CameraNode extends Node {
         this.farPlane = farPlane;
     }
 
+    @Override
+    public void createPhysics(float mass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

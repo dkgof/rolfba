@@ -1,7 +1,13 @@
 package rge.nodes;
 
+import com.bulletphysics.dynamics.RigidBody;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import rge.math.AxisAngle;
@@ -31,6 +37,11 @@ public abstract class Node {
 
     private List<Texture> textures;
 
+    private RigidBody physicsBody;
+
+    private Quat4f physOrient = new Quat4f();
+    private Vector3f physLocation = new Vector3f();
+
     public Node() {
         children = new ArrayList<Node>();
         position = new Vector3(0,0,0);
@@ -45,13 +56,26 @@ public abstract class Node {
     public void recursiveRender() {
         GL11.glPushMatrix();
 
-        GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
+        if(physicsBody != null) {
+            physLocation = physicsBody.getCenterOfMassPosition(physLocation);
+            GL11.glTranslatef(physLocation.x, physLocation.y, physLocation.z);
+        }
+        else {
+            GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
+        }
+
+        AxisAngle axisAngle = null;
+
+        if(physicsBody != null) {
+            physOrient = physicsBody.getOrientation(physOrient);
+            axisAngle = new Quaternion(physOrient.w, physOrient.x, physOrient.y, physOrient.z).toAxisAngle();
+        }
+        else {
+            axisAngle = getRotation().toAxisAngle();
+        }
+        GL11.glRotatef((float)axisAngle.getAngle(), (float)axisAngle.getAxis().getX(), (float)axisAngle.getAxis().getY(), (float)axisAngle.getAxis().getZ());
 
         GL11.glScaled(getScale().getX(), getScale().getY(), getScale().getZ());
-
-        AxisAngle aa = getRotation().toAxisAngle();
-
-        GL11.glRotatef((float)aa.getAngle(), (float)aa.getAxis().getX(), (float)aa.getAxis().getY(), (float)aa.getAxis().getZ());
 
         for(Node n : getChildren()) {
             n.recursiveRender();
@@ -199,5 +223,56 @@ public abstract class Node {
      */
     public void addTexture(Texture tex) {
         textures.add(tex);
+    }
+
+    /**
+     * Create a static physics body of this node, with mass = 0
+     */
+    public void createPhysics() {
+        createPhysics(0f);
+    }
+
+    /**
+     * Create a physicsbody for this node, with the given mass.
+     * Mass > 0 creates a dynamic body, mass = 0 creates a static body
+     * @param mass the mass of the body
+     */
+    public abstract void createPhysics(float mass);
+
+    /**
+     * @return the physicsBody
+     */
+    public RigidBody getPhysicsBody() {
+        return physicsBody;
+    }
+
+    /**
+     * @param physicsBody the physicsBody to set
+     */
+    public void setPhysicsBody(RigidBody physicsBody) {
+        this.physicsBody = physicsBody;
+    }
+
+    public float[] getTransformMatrix() {
+        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+
+        GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
+
+        AxisAngle axisAngle = getRotation().toAxisAngle();
+        GL11.glRotatef((float)axisAngle.getAngle(), (float)axisAngle.getAxis().getX(), (float)axisAngle.getAxis().getY(), (float)axisAngle.getAxis().getZ());
+
+        //GL11.glScaled(getScale().getX(), getScale().getY(), getScale().getZ());
+
+        FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4*4);
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrixBuffer);
+        GL11.glPopMatrix();
+
+        float[] matrix = new float[4*4];
+        matrixBuffer.get(matrix);
+
+        System.out.println(""+matrix);
+
+        return matrix;
     }
 }

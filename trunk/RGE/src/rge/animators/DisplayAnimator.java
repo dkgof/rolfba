@@ -39,7 +39,7 @@ public class DisplayAnimator extends Animator {
     }
 
     @Override
-    protected void animate() {
+    protected void animate(double deltaTime) {
         if(needToCreateDisplay) {
             RGEDisplay.createDisplay(width, height, colorDepth, fullscreen);
             needToCreateDisplay = false;
