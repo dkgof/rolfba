@@ -19,12 +19,15 @@ public class RGEApplication {
 
     private boolean firstFrame;
 
+    /**
+     * Create a new RGEAppliation
+     */
     public RGEApplication() {
         scenes = new ArrayList<Scene>();
         firstFrame = true;
     }
 
-    public void renderApplication() {
+    private void renderApplication() {
         currentScene.renderScene();
     }
 
@@ -37,10 +40,17 @@ public class RGEApplication {
         }
     }
 
+    /**
+     * Add a scene to this app
+     * @param s the scene to add
+     */
     public void addScene(Scene s) {
         scenes.add(s);
     }
 
+    /**
+     * Render this app
+     */
     public void display() {
         if(firstFrame) {
             initApp();
