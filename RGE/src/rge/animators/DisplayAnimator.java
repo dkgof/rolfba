@@ -36,13 +36,20 @@ public class DisplayAnimator extends Animator {
             needToCreateDisplay = false;
         }
 
+        //Clear color and depth buffer prior drawing
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        //Reset modelview matrix
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
 
+        //Render the app
         app.display();
 
+        //Update opengl
         Display.update();
 
+        //Close if requested
         if (Display.isCloseRequested()) {
             Display.destroy();
             System.exit(0);
