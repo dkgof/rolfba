@@ -7,7 +7,7 @@ import rge.RGEApplication;
 import rge.RGEDisplay;
 
 /**
- *
+ * DisplayAnimator runs the rendering at a fixed framerate
  * @author Rolf
  */
 public class DisplayAnimator extends Animator {
@@ -19,6 +19,15 @@ public class DisplayAnimator extends Animator {
     private final int colorDepth;
     private final boolean fullscreen;
 
+    /**
+     * Create a new display animator rendering with the given parameters
+     * @param app the application to render
+     * @param width the width to use for the opengl display
+     * @param height the height to use for the opengl display
+     * @param colorDepth the color depth to use for the opengl display
+     * @param fullscreen should we render to fullscreen
+     * @param fps the framerate to render at
+     */
     public DisplayAnimator(RGEApplication app, int width, int height, int colorDepth, boolean fullscreen, double fps) {
         super(fps);
         this.app = app;

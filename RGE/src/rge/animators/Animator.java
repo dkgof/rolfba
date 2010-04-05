@@ -5,7 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * An animator is used to run something at a fixed framerate, for example the
+ * rendering thread.
  * @author Rolf
  */
 public abstract class Animator implements Runnable {
@@ -14,10 +15,17 @@ public abstract class Animator implements Runnable {
 
     private Thread thread;
 
+    /**
+     * Create a new animator running at the given framerate
+     * @param  fps the framerate to run this animator
+     */
     public Animator(double fps) {
         this.fps = fps;
     }
 
+    /**
+     * Start the animator
+     */
     public void start() {
         if(thread == null) {
             thread = new Thread(this);
@@ -55,10 +63,16 @@ public abstract class Animator implements Runnable {
         }
     }
 
+    /**
+     * Pause the animator
+     */
     public void pause() {
         paused = true;
     }
 
+    /**
+     * Resume the animator
+     */
     public void resume() {
         paused = false;
         this.notifyAll();
