@@ -6,6 +6,7 @@ import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
