@@ -52,14 +52,6 @@ public abstract class Animator implements Runnable {
             catch(Exception ex) {
                     Logger.getAnonymousLogger().log(Level.WARNING, "Error sleeping", ex);
             }
-
-            /*
-            diff = System.nanoTime() - start;
-
-            double realFps = 1 / diff * 1000000000;
-
-            System.out.println("FPS: "+String.format("%.2f", realFps));
-             */
         }
     }
 
