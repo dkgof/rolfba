@@ -84,7 +84,7 @@ public abstract class Node {
      * @param y the position on the y axis
      * @param z the position on the z axis
      */
-    public void translate(double x, double y, double z) {
+    public void setPosition(double x, double y, double z) {
         setPosition(new Vector3(x, y, z));
     }
 
@@ -94,7 +94,7 @@ public abstract class Node {
      * @param y the amount to scale on the y axis
      * @param z the amount to scale on the z axis
      */
-    public void scale(double x, double y, double z) {
+    public void setScale(double x, double y, double z) {
         setScale(new Vector3(x, y, z));
     }
 
@@ -102,7 +102,7 @@ public abstract class Node {
      * Scales this node uniformly on all 3 axis with the given scale
      * @param scale the amount to scale
      */
-    public void scale(double scale) {
+    public void setScale(double scale) {
         this.setScale(new Vector3(scale, scale, scale));
     }
 

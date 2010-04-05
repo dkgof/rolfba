@@ -14,38 +14,19 @@ import java.util.logging.Logger;
  */
 public class ModelImportFactory {
 
+    private static Map<String, ModelData> modelCache = new HashMap<String, ModelData>();
+
     private static Map<String, ModelImporter> importers = new HashMap<String, ModelImporter>();
 
     private static boolean first = true;
 
     public static ModelData importModel(String modelFile, String modelName) {
 
-        if(first) {
-            registerImporters();
-            first = false;
+        if(!modelCache.containsKey(modelFile+modelName)) {
+            cacheModelData(modelFile, modelName);
         }
 
-        ModelImporter importer = importers.get(getExtension(modelFile));
-
-        if( importer != null ) {
-            ModelData data = importer.importModel(modelFile, modelName);
-
-            String importStats =
-                    "\n********************\n" +
-                    "* ["+modelFile+" - "+modelName+"] \n" +
-                    data.getStats()+
-                    "********************";
-
-            Logger.getAnonymousLogger().log(Level.INFO, importStats);
-
-            return data;
-        }
-        else {
-            Logger.getAnonymousLogger().log(Level.WARNING, "No known ModelImporter for format: "+getExtension(modelFile));
-            System.exit(-1);
-        }
-        
-        return null;
+        return modelCache.get(modelFile+modelName);
     }
 
     public static void registerImporter(ModelImporter importer) {
@@ -74,6 +55,40 @@ public class ModelImportFactory {
                     }
                 }
             }
+        }
+    }
+
+    private static void cacheModelData(String modelFile, String modelName) {
+        if(first) {
+            registerImporters();
+            first = false;
+        }
+
+        ModelImporter importer = importers.get(getExtension(modelFile));
+
+        if( importer != null ) {
+            long start = System.currentTimeMillis();
+
+            ModelData data = importer.importModel(modelFile, modelName);
+
+            long diff = System.currentTimeMillis() - start;
+            
+            double seconds = diff / 1000.0;
+
+            String importStats =
+                    "\n********************\n" +
+                    "* Model: ["+modelFile+" - "+modelName+"] \n" +
+                    "* Loadtime: ["+String.format("%.2f", seconds)+"s] \n" +
+                    data.getStats()+
+                    "********************";
+
+            Logger.getAnonymousLogger().log(Level.INFO, importStats);
+
+            modelCache.put(modelFile+modelName, data);
+        }
+        else {
+            Logger.getAnonymousLogger().log(Level.WARNING, "No known ModelImporter for format: "+getExtension(modelFile));
+            System.exit(-1);
         }
     }
 }
