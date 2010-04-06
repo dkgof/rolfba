@@ -263,16 +263,12 @@ public abstract class Node {
         AxisAngle axisAngle = getRotation().toAxisAngle();
         GL11.glRotatef((float)axisAngle.getAngle(), (float)axisAngle.getAxis().getX(), (float)axisAngle.getAxis().getY(), (float)axisAngle.getAxis().getZ());
 
-        //GL11.glScaled(getScale().getX(), getScale().getY(), getScale().getZ());
-
         FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4*4);
         GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, matrixBuffer);
         GL11.glPopMatrix();
 
         float[] matrix = new float[4*4];
         matrixBuffer.get(matrix);
-
-        System.out.println(""+matrix);
 
         return matrix;
     }

@@ -69,6 +69,8 @@ public class RGEApplication {
     }
 
     public void update(double deltaTime) {
-        currentScene.updateScene(deltaTime);
+        if(currentScene != null) {
+            currentScene.updateScene(deltaTime);
+        }
     }
 }
