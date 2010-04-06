@@ -1,6 +1,9 @@
 package rge.nodes;
 
+import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.extras.gimpact.GImpactMeshShape;
+import com.bulletphysics.linearmath.Transform;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +45,6 @@ public abstract class Node {
 
     private RigidBody physicsBody;
 
-    private Quat4f physOrient = new Quat4f();
-    private Vector3f physLocation = new Vector3f();
-
     public Node() {
         children = new ArrayList<Node>();
         position = new Vector3(0,0,0);
@@ -59,16 +59,8 @@ public abstract class Node {
     public void recursiveRender() {
         GL11.glPushMatrix();
 
-        if(physicsBody != null) {
-            physLocation = physicsBody.getCenterOfMassPosition(physLocation);
-            setPosition(physLocation.x, physLocation.y, physLocation.z);
-        }
         GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
 
-        if(physicsBody != null) {
-            physOrient = physicsBody.getOrientation(physOrient);
-            setRotation(new Quaternion(physOrient.w, physOrient.x, physOrient.y, physOrient.z));
-        }
         AxisAngle axisAngle = getRotation().toAxisAngle();
         GL11.glRotatef((float)axisAngle.getAngle(), (float)axisAngle.getAxis().getX(), (float)axisAngle.getAxis().getY(), (float)axisAngle.getAxis().getZ());
 
@@ -138,7 +130,7 @@ public abstract class Node {
      * @param scale the amount to scale
      */
     public void setScale(double scale) {
-        this.setScale(new Vector3(scale, scale, scale));
+        setScale(new Vector3(scale, scale, scale));
     }
 
     /**
@@ -160,42 +152,82 @@ public abstract class Node {
      * @return the position
      */
     public Vector3 getPosition() {
-        return position;
+        if(physicsBody == null) {
+            return position;
+        }
+        else {
+            Vector3f physLocation = physicsBody.getCenterOfMassPosition(new Vector3f());
+            return new Vector3(physLocation.x, physLocation.y, physLocation.z);
+        }
     }
 
     /**
      * @param position the position to set
      */
     public void setPosition(Vector3 position) {
-        this.position = position;
+        if(physicsBody == null) {
+            this.position = position;
+        }
+        else {
+            Transform tr = physicsBody.getCenterOfMassTransform(new Transform());
+            tr.origin.x = (float)position.getX();
+            tr.origin.y = (float)position.getY();
+            tr.origin.z = (float)position.getZ();
+            physicsBody.setCenterOfMassTransform(tr);
+        }
     }
 
     /**
      * @return the scale
      */
     public Vector3 getScale() {
-        return scale;
+        if(physicsBody == null) {
+            return scale;
+        }
+        else {
+            Vector3f v = physicsBody.getCollisionShape().getLocalScaling(new Vector3f());
+            return new Vector3(v.x, v.y, v.z);
+        }
     }
 
     /**
      * @param scale the scale to set
      */
     public void setScale(Vector3 scale) {
-        this.scale = scale;
+        if(physicsBody == null) {
+            this.scale = scale;
+        }
+        else {
+            physicsBody.getCollisionShape().setLocalScaling(new Vector3f((float)scale.getX(), (float)scale.getY(), (float)scale.getZ()));
+        }
     }
 
     /**
      * @return the rotation
      */
     public Quaternion getRotation() {
-        return rotation;
+        if(physicsBody == null) {
+            return rotation;
+        }
+        else {
+            Quat4f q = physicsBody.getOrientation(new Quat4f());
+            return new Quaternion(q.w, q.x, q.y, q.z);
+        }
     }
 
     /**
      * @param rotation the rotation to set
      */
     public void setRotation(Quaternion rotation) {
-        this.rotation = rotation;
+        if(physicsBody == null) {
+            this.rotation = rotation;
+        }
+        else {
+            Transform tr = physicsBody.getWorldTransform(new Transform());
+            tr.setRotation(new Quat4f((float)rotation.getW(), (float)rotation.getV().getX(), (float)rotation.getV().getY(), (float)rotation.getV().getZ()));
+            //physicsBody.setCenterOfMassTransform(tr);
+            physicsBody.proceedToTransform(tr);
+        }
     }
 
     private void activateTextures() {

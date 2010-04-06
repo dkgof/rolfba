@@ -52,10 +52,6 @@ public class CubeNode extends Node {
     }
 
     @Override
-    public void update(double deltaTime) {
-    }
-
-    @Override
     public void createPhysics(float mass) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

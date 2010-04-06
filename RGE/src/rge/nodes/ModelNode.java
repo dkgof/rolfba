@@ -54,10 +54,6 @@ public class ModelNode extends Node {
         }
     }
 
-    @Override
-    public void update(double deltaTime) {
-    }
-
     private void renderModel() {
         boolean inTriangleMode = true;
         
