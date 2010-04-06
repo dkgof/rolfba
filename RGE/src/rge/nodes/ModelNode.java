@@ -102,10 +102,10 @@ public class ModelNode extends Node {
         trimesh.setLocalScaling(new Vector3f((float) getScale().getX(), (float) getScale().getY(), (float) getScale().getZ()));
         trimesh.updateBound();
 
-        Transform startTransform = new Transform();
-        startTransform.setFromOpenGLMatrix(getTransformMatrix());
+        Transform initialPosition = new Transform();
+        initialPosition.setFromOpenGLMatrix(this.getTransformMatrix());
 
-        setPhysicsBody(PhysicsCore.singleton().localCreateRigidBody(mass, startTransform, trimesh));
+        setPhysicsBody(PhysicsCore.singleton().localCreateRigidBody(this, mass, initialPosition, trimesh));
     }
 
 }

@@ -1,6 +1,8 @@
 
 package rge.math;
 
+import javax.vecmath.Vector3f;
+
 /**
  * This class models a 3d vector
  * @author Rolf
@@ -23,6 +25,10 @@ public class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Vector3(Vector3f v) {
+        this(v.x, v.y, v.z);
     }
 
     /**
