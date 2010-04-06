@@ -1,6 +1,8 @@
 
 package rge.math;
 
+import javax.vecmath.Quat4f;
+
 /**
  *
  * @author Rolf
@@ -18,6 +20,10 @@ public class Quaternion {
     public Quaternion(double w, double x, double y, double z) {
         this.w = w;
         this.v = new Vector3(x,y,z);
+    }
+
+    public Quaternion(Quat4f q) {
+        this(q.w, q.x, q.y, q.z);
     }
 
     public Quaternion add(Quaternion q) {

@@ -15,6 +15,7 @@ import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import javax.vecmath.Vector3f;
+import rge.nodes.Node;
 
 /**
  *
@@ -53,7 +54,7 @@ public class PhysicsCore {
         return singleton;
     }
 
-    public RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
+    public RigidBody localCreateRigidBody(Node n, float mass, Transform initialPosition, CollisionShape shape) {
         boolean isDynamic = (mass != 0f);
 
         Vector3f localInertia = new Vector3f(0f, 0f, 0f);
@@ -61,7 +62,7 @@ public class PhysicsCore {
             shape.calculateLocalInertia(mass, localInertia);
         }
 
-        DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
+        RGEMotionState myMotionState = new RGEMotionState(n, initialPosition);
 
         RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
 

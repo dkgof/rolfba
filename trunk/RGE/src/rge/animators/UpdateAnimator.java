@@ -2,6 +2,7 @@
 package rge.animators;
 
 import rge.RGEApplication;
+import rge.physics.PhysicsCore;
 
 /**
  *
