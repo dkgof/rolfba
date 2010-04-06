@@ -56,10 +56,6 @@ public abstract class Animator implements Runnable {
 
             double time = timer.getDelta();
 
-            if(this instanceof PhysicsAnimator) {
-                System.out.println(""+time);
-            }
-
             animate(time);
 
             diff = System.nanoTime() - start;
