@@ -28,10 +28,6 @@ public class RGEApplication {
         firstFrame = true;
     }
 
-    private void renderApplication() {
-        currentScene.renderScene();
-    }
-
     /**
      * Setup all the scenes of this application
      */
@@ -59,7 +55,7 @@ public class RGEApplication {
             firstFrame = false;
         }
 
-        renderApplication();
+        currentScene.renderScene();
     }
 
     private void initApp() {
@@ -70,5 +66,9 @@ public class RGEApplication {
 
         GL11.glClearColor(0,0,0,0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+    }
+
+    public void update(double deltaTime) {
+        currentScene.updateScene(deltaTime);
     }
 }
