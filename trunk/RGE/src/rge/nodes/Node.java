@@ -4,12 +4,12 @@ import com.bulletphysics.dynamics.RigidBody;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import rge.actuators.Actuator;
 import rge.math.AxisAngle;
 import rge.math.Quaternion;
 import rge.math.Vector3;
@@ -25,6 +25,9 @@ public abstract class Node {
 
     //The children of this node in the scene graph
     private List<Node> children;
+
+    //The actuators attached to this node
+    private Actuator actuator;
 
     //The current position of this node
     private Vector3 position;
@@ -58,21 +61,15 @@ public abstract class Node {
 
         if(physicsBody != null) {
             physLocation = physicsBody.getCenterOfMassPosition(physLocation);
-            GL11.glTranslatef(physLocation.x, physLocation.y, physLocation.z);
+            setPosition(physLocation.x, physLocation.y, physLocation.z);
         }
-        else {
-            GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
-        }
-
-        AxisAngle axisAngle = null;
+        GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
 
         if(physicsBody != null) {
             physOrient = physicsBody.getOrientation(physOrient);
-            axisAngle = new Quaternion(physOrient.w, physOrient.x, physOrient.y, physOrient.z).toAxisAngle();
+            setRotation(new Quaternion(physOrient.w, physOrient.x, physOrient.y, physOrient.z));
         }
-        else {
-            axisAngle = getRotation().toAxisAngle();
-        }
+        AxisAngle axisAngle = getRotation().toAxisAngle();
         GL11.glRotatef((float)axisAngle.getAngle(), (float)axisAngle.getAxis().getX(), (float)axisAngle.getAxis().getY(), (float)axisAngle.getAxis().getZ());
 
         GL11.glScaled(getScale().getX(), getScale().getY(), getScale().getZ());
@@ -110,7 +107,11 @@ public abstract class Node {
      * Do updating of this node
      * @param deltaTime the time since last update
      */
-    public abstract void update(double deltaTime);
+    public void update(double deltaTime) {
+        if(getActuator() != null) {
+            getActuator().update(this, deltaTime);
+        }
+    }
 
     /**
      * Translate this nodes position to the given coordinates (x,y,z)
@@ -199,7 +200,7 @@ public abstract class Node {
 
     private void activateTextures() {
         int textureUnitIndex = 0;
-        for(Texture tex : textures) {
+        for(Texture tex : getTextures()) {
             GL13.glActiveTexture(TEXTURE_UNIT[textureUnitIndex]);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             tex.bind();
@@ -213,8 +214,8 @@ public abstract class Node {
      * @param tex the texture to set
      */
     public void setTexture(Texture tex) {
-        textures.clear();
-        textures.add(tex);
+        getTextures().clear();
+        getTextures().add(tex);
     }
 
     /**
@@ -222,7 +223,7 @@ public abstract class Node {
      * @param tex the texture to add
      */
     public void addTexture(Texture tex) {
-        textures.add(tex);
+        getTextures().add(tex);
     }
 
     /**
@@ -274,5 +275,26 @@ public abstract class Node {
         System.out.println(""+matrix);
 
         return matrix;
+    }
+
+    /**
+     * @return the actuator
+     */
+    public Actuator getActuator() {
+        return actuator;
+    }
+
+    /**
+     * @param actuator the actuator to set
+     */
+    public void setActuator(Actuator actuator) {
+        this.actuator = actuator;
+    }
+
+    /**
+     * @return the textures
+     */
+    public List<Texture> getTextures() {
+        return textures;
     }
 }
