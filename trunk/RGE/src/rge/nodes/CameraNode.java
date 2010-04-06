@@ -34,10 +34,6 @@ public class CameraNode extends Node {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 
-    @Override
-    public void update(double deltaTime) {
-    }
-
     /**
      * @return the fov
      */
