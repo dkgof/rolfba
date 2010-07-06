@@ -167,4 +167,8 @@ public class Vector3 {
     public void setZ(double z) {
         this.z = z;
     }
+
+    public Vector3f toMathVector() {
+        return new Vector3f((float)x, (float)y, (float)z);
+    }
 }

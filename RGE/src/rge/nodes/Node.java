@@ -51,7 +51,7 @@ public abstract class Node {
     /**
      * Renders all the children of this node, and then renders the node itself
      */
-    public void recursiveRender() {
+    public synchronized void recursiveRender() {
         GL11.glPushMatrix();
 
         GL11.glTranslated(getPosition().getX(), getPosition().getY(), getPosition().getZ());
@@ -82,7 +82,7 @@ public abstract class Node {
      * Runs update on all children
      * @param deltaTime the time since last update
      */
-    public void recursiveUpdate(double deltaTime) {
+    public synchronized void recursiveUpdate(double deltaTime) {
         for(Node n : getChildren()) {
             n.recursiveUpdate(deltaTime);
         }
@@ -132,7 +132,7 @@ public abstract class Node {
      * Attach the given node as a child of this node
      * @param n the node to attach
      */
-    public void attachNode(Node n) {
+    public synchronized void attachNode(Node n) {
         getChildren().add(n);
     }
 
