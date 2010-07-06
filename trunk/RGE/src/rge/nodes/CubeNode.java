@@ -53,7 +53,7 @@ public class CubeNode extends Node {
 
     @Override
     public void createPhysics(float mass) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Method not implemented yet!");
     }
 
 }

@@ -1,13 +1,8 @@
 
 package rge.nodes;
 
-import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
-import com.bulletphysics.extras.gimpact.GImpactMeshShape;
-import com.bulletphysics.linearmath.Transform;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import rge.importing.Face;
@@ -15,7 +10,6 @@ import rge.importing.FacePoint;
 import rge.importing.ModelData;
 import rge.importing.Point2;
 import rge.math.Vector3;
-import rge.physics.PhysicsCore;
 
 /**
  *
@@ -85,8 +79,8 @@ public class ModelNode extends Node {
                         textureUnitIndex++;
                     }
 
-                    GL11.glVertex3d(vertex.getX(), vertex.getY(), vertex.getZ());
                     GL11.glNormal3d(normal.getX(), normal.getY(), normal.getZ());
+                    GL11.glVertex3d(vertex.getX(), vertex.getY(), vertex.getZ());
                 }
             }
         GL11.glEnd();
@@ -94,18 +88,7 @@ public class ModelNode extends Node {
 
     @Override
     public void createPhysics(float mass) {
-        TriangleIndexVertexArray indexVertexArray = new TriangleIndexVertexArray(
-                data.getFaces().size(), data.getTriangleData(), 3 * 4,
-                data.getVertices().size(), data.getVertexData(), 3 * 4);
-
-        GImpactMeshShape trimesh = new GImpactMeshShape(indexVertexArray);
-        trimesh.setLocalScaling(new Vector3f((float) getScale().getX(), (float) getScale().getY(), (float) getScale().getZ()));
-        trimesh.updateBound();
-
-        Transform initialPosition = new Transform();
-        initialPosition.setFromOpenGLMatrix(this.getTransformMatrix());
-
-        setPhysicsBody(PhysicsCore.singleton().localCreateRigidBody(this, mass, initialPosition, trimesh));
+        throw new UnsupportedOperationException("Method not implemented yet!");
     }
 
 }
