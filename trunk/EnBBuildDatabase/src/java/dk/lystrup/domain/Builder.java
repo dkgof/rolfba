@@ -12,9 +12,13 @@ import lombok.Data;
  * @author Rolf
  */
 @Data public class Builder {
+    //Name of the ingame char
     private String name;
-    private int level;
+    
+    //Negotiate level of the builder
     private int negotiateLevel;
+
+    //Levels of the different build skills
     private int buildShieldLevel;
     private int buildDeviceLevel;
     private int buildWeaponLevel;
