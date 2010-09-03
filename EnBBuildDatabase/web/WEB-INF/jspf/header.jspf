@@ -1,0 +1,12 @@
+<%@ page pageEncoding="UTF-8" %>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EnB Buildlist</title>
+        <link href="css/main.css" rel="stylesheet" />
+        <link href="css/ui-darkness/jquery-ui-1.8.4.custom.css" rel="stylesheet" />
+        <script src="javascript/jquery.js"></script>
+        <script src="javascript/jquery-ui.js"></script>
+    </head>
+    <body>
