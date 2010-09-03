@@ -1,0 +1,18 @@
+/* 
+    Document   : main
+    Created on : 03-09-2010, 18:44:06
+    Author     : Rolf
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+body {
+    background-color: black;
+    color: white;
+}
+
