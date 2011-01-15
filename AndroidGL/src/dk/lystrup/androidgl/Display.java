@@ -8,7 +8,8 @@ package dk.lystrup.androidgl;
 import android.content.Context;
 
 /**
- *
+ * Display models the core features of the Android display for usage
+ * in other parts of AndroidGL
  * @author Rolf
  */
 public class Display {

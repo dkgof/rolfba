@@ -10,7 +10,8 @@ import java.util.logging.Logger;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * A DynamicTexture represents something where the texture id is allowed to change,
+ * but they cannot be used before they have been initialized with an id.
  * @author Rolf
  */
 public class DynamicTexture implements Texture {

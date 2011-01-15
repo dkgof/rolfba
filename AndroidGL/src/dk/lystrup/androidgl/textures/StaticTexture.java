@@ -12,7 +12,8 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * StaticTexture represents a texture from a static image, ie. something that
+ * will not change over time. For example a bitmap texture.
  * @author Rolf
  */
 public class StaticTexture implements Texture {
