@@ -1,7 +1,7 @@
 package dk.lystrup.androidgl.math;
 
 /**
- *
+ * A Quaternion represents a 3d rotation with a 4d vector
  * @author Rolf
  */
 public class Quaternion {
@@ -23,20 +23,42 @@ public class Quaternion {
         this.v = v.clone();
     }
 
+    /**
+     * Add the given quaternion to this one and return a new quaternion holding
+     * the result
+     * @param q the quaternion to add
+     * @return the resulting quaternion
+     */
     public Quaternion add(Quaternion q) {
         return new Quaternion(w + q.w, v.add(q.v));
     }
 
+    /**
+     * Scale this quaternion by the given scalar and return a new quaternion with
+     * the result
+     * @param scalar the amount to scale this quaternion
+     * @return the resulting quaternion
+     */
     public Quaternion scale(float scalar) {
         return new Quaternion(w * scalar, v.scale(scalar));
     }
 
+    /**
+     * Normalize the length of this quaternion and return a new quaternion holding
+     * the result
+     * @return the resulting quaternion
+     */
     public Quaternion normalize() {
         float n = (float) Math.sqrt(v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ() + w * w);
 
         return this.scale(1 / n);
     }
 
+    /**
+     * Multiply this quaternion with the given and return the result as a new quaternion
+     * @param q the quaternion to multiply with
+     * @return the resulting quaternion
+     */
     public Quaternion mult(Quaternion q) {
         float nx = v.getX() * q.w + v.getY() * q.getV().getZ() - v.getZ() * q.getV().getY() + w * q.getV().getX();
         float ny = -v.getX() * q.getV().getZ() + v.getY() * q.getW() + v.getZ() * q.getV().getX() + w * q.getV().getY();
@@ -46,16 +68,43 @@ public class Quaternion {
         return new Quaternion(nw, new Vector3(nx, ny, nz));
     }
 
+    /**
+     * Conjugate this quaternion and return a new quaternion holding the result
+     * @return the resulting quaternion
+     */
     public Quaternion conjugate() {
         return new Quaternion(w, v.scale(-1));
     }
 
+    /**
+     * Create a new quaternion representing the same rotation as the given axis
+     * angle
+     * @param angle the angle of the axis angle to convert
+     * @param axis the axis of the axis angle to convert
+     * @return the resulting quaternion
+     */
     public static Quaternion createFromAxisAngle(float angle, Vector3 axis) {
         angle = (float) Math.toRadians(angle);
         float sinHalfAngle = (float) Math.sin(angle / 2);
         return new Quaternion((float) Math.cos(angle / 2), axis.scale(sinHalfAngle));
     }
 
+    /**
+     * Create a new quaternion representing the same rotation as the given axis
+     * angle
+     * @param axisAngle the axis angle to convert
+     * @return the resulting quaternion
+     */
+    public static Quaternion createFromAxisAngle(AxisAngle axisAngle) {
+        float angle = (float) Math.toRadians(axisAngle.getAngle());
+        float sinHalfAngle = (float) Math.sin(angle / 2);
+        return new Quaternion((float) Math.cos(angle / 2), axisAngle.getAxis().scale(sinHalfAngle));
+    }
+
+    /**
+     * Transforms this quaternion into its AxisAngle representation
+     * @return an AxisAngle representing the same rotation as this quaternion
+     */
     public AxisAngle toAxisAngle() {
         float scale = v.length();
 

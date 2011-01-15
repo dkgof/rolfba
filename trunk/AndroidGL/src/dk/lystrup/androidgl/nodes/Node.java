@@ -27,6 +27,11 @@ public interface Node {
      */
     public void recursiveRender(GL10 gl);
 
+    /**
+     * Recursively call the update method on all children to allow the actuator
+     * system to know that time has passed.
+     * @param deltaTime 
+     */
     public void recursiveUpdate(float deltaTime);
 
     /**

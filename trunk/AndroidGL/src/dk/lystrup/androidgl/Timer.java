@@ -2,7 +2,8 @@
 package dk.lystrup.androidgl;
 
 /**
- *
+ * Timer models a nano precision timer for messuring time between frames and other
+ * timing that requires precise delta values.
  * @author Rolf
  */
 public class Timer {

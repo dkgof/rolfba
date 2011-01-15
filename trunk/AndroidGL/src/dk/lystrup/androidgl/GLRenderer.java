@@ -10,7 +10,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * GLRenderer is the Core behind the AndroidGL system. It sets up the OpenGL context
+ * and delegates the rendering work to a Scene object
  * @author Rolf
  */
 public class GLRenderer implements Renderer {

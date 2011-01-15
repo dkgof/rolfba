@@ -145,6 +145,10 @@ public class Vector3 {
         return z;
     }
 
+    /**
+     * Normalize the length of this vector and return a new vector with the result
+     * @return the resulting vector
+     */
     public Vector3 normalize() {
         float lengthScale = 1.0f / this.length();
         return this.scale(lengthScale);

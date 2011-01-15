@@ -13,11 +13,11 @@ package dk.lystrup.androidgl.nodes;
 public class ModelData {
 
     //The vertices of this model
-    private float[] vertices;
+    private final float[] vertices;
     //The indices of this model
-    private short[] indices;
+    private final short[] indices;
     //The texture coordinates of this model
-    private float[] texturecoords;
+    private final float[] texturecoords;
 
     ModelData(short[] indices, float[] vertices, float[] texturecoords) {
         this.indices = indices;
@@ -33,13 +33,6 @@ public class ModelData {
     }
 
     /**
-     * @param vertices the vertices to set
-     */
-    public void setVertices(float[] vertices) {
-        this.vertices = vertices;
-    }
-
-    /**
      * @return the indices
      */
     public short[] getIndices() {
@@ -47,23 +40,9 @@ public class ModelData {
     }
 
     /**
-     * @param indices the indices to set
-     */
-    public void setIndices(short[] indices) {
-        this.indices = indices;
-    }
-
-    /**
      * @return the texturecoords
      */
     public float[] getTexturecoords() {
         return texturecoords;
-    }
-
-    /**
-     * @param texturecoords the texturecoords to set
-     */
-    public void setTexturecoords(float[] texturecoords) {
-        this.texturecoords = texturecoords;
     }
 }

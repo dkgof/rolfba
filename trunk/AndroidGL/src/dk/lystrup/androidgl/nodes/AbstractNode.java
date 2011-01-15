@@ -15,7 +15,7 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * Implementing class with all the basic parts of the Node interface
  * @author Rolf
  */
 public abstract class AbstractNode implements Node {

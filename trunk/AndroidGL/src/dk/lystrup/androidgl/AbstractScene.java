@@ -10,7 +10,7 @@ import dk.lystrup.androidgl.nodes.Node;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- *
+ * Implementing class that handles the basic work of the Scene interface
  * @author Rolf
  */
 public abstract class AbstractScene implements Scene {
