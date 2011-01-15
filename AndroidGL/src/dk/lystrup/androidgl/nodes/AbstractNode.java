@@ -19,14 +19,15 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Rolf
  */
 public abstract class AbstractNode implements Node {
+    public static final int[] TEXTURE_UNITS = {GL10.GL_TEXTURE0, GL10.GL_TEXTURE1, GL10.GL_TEXTURE2, GL10.GL_TEXTURE3};
+
     protected Vector3 position;
     protected Quaternion rotation;
     protected Actuator actuator;
 
-    private List<Node> children;
+    protected final List<Node> children;
 
-    private int[] TEXTURE_UNITS = {GL10.GL_TEXTURE0, GL10.GL_TEXTURE1, GL10.GL_TEXTURE2, GL10.GL_TEXTURE3};
-    private List<Texture> textures;
+    private final List<Texture> textures;
 
     public AbstractNode() {
         children = new ArrayList<Node>();
@@ -100,7 +101,7 @@ public abstract class AbstractNode implements Node {
         }
     }
 
-    private void activateTextures(GL10 gl) {
+    protected void activateTextures(GL10 gl) {
         gl.glEnable(GL10.GL_TEXTURE_2D);
 
         int i = 0;
@@ -114,7 +115,7 @@ public abstract class AbstractNode implements Node {
         }
     }
 
-    private void deactivateTextures(GL10 gl) {
+    protected void deactivateTextures(GL10 gl) {
         gl.glDisable(GL10.GL_TEXTURE_2D);
         int i = 0;
         for(Texture tex : textures) {

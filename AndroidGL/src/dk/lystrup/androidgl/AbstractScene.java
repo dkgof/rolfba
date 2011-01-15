@@ -17,12 +17,18 @@ public abstract class AbstractScene implements Scene {
 
     protected final Node root;
     
+    private boolean initialized;
+    
     public AbstractScene() {
         root = new EmptyNode();
+        initialized = false;
     }
     
     public final void init() {
-        customInit();
+        if(!initialized) {
+            customInit();
+            initialized = true;
+        }
     }
 
     public final void update(float deltaTime) {

@@ -19,6 +19,12 @@ public class ModelData {
     //The texture coordinates of this model
     private float[] texturecoords;
 
+    ModelData(short[] indices, float[] vertices, float[] texturecoords) {
+        this.indices = indices;
+        this.vertices = vertices;
+        this.texturecoords = texturecoords;
+    }
+
     /**
      * @return the vertices
      */
