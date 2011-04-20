@@ -50,7 +50,7 @@ public class CameraNode extends AbstractNode {
         this.nearPlane = near;
         this.farPlane = far;
 
-        recalculateAspect = false;
+        recalculateAspect = true;
     }
 
     @Override
