@@ -46,6 +46,12 @@ public interface Node {
      */
     public void setPosition(Vector3 position);
 
+    /**
+     * Sets the position of this node to the coordinates given
+     * @param x
+     * @param y
+     * @param z 
+     */
     public void setPosition(float x, float y, float z);
 
     /**

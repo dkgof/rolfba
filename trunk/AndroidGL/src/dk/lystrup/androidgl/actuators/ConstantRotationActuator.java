@@ -7,7 +7,6 @@ package dk.lystrup.androidgl.actuators;
 
 import dk.lystrup.androidgl.math.AxisAngle;
 import dk.lystrup.androidgl.math.Quaternion;
-import dk.lystrup.androidgl.math.Vector3;
 import dk.lystrup.androidgl.nodes.Node;
 
 /**
