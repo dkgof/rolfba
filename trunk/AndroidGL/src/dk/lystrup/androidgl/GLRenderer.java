@@ -39,7 +39,9 @@ public class GLRenderer implements Renderer {
         gl.glDepthFunc(GL10.GL_LEQUAL);
         // Really nice perspective calculations.
         gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-
+        //Setup front face direction to counter clockwise
+        gl.glFrontFace(GL10.GL_CCW);
+        
         renderScene.init();
         
         timer.start();
@@ -56,25 +58,27 @@ public class GLRenderer implements Renderer {
     private float delta;
 
     public void onDrawFrame(GL10 gl) {
+        //Clear the screen color and depth buffer
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
         // Reset the modelview matrix
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
 
+        //Get delta time in seconds since last frame
         delta = timer.getDelta();
 
-        if(count % 100 == 0) {
+        //Debug framerate to logcat
+        if(count == 100) {
             float fps = 1.0f / delta;
             Log.i("AndroidGL", "Framerate: "+fps);
+            count = 0;
         }
-
         count++;
 
+        //Update scenegraph
         renderScene.update(delta);
-
-        gl.glFrontFace(GL10.GL_CCW);
-
+        //Render scenegraph
         renderScene.render(gl);
     }
 }
