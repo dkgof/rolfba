@@ -5,7 +5,6 @@
 
 package dk.lystrup.androidgl.nodes;
 
-import dk.lystrup.androidgl.math.AxisAngle;
 import javax.microedition.khronos.opengles.GL10;
 
 /**

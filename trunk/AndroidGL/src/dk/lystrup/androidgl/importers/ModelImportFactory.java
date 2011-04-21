@@ -20,6 +20,7 @@ public class ModelImportFactory {
     
     private ModelImportFactory() {
         importers = new ArrayList<ModelImporter>();
+        importers.add(new ObjImporter());
     }
     
     public static ModelImportFactory singleton() {
@@ -30,7 +31,7 @@ public class ModelImportFactory {
         return singleton;
     }
     
-    public ModelData importModel(String modelFile, String modelName) {
+    public static ModelData importModel(String modelFile, String modelName) {
         return singleton().importModelInside(modelFile, modelName);
     }
     
