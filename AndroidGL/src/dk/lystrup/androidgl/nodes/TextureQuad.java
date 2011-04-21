@@ -43,21 +43,4 @@ public class TextureQuad extends AbstractNode {
     public void render(GL10 gl) {
         model.render(gl);
     }
-
-    @Override
-    public void recursiveRender(GL10 gl) {
-        gl.glPushMatrix();
-            AxisAngle axisRotation = rotation.toAxisAngle();
-            gl.glTranslatef(position.getX(), position.getY(), position.getZ());
-            gl.glRotatef(axisRotation.getAngle(), axisRotation.getAxis().getX(), axisRotation.getAxis().getY(), axisRotation.getAxis().getZ());
-
-            for(Node child : children) {
-                child.recursiveRender(gl);
-            }
-
-            activateTextures(gl);
-            model.render(gl);
-            deactivateTextures(gl);
-        gl.glPopMatrix();
-    }
 }

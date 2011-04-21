@@ -30,23 +30,17 @@ public class HelloWorldScene extends AbstractScene {
         camera.setPosition(0,0,5);
         root.attachNode(camera);
 
-        Node model = new TextureQuad();
-        
         Texture floraTex = new StaticTexture(R.drawable.flora);
 
-        Actuator act = new ConstantRotationActuator(new AxisAngle(90, Vector3.UnitX));
-        model.setActuator(act);
+        Node model = new TextureQuad();
         model.setTexture(floraTex);
-        model.setPosition(-1, 0, 0);
-
-        Node model2 = new TextureQuad();
-        model2.setTexture(floraTex);
-        model2.setPosition(1,0,0);
-        Actuator act2 = new OrientationSensorActuator();
-        model2.setActuator(act2);
+        model.setPosition(0,0,0);
+        model.setScale(2);
+        
+        Actuator act = new OrientationSensorActuator();
+        model.setActuator(act);
 
         root.attachNode(model);
-        root.attachNode(model2);
     }
 
 }

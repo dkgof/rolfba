@@ -72,6 +72,20 @@ public interface Node {
      */
     public void attachNode(Node n);
 
+    /**
+     * Set the scale of this node to the same on all 3 axis
+     * @param scale the scale to use on all 3 axis
+     */
+    public void setScale(float scale);
+    
+    /**
+     * Sets individual scales for all 3 axis
+     * @param x the x-axis scale
+     * @param y the y-axis scale
+     * @param z the z-axis scale
+     */
+    public void setScale(float x, float y, float z);
+    
     public void setActuator(Actuator act);
 
     public void addTexture(Texture tex);
