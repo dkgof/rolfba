@@ -22,6 +22,7 @@ public abstract class AbstractNode implements Node {
     public static final int[] TEXTURE_UNITS = {GL10.GL_TEXTURE0, GL10.GL_TEXTURE1, GL10.GL_TEXTURE2, GL10.GL_TEXTURE3};
 
     protected Vector3 position;
+    protected Vector3 scale;
     protected Quaternion rotation;
     protected Actuator actuator;
 
@@ -32,6 +33,7 @@ public abstract class AbstractNode implements Node {
     public AbstractNode() {
         children = new ArrayList<Node>();
         position = new Vector3();
+        scale = new Vector3(1,1,1);
         rotation = Quaternion.createFromAxisAngle(0, Vector3.UnitX);
         textures = new ArrayList<Texture>();
     }
@@ -67,6 +69,7 @@ public abstract class AbstractNode implements Node {
             AxisAngle axisRotation = rotation.toAxisAngle();
             gl.glTranslatef(position.getX(), position.getY(), position.getZ());
             gl.glRotatef(axisRotation.getAngle(), axisRotation.getAxis().getX(), axisRotation.getAxis().getY(), axisRotation.getAxis().getZ());
+            gl.glScalef(scale.getX(), scale.getY(), scale.getZ());
 
             for(Node child : children) {
                 child.recursiveRender(gl);
@@ -130,16 +133,29 @@ public abstract class AbstractNode implements Node {
         gl.glClientActiveTexture(TEXTURE_UNITS[0]);
     }
 
+    @Override
     public void addTexture(Texture tex) {
         textures.add(tex);
     }
 
+    @Override
     public void setTexture(Texture tex) {
         textures.clear();
         textures.add(tex);
     }
 
+    @Override
     public void setTexture(Texture tex, int textureUnit) {
         textures.set(textureUnit, tex);
+    }
+
+    @Override
+    public void setScale(float scale) {
+        this.scale = new Vector3(scale, scale, scale);
+    }
+
+    @Override
+    public void setScale(float x, float y, float z) {
+        this.scale = new Vector3(x, y, z);
     }
 }
