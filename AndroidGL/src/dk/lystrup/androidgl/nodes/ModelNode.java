@@ -27,19 +27,27 @@ public class ModelNode extends AbstractNode {
      * @param data the ModelData to use for this model
      */
     public ModelNode(ModelData data) {
-        //Create a byte buffer in native memory and wrap it into a float buffer
-        ByteBuffer vbb = ByteBuffer.allocateDirect(data.getVertices().length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        vertexBuffer = vbb.asFloatBuffer();
-        vertexBuffer.put(data.getVertices());
-        vertexBuffer.flip();
+        if(data.getVertices() != null) {
+            //Create a byte buffer in native memory and wrap it into a float buffer
+            ByteBuffer vbb = ByteBuffer.allocateDirect(data.getVertices().length * 4);
+            vbb.order(ByteOrder.nativeOrder());
+            vertexBuffer = vbb.asFloatBuffer();
+            vertexBuffer.put(data.getVertices());
+            vertexBuffer.flip();
+        } else {
+            vertexBuffer = null;
+        }
 
-        //Create a byte buffer in native memory and wrap it into a float buffer
-        ByteBuffer tbb = ByteBuffer.allocateDirect(data.getTexturecoords().length * 4);
-        tbb.order(ByteOrder.nativeOrder());
-        texturecoordsBuffer = tbb.asFloatBuffer();
-        texturecoordsBuffer.put(data.getTexturecoords());
-        texturecoordsBuffer.flip();
+        if(data.getTexturecoords() != null) {
+            //Create a byte buffer in native memory and wrap it into a float buffer
+            ByteBuffer tbb = ByteBuffer.allocateDirect(data.getTexturecoords().length * 4);
+            tbb.order(ByteOrder.nativeOrder());
+            texturecoordsBuffer = tbb.asFloatBuffer();
+            texturecoordsBuffer.put(data.getTexturecoords());
+            texturecoordsBuffer.flip();
+        } else {
+            texturecoordsBuffer = null;
+        }
 
         //Create a byte buffer in native memory and wrap it into a short buffer
         ByteBuffer ibb = ByteBuffer.allocateDirect(data.getIndices().length * 2);
@@ -54,13 +62,19 @@ public class ModelNode extends AbstractNode {
 
     @Override
     public void render(GL10 gl) {
-        //Enable the needed vertex and texture arrays
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        if(vertexBuffer != null) {
+            //Enable the needed vertex array
+            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+            //Setup pointer to the used array
+            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+        }
         
-        //Setup pointers to the used arrays
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texturecoordsBuffer);
+        if(texturecoordsBuffer != null) {
+            //Enable the needed texture array
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            //Setup pointer to the used array
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texturecoordsBuffer);
+        }
 
         //Draw the elements of the model
         gl.glDrawElements(GL10.GL_TRIANGLES, indicesCount, GL10.GL_UNSIGNED_SHORT, indexBuffer);
