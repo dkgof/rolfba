@@ -8,11 +8,10 @@ package dk.lystrup.helloworld;
 import dk.lystrup.androidgl.AbstractScene;
 import dk.lystrup.androidgl.actuators.Actuator;
 import dk.lystrup.androidgl.actuators.ConstantRotationActuator;
+import dk.lystrup.androidgl.actuators.OrientationSensorActuator;
 import dk.lystrup.androidgl.math.AxisAngle;
 import dk.lystrup.androidgl.math.Vector3;
 import dk.lystrup.androidgl.nodes.CameraNode;
-import dk.lystrup.androidgl.nodes.ModelData;
-import dk.lystrup.androidgl.nodes.ModelNode;
 import dk.lystrup.androidgl.nodes.Node;
 import dk.lystrup.androidgl.nodes.TextureQuad;
 import dk.lystrup.androidgl.textures.StaticTexture;
@@ -43,11 +42,11 @@ public class HelloWorldScene extends AbstractScene {
         Node model2 = new TextureQuad();
         model2.setTexture(floraTex);
         model2.setPosition(1,0,0);
-        Actuator act2 = new ConstantRotationActuator(new AxisAngle(45, Vector3.UnitY));
+        Actuator act2 = new OrientationSensorActuator();
         model2.setActuator(act2);
 
         root.attachNode(model);
-        model.attachNode(model2);
+        root.attachNode(model2);
     }
 
 }

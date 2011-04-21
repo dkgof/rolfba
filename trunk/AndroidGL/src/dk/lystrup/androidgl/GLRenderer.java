@@ -20,10 +20,14 @@ public class GLRenderer implements Renderer {
 
     private final Scene renderScene;
     
+    private boolean paused;
+    
     public GLRenderer(Scene renderScene) {
         this.renderScene = renderScene;
         
         timer = new Timer();
+        
+        paused = false;
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig glConfig) {
@@ -58,27 +62,33 @@ public class GLRenderer implements Renderer {
     private float delta;
 
     public void onDrawFrame(GL10 gl) {
-        //Clear the screen color and depth buffer
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        if(!paused) {
+            //Clear the screen color and depth buffer
+            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        // Reset the modelview matrix
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
+            // Reset the modelview matrix
+            gl.glMatrixMode(GL10.GL_MODELVIEW);
+            gl.glLoadIdentity();
 
-        //Get delta time in seconds since last frame
-        delta = timer.getDelta();
+            //Get delta time in seconds since last frame
+            delta = timer.getDelta();
 
-        //Debug framerate to logcat
-        if(count == 100) {
-            float fps = 1.0f / delta;
-            Log.i("AndroidGL", "Framerate: "+fps);
-            count = 0;
+            //Debug framerate to logcat
+            if(count == 100) {
+                float fps = 1.0f / delta;
+                Log.i("AndroidGL", "Framerate: "+fps);
+                count = 0;
+            }
+            count++;
+
+            //Update scenegraph
+            renderScene.update(delta);
+            //Render scenegraph
+            renderScene.render(gl);
         }
-        count++;
-
-        //Update scenegraph
-        renderScene.update(delta);
-        //Render scenegraph
-        renderScene.render(gl);
+    }
+    
+    public void setPaused(boolean p) {
+        paused = p;
     }
 }
