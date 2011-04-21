@@ -29,14 +29,12 @@ public class ObjImporter implements ModelImporter {
             String line = reader.readLine();
             
             Pattern vertexPattern = Pattern.compile("v (\\S+) (\\S+) (\\S+)");
-            Pattern facePattern = Pattern.compile("f (\\d?)/(\\d?)/(\\d?) (\\d?)/(\\d?)/(\\d?) (\\d?)/(\\d?)/(\\d?)");
+            Pattern facePattern = Pattern.compile("f (\\S+) (\\S+) (\\S+)");
 
             List<Float> vertexList = new LinkedList<Float>();
             List<Short> indicesList = new LinkedList<Short>();
             
             while(line != null) {
-                Log.d("ObjImporter", line);
-                
                 Matcher vertexMatcher = vertexPattern.matcher(line);
                 if(vertexMatcher.matches()) {
                     float x = Float.parseFloat(vertexMatcher.group(1));
@@ -45,18 +43,20 @@ public class ObjImporter implements ModelImporter {
                     vertexList.add(x);
                     vertexList.add(y);
                     vertexList.add(z);
-                    Log.i("OnjImporter", "Adding vertex: "+x+","+y+","+z);
                 }
                 
                 Matcher faceMatcher = facePattern.matcher(line);
                 if(faceMatcher.matches()) {
-                    short a = Short.parseShort(faceMatcher.group(1));
-                    short b = Short.parseShort(faceMatcher.group(4));
-                    short c = Short.parseShort(faceMatcher.group(7));
+                    String[] splitA = faceMatcher.group(1).split("/");
+                    String[] splitB = faceMatcher.group(2).split("/");
+                    String[] splitC = faceMatcher.group(3).split("/");
+                    
+                    short a = Short.parseShort(splitA[0]);
+                    short b = Short.parseShort(splitB[0]);
+                    short c = Short.parseShort(splitC[0]);
                     indicesList.add(a);
                     indicesList.add(b);
                     indicesList.add(c);
-                    Log.i("OnjImporter", "Adding face: "+a+","+b+","+c);
                 }
                 
                 line = reader.readLine();

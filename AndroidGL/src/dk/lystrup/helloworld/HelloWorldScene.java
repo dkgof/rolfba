@@ -30,7 +30,7 @@ public class HelloWorldScene extends AbstractScene {
 
         Texture floraTex = new StaticTexture(R.drawable.flora);
 
-        Node model = new ModelNode(ModelImportFactory.importModel("dk/lystrup/helloworld/models/cube.obj", "Cube"));
+        Node model = new ModelNode(ModelImportFactory.importModel("dk/lystrup/helloworld/models/total.obj", "Custom"));
         model.setTexture(floraTex);
         model.setPosition(0,0,0);
         model.setScale(0.5f);
