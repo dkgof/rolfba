@@ -32,7 +32,7 @@ public class GLRenderer implements Renderer {
 
     public void onSurfaceCreated(GL10 gl, EGLConfig glConfig) {
         // Set the background color to black ( rgba ).
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // Enable Smooth Shading, default not really needed.
         gl.glShadeModel(GL10.GL_SMOOTH);
         // Depth buffer setup.
@@ -63,15 +63,15 @@ public class GLRenderer implements Renderer {
 
     public void onDrawFrame(GL10 gl) {
         if(!paused) {
+            //Get delta time in seconds since last frame
+            delta = timer.getDelta();
+
             //Clear the screen color and depth buffer
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
             // Reset the modelview matrix
             gl.glMatrixMode(GL10.GL_MODELVIEW);
             gl.glLoadIdentity();
-
-            //Get delta time in seconds since last frame
-            delta = timer.getDelta();
 
             //Debug framerate to logcat
             if(count == 100) {
