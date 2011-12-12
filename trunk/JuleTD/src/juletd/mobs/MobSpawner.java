@@ -7,6 +7,7 @@ package juletd.mobs;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import juletd.GameObject;
+import processing.core.PVector;
 
 /**
  *
@@ -26,10 +27,13 @@ public class MobSpawner {
         }
     }
     
-    public AbstractMob createMob() {
+    public AbstractMob createMob(PVector position) {
         try {
             Constructor constructor = mobType.getConstructor();
-            return (AbstractMob)constructor.newInstance();
+            AbstractMob mob = (AbstractMob)constructor.newInstance();
+            mob.setPosition(position);
+            
+            return mob;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
             ex.printStackTrace();
         }

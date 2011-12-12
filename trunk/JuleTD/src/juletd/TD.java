@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import juletd.mobs.AbstractMob;
 import juletd.mobs.Mob;
 import juletd.mobs.MobSpawner;
-import juletd.towers.Tower;
 import juletd.towers.projectiles.Projectile;
 
 /**
@@ -78,7 +77,8 @@ public class TD extends PApplet implements TuioListener {
         
         //5% chance to spawn a mob
         if(random(100) >= 95) {
-            AbstractMob m = spawner.createMob();
+            PVector position = new PVector(TD.getTD().random(0,TD.getTD().getWidth()), TD.getTD().random(0,TD.getTD().getHeight()));
+            AbstractMob m = spawner.createMob(position);
             addMob(m);
         }
 

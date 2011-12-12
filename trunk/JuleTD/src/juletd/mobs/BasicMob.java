@@ -15,7 +15,6 @@ import processing.core.PVector;
 public class BasicMob extends AbstractMob {
 
     public BasicMob() {
-        position = new PVector(TD.getTD().random(0,TD.getTD().getWidth()), TD.getTD().random(0,TD.getTD().getHeight()));
         speed = 5;
     }
     
