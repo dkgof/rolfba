@@ -11,18 +11,18 @@ import TUIO.TuioObject;
 import TUIO.TuioTime;
 import java.util.HashMap;
 import java.util.Map;
-import juletd.TD;
+import juletd.World;
 
 /**
  *
  * @author Rolf
  */
 public class TowerTuioHandler implements TuioListener {
-    private final TD td;
+    private final World td;
 
     private Map<Integer, AbstractTower> towerMap;
     
-    public TowerTuioHandler(TD td) {
+    public TowerTuioHandler(World td) {
         this.td = td;
         
         towerMap = new HashMap<>();

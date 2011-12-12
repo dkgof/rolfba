@@ -16,12 +16,14 @@ import juletd.mobs.MobSpawner;
 import juletd.towers.projectiles.Projectile;
 
 /**
- *
+ * This class models the world of the JuleTD project. It handles processing of
+ * mobs, towers and projectiles, and call listeners on TUIO events
+ * 
  * @author Rolf
  */
-public class TD extends PApplet implements TuioListener {
+public class World extends PApplet implements TuioListener {
 
-    private static TD singleton;
+    private static World singleton;
     
     private final List<TuioListener> tuioListeners;
     private final List<GameObject> projectiles;
@@ -34,7 +36,10 @@ public class TD extends PApplet implements TuioListener {
 
     private int last;
 
-    public TD() {
+    /**
+     * Creates a new blank TD object
+     */
+    public World() {
         tuioListeners = new ArrayList<>();
         
         projectiles = new CopyOnWriteArrayList<>();
@@ -48,14 +53,25 @@ public class TD extends PApplet implements TuioListener {
         singleton = this;
     }
 
-    public static TD getTD() {
+    /**
+     * Return the current TD instance, which is the last one created with TD()
+     * @return 
+     */
+    public static World getTD() {
         return singleton;
     }
     
+    /**
+     * Add a TuioListener to listen for TUIO events
+     * @param listener the listener to add
+     */
     public void addTuioListener(TuioListener listener) {
         tuioListeners.add(listener);
     }
     
+    /**
+     * Called by Processing to setup the Processing applet
+     */
     @Override
     public void setup() {
         tuioClient = new TuioProcessing(this);
@@ -68,6 +84,9 @@ public class TD extends PApplet implements TuioListener {
         last = 0;
     }
 
+    /**
+     * Called by Processing when drawing is requested
+     */
     @Override
     public void draw() {
         background(255);
@@ -77,7 +96,7 @@ public class TD extends PApplet implements TuioListener {
         
         //5% chance to spawn a mob
         if(random(100) >= 95) {
-            PVector position = new PVector(TD.getTD().random(0,TD.getTD().getWidth()), TD.getTD().random(0,TD.getTD().getHeight()));
+            PVector position = new PVector(World.getTD().random(0,World.getTD().getWidth()), World.getTD().random(0,World.getTD().getHeight()));
             AbstractMob m = spawner.createMob(position);
             addMob(m);
         }
@@ -90,6 +109,12 @@ public class TD extends PApplet implements TuioListener {
         last = now;
     }
 
+    /**
+     * Return the list of mobs within range of point
+     * @param point the point to check range from
+     * @param range the range to check
+     * @return a list of mobs within range of point
+     */
     public List<AbstractMob> getMobsInRange(PVector point, double range) {
         List<AbstractMob> foundMobs = new ArrayList<>();
         
@@ -162,7 +187,7 @@ public class TD extends PApplet implements TuioListener {
      */
     public static void main(String[] args) {
         //Start the processing applet
-        PApplet.main(new String[]{"juletd.TD"});
+        PApplet.main(new String[]{"juletd.World"});
     }
 
     private void updateGameObjects(float delta) {
@@ -189,30 +214,60 @@ public class TD extends PApplet implements TuioListener {
         }
     }
     
+    /**
+     * Add a tower to this world
+     * @param go the tower to add
+     */
     public void addTower(GameObject go) {
         towers.add(go);
     }
 
+    /**
+     * Removes a tower from this world
+     * @param go the tower to remove
+     */
     public void removeTower(GameObject go) {
         towers.remove(go);
     }
 
+    /**
+     * Add a projectile to this world
+     * @param go the projectile to add
+     */
     public void addProjectile(GameObject go) {
         projectiles.add(go);
     }
 
+    /**
+     * Removes a projectile from this world
+     * @param go the projectile to remove
+     */
     public void removeProjectile(GameObject go) {
         projectiles.remove(go);
     }
 
+    /**
+     * Adds a mob to this world
+     * @param go the mob to add
+     */
     public void addMob(GameObject go) {
         mobs.add(go);
     }
 
+    /**
+     * Removes a mob from this world
+     * @param go the mob to remove
+     */
     public void removeMob(GameObject go) {
         mobs.remove(go);
     }
 
+    /**
+     * Check for collisions between mobs and projectiles, based on the range
+     * between their positions.
+     * 
+     * TODO: Base this on physics from JBox2D or at least java rectangles
+     */
     private void checkForCollisions() {
         for(GameObject projObj : projectiles) {
             for(GameObject mobObj : mobs) {

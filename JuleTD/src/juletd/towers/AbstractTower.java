@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import juletd.AbstractGameObject;
 import juletd.GameObject;
-import juletd.TD;
+import juletd.World;
 import juletd.mobs.AbstractMob;
 import juletd.towers.projectiles.AbstractProjectile;
 import processing.core.PApplet;
@@ -43,7 +43,7 @@ public abstract class AbstractTower extends AbstractGameObject implements Tower 
 
             if(timeUntilShot <= 0) {
 
-                List<AbstractMob> mobsInRange = TD.getTD().getMobsInRange(position, range);
+                List<AbstractMob> mobsInRange = World.getTD().getMobsInRange(position, range);
 
                 if(!mobsInRange.isEmpty()) {
                     AbstractMob randomMob = mobsInRange.get(applet.parseInt(applet.random(mobsInRange.size())));
@@ -83,7 +83,7 @@ public abstract class AbstractTower extends AbstractGameObject implements Tower 
             Constructor projectileConstructor = projectileClass.getConstructor(GameObject.class, GameObject.class);
             AbstractProjectile projectile = (AbstractProjectile) projectileConstructor.newInstance(this, randomMob);
             
-            TD.getTD().addProjectile(projectile);
+            World.getTD().addProjectile(projectile);
             
             timeUntilShot = reloadTime;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
