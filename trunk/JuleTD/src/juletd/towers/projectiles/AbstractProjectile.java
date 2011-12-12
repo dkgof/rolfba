@@ -6,7 +6,7 @@ package juletd.towers.projectiles;
 
 import juletd.AbstractGameObject;
 import juletd.GameObject;
-import juletd.TD;
+import juletd.World;
 import processing.core.PApplet;
 
 /**
@@ -38,7 +38,7 @@ public abstract class AbstractProjectile extends AbstractGameObject implements P
         
         if(alive > duration) {
             //Projectile has lived long enough
-            TD.getTD().removeProjectile(this);
+            World.getTD().removeProjectile(this);
         }
         
         doUpdate(applet, deltaTime);

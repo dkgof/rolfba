@@ -4,7 +4,7 @@
  */
 package juletd.mobs;
 
-import juletd.TD;
+import juletd.World;
 import processing.core.PApplet;
 import processing.core.PVector;
 
