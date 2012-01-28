@@ -5,14 +5,14 @@
 
 package dk.lystrup.helloworld;
 
-import dk.lystrup.androidgl.AbstractScene;
-import dk.lystrup.androidgl.actuators.Actuator;
-import dk.lystrup.androidgl.actuators.OrientationSensorActuator;
-import dk.lystrup.androidgl.nodes.CameraNode;
-import dk.lystrup.androidgl.nodes.Node;
-import dk.lystrup.androidgl.nodes.TextureQuad;
-import dk.lystrup.androidgl.textures.StaticTexture;
-import dk.lystrup.androidgl.textures.Texture;
+import dk.lystrup.lagl.AbstractScene;
+import dk.lystrup.lagl.actuators.Actuator;
+import dk.lystrup.lagl.actuators.OrientationSensorActuator;
+import dk.lystrup.lagl.nodes.CameraNode;
+import dk.lystrup.lagl.nodes.Node;
+import dk.lystrup.lagl.nodes.TextureQuad;
+import dk.lystrup.lagl.textures.StaticTexture;
+import dk.lystrup.lagl.textures.Texture;
 
 /**
  *
