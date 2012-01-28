@@ -15,13 +15,17 @@ import javax.microedition.khronos.opengles.GL10;
  * and delegates the rendering work to a Scene object
  * @author Rolf
  */
-public class LAGLRenderer implements GLSurfaceView.Renderer {
+public class LAGLRenderer {
 
     private final Timer timer;
 
     private final Scene renderScene;
     
     private boolean paused;
+
+    private int count = 0;
+    
+    private float delta;
     
     public LAGLRenderer(Scene renderScene) {
         this.renderScene = renderScene;
@@ -31,7 +35,7 @@ public class LAGLRenderer implements GLSurfaceView.Renderer {
         paused = false;
     }
 
-    public void onSurfaceCreated(GL10 unused, EGLConfig glConfig) {
+    public void surfaceCreated(EGLConfig glConfig) {
         // Set the background color to black ( rgba ).
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         
@@ -40,17 +44,14 @@ public class LAGLRenderer implements GLSurfaceView.Renderer {
         timer.start();
     }
 
-    public void onSurfaceChanged(GL10 unused, int width, int height) {
+    public void surfaceChanged(int width, int height) {
         // Sets the current view port to the new size.
         GLES20.glViewport(0, 0, width, height);
 
         Display.singleton().setResolution(width, height);
     }
 
-    private int count = 0;
-    private float delta;
-
-    public void onDrawFrame(GL10 unused) {
+    public void drawFrame() {
         if(!paused) {
             //Get delta time in seconds since last frame
             delta = timer.getDelta();

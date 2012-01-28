@@ -17,10 +17,8 @@ public class LAGLSurfaceView extends GLSurfaceView {
         
         setEGLContextClientVersion(2);
         
-        LAGLRenderer renderer = new LAGLRenderer(scene);
+        GLRenderer renderer = new GLRenderer(scene);
         
         setRenderer(renderer);
-        
-        Display.singleton().setRenderer(renderer);
     }
 }
