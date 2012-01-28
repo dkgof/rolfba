@@ -4,6 +4,8 @@
  */
 package dk.lystrup.androidgl.textures;
 
+import static android.opengl.GLES10.*;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
@@ -31,30 +33,30 @@ public class StaticTexture implements Texture {
         if (!loaded) {
             load(gl);
         }
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, textureId);
     }
 
     public void unbind(GL10 gl) {
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     private void load(GL10 gl) {
         Bitmap bmp = loadImage();
 
         IntBuffer textureIds = IntBuffer.allocate(1);
-        gl.glGenTextures(textureId, textureIds);
+        glGenTextures(textureId, textureIds);
 
         textureId = textureIds.get(0);
 
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, textureId);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
+        GLUtils.texImage2D(GL_TEXTURE_2D, 0, bmp, 0);
 
         loaded = true;
     }

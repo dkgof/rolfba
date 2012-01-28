@@ -4,6 +4,7 @@
  */
 package dk.lystrup.androidgl;
 
+import static android.opengl.GLES10.*;
 import android.opengl.GLSurfaceView.Renderer;
 import android.util.Log;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -34,17 +35,17 @@ public class GLRenderer implements Renderer {
         // Set the background color to black ( rgba ).
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // Enable Smooth Shading, default not really needed.
-        gl.glShadeModel(GL10.GL_SMOOTH);
+        glShadeModel(GL_SMOOTH);
         // Depth buffer setup.
-        gl.glClearDepthf(1.0f);
+        glClearDepthf(1.0f);
         // Enables depth testing.
-        gl.glEnable(GL10.GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
         // The type of depth testing to do.
-        gl.glDepthFunc(GL10.GL_LEQUAL);
+        glDepthFunc(GL_LEQUAL);
         // Really nice perspective calculations.
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
         //Setup front face direction to counter clockwise
-        gl.glFrontFace(GL10.GL_CCW);
+        glFrontFace(GL_CCW);
         
         renderScene.init();
         
@@ -53,7 +54,7 @@ public class GLRenderer implements Renderer {
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         // Sets the current view port to the new size.
-        gl.glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height);
 
         Display.singleton().setResolution(width, height);
     }
@@ -67,11 +68,11 @@ public class GLRenderer implements Renderer {
             delta = timer.getDelta();
 
             //Clear the screen color and depth buffer
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Reset the modelview matrix
-            gl.glMatrixMode(GL10.GL_MODELVIEW);
-            gl.glLoadIdentity();
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
 
             //Debug framerate to logcat
             if(count == 100) {

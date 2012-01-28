@@ -5,6 +5,8 @@
 
 package dk.lystrup.androidgl.nodes;
 
+import static android.opengl.GLES10.*;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -64,23 +66,23 @@ public class ModelNode extends AbstractNode {
     public void render(GL10 gl) {
         if(vertexBuffer != null) {
             //Enable the needed vertex array
-            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+            glEnableClientState(GL_VERTEX_ARRAY);
             //Setup pointer to the used array
-            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
+            glVertexPointer(3, GL_FLOAT, 0, vertexBuffer);
         }
         
         if(texturecoordsBuffer != null) {
             //Enable the needed texture array
-            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             //Setup pointer to the used array
-            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, texturecoordsBuffer);
+            glTexCoordPointer(2, GL_FLOAT, 0, texturecoordsBuffer);
         }
 
         //Draw the elements of the model
-        gl.glDrawElements(GL10.GL_TRIANGLES, indicesCount, GL10.GL_UNSIGNED_SHORT, indexBuffer);
+        glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_SHORT, indexBuffer);
 
         //Disable vertex and texture array support
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
 }

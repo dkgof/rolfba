@@ -5,6 +5,8 @@
 
 package dk.lystrup.androidgl.nodes;
 
+import static android.opengl.GLES10.*;
+
 import dk.lystrup.androidgl.actuators.Actuator;
 import dk.lystrup.androidgl.math.AxisAngle;
 import dk.lystrup.androidgl.math.Quaternion;
@@ -19,7 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
  * @author Rolf
  */
 public abstract class AbstractNode implements Node {
-    public static final int[] TEXTURE_UNITS = {GL10.GL_TEXTURE0, GL10.GL_TEXTURE1, GL10.GL_TEXTURE2, GL10.GL_TEXTURE3};
+    public static final int[] TEXTURE_UNITS = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
 
     protected Vector3 position;
     protected Vector3 scale;
@@ -65,11 +67,11 @@ public abstract class AbstractNode implements Node {
 
     @Override
     public void recursiveRender(GL10 gl) {
-        gl.glPushMatrix();
+        glPushMatrix();
             AxisAngle axisRotation = rotation.toAxisAngle();
-            gl.glTranslatef(position.getX(), position.getY(), position.getZ());
-            gl.glRotatef(axisRotation.getAngle(), axisRotation.getAxis().getX(), axisRotation.getAxis().getY(), axisRotation.getAxis().getZ());
-            gl.glScalef(scale.getX(), scale.getY(), scale.getZ());
+            glTranslatef(position.getX(), position.getY(), position.getZ());
+            glRotatef(axisRotation.getAngle(), axisRotation.getAxis().getX(), axisRotation.getAxis().getY(), axisRotation.getAxis().getZ());
+            glScalef(scale.getX(), scale.getY(), scale.getZ());
 
             for(Node child : children) {
                 child.recursiveRender(gl);
@@ -78,7 +80,7 @@ public abstract class AbstractNode implements Node {
             activateTextures(gl);
             this.render(gl);
             deactivateTextures(gl);
-        gl.glPopMatrix();
+        glPopMatrix();
     }
 
     public abstract void render(GL10 gl);
@@ -105,12 +107,12 @@ public abstract class AbstractNode implements Node {
     }
 
     protected void activateTextures(GL10 gl) {
-        gl.glEnable(GL10.GL_TEXTURE_2D);
+        glEnable(GL_TEXTURE_2D);
 
         int i = 0;
         for(Texture tex : textures) {
-            gl.glActiveTexture(TEXTURE_UNITS[i]);
-            gl.glClientActiveTexture(TEXTURE_UNITS[i]);
+            glActiveTexture(TEXTURE_UNITS[i]);
+            glClientActiveTexture(TEXTURE_UNITS[i]);
 
             tex.bind(gl);
 
@@ -119,18 +121,18 @@ public abstract class AbstractNode implements Node {
     }
 
     protected void deactivateTextures(GL10 gl) {
-        gl.glDisable(GL10.GL_TEXTURE_2D);
+        glDisable(GL_TEXTURE_2D);
         int i = 0;
         for(Texture tex : textures) {
-            gl.glActiveTexture(TEXTURE_UNITS[i]);
-            gl.glClientActiveTexture(TEXTURE_UNITS[i]);
+            glActiveTexture(TEXTURE_UNITS[i]);
+            glClientActiveTexture(TEXTURE_UNITS[i]);
 
             tex.unbind(gl);
 
             i++;
         }
-        gl.glActiveTexture(TEXTURE_UNITS[0]);
-        gl.glClientActiveTexture(TEXTURE_UNITS[0]);
+        glActiveTexture(TEXTURE_UNITS[0]);
+        glClientActiveTexture(TEXTURE_UNITS[0]);
     }
 
     @Override

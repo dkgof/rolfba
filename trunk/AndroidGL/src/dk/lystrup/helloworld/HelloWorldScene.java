@@ -8,10 +8,9 @@ package dk.lystrup.helloworld;
 import dk.lystrup.androidgl.AbstractScene;
 import dk.lystrup.androidgl.actuators.Actuator;
 import dk.lystrup.androidgl.actuators.OrientationSensorActuator;
-import dk.lystrup.androidgl.importers.ModelImportFactory;
 import dk.lystrup.androidgl.nodes.CameraNode;
-import dk.lystrup.androidgl.nodes.ModelNode;
 import dk.lystrup.androidgl.nodes.Node;
+import dk.lystrup.androidgl.nodes.TextureQuad;
 import dk.lystrup.androidgl.textures.StaticTexture;
 import dk.lystrup.androidgl.textures.Texture;
 
@@ -30,10 +29,10 @@ public class HelloWorldScene extends AbstractScene {
 
         Texture floraTex = new StaticTexture(R.drawable.flora);
 
-        Node model = new ModelNode(ModelImportFactory.importModel("dk/lystrup/helloworld/models/total.obj", "Custom"));
+        Node model = new TextureQuad();
         model.setTexture(floraTex);
         model.setPosition(0,0,0);
-        model.setScale(0.5f);
+        model.setScale(1f);
         
         Actuator act = new OrientationSensorActuator();
         model.setActuator(act);
