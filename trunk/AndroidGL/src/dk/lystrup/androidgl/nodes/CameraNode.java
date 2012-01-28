@@ -1,12 +1,11 @@
 
 package dk.lystrup.androidgl.nodes;
 
-import static android.opengl.GLES10.*;
-
 import android.opengl.GLU;
+import android.opengl.Matrix;
 import dk.lystrup.androidgl.Display;
+import dk.lystrup.androidgl.LAGLMatrix;
 import dk.lystrup.androidgl.math.Vector3;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * This class models a Camera in OpenGL that when rendered will set up OpenGL's
@@ -56,18 +55,15 @@ public class CameraNode extends AbstractNode {
     }
 
     @Override
-    public void render(GL10 gl) {
+    public void render() {
         Vector3 direction = position.add(Vector3.UnitZ.scale(-1));
 
         if(recalculateAspect) {
             aspect = Display.singleton().getWidth() / (Display.singleton().getHeight() * 1.0f);
         }
 
-        glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            GLU.gluPerspective(gl, fieldOfView, aspect, nearPlane, farPlane);
-            GLU.gluLookAt(gl, position.getX(), position.getY(), position.getZ(), direction.getX(), direction.getY(), direction.getZ(), 0, 1, 0);
-        glMatrixMode(GL_MODELVIEW);
+        Matrix.frustumM(LAGLMatrix.singleton().getMatrix(LAGLMatrix.MatrixType.PROJECTION), 0, -aspect, aspect, -1, 1, nearPlane, farPlane); 
+        Matrix.setLookAtM(LAGLMatrix.singleton().getMatrix(LAGLMatrix.MatrixType.VIEW), 0, position.getX(), position.getY(), position.getZ(), direction.getX(), direction.getY(), direction.getZ(), 0, 1, 0);
     }
 
     /**

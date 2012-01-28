@@ -6,7 +6,6 @@
 package dk.lystrup.androidgl;
 
 import android.app.Activity;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,23 +13,19 @@ import android.util.Log;
  *
  * @author Rolf
  */
-public abstract class GLActivity extends Activity {
-    private GLRenderer renderer;
+public abstract class LAGLActivity extends Activity {
+    private LAGLSurfaceView glView;
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
+    public void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
         
         Log.i("AndroidGL", "Creating GLActivity");
 
         SensorCore.create(this);
 
-        GLSurfaceView glView = new GLSurfaceView(this);
-
-        renderer = new GLRenderer(getScene());
-        
-        glView.setRenderer(renderer);
+        glView = new LAGLSurfaceView(this, this.getScene());
 
         Display.singleton().setContext(this);
 
@@ -41,7 +36,7 @@ public abstract class GLActivity extends Activity {
     protected void onPause() {
         super.onPause();
         SensorCore.singleton().pause();
-        renderer.setPaused(true);
+        glView.onPause();
         Log.i("AndroidGL", "Paused");
     }
 
@@ -49,7 +44,7 @@ public abstract class GLActivity extends Activity {
     protected void onResume() {
         super.onResume();
         SensorCore.singleton().resume();
-        renderer.setPaused(false);
+        glView.onResume();
         Log.i("AndroidGL", "Resumed");
     }
 

@@ -4,8 +4,8 @@
  */
 package dk.lystrup.androidgl;
 
-import static android.opengl.GLES10.*;
-import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLES20;
+import android.opengl.GLSurfaceView;
 import android.util.Log;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  * and delegates the rendering work to a Scene object
  * @author Rolf
  */
-public class GLRenderer implements Renderer {
+public class LAGLRenderer implements GLSurfaceView.Renderer {
 
     private final Timer timer;
 
@@ -23,7 +23,7 @@ public class GLRenderer implements Renderer {
     
     private boolean paused;
     
-    public GLRenderer(Scene renderScene) {
+    public LAGLRenderer(Scene renderScene) {
         this.renderScene = renderScene;
         
         timer = new Timer();
@@ -31,30 +31,18 @@ public class GLRenderer implements Renderer {
         paused = false;
     }
 
-    public void onSurfaceCreated(GL10 gl, EGLConfig glConfig) {
+    public void onSurfaceCreated(GL10 unused, EGLConfig glConfig) {
         // Set the background color to black ( rgba ).
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        // Enable Smooth Shading, default not really needed.
-        glShadeModel(GL_SMOOTH);
-        // Depth buffer setup.
-        glClearDepthf(1.0f);
-        // Enables depth testing.
-        glEnable(GL_DEPTH_TEST);
-        // The type of depth testing to do.
-        glDepthFunc(GL_LEQUAL);
-        // Really nice perspective calculations.
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-        //Setup front face direction to counter clockwise
-        glFrontFace(GL_CCW);
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         
         renderScene.init();
         
         timer.start();
     }
 
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
+    public void onSurfaceChanged(GL10 unused, int width, int height) {
         // Sets the current view port to the new size.
-        glViewport(0, 0, width, height);
+        GLES20.glViewport(0, 0, width, height);
 
         Display.singleton().setResolution(width, height);
     }
@@ -62,17 +50,16 @@ public class GLRenderer implements Renderer {
     private int count = 0;
     private float delta;
 
-    public void onDrawFrame(GL10 gl) {
+    public void onDrawFrame(GL10 unused) {
         if(!paused) {
             //Get delta time in seconds since last frame
             delta = timer.getDelta();
 
             //Clear the screen color and depth buffer
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-            // Reset the modelview matrix
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+            // Reset the model matrix
+            LAGLMatrix.singleton().resetToIdentity(LAGLMatrix.MatrixType.MODEL);
 
             //Debug framerate to logcat
             if(count == 100) {
@@ -84,8 +71,9 @@ public class GLRenderer implements Renderer {
 
             //Update scenegraph
             renderScene.update(delta);
+            
             //Render scenegraph
-            renderScene.render(gl);
+            renderScene.render();
         }
     }
     

@@ -5,8 +5,6 @@
 
 package dk.lystrup.androidgl.nodes;
 
-import javax.microedition.khronos.opengles.GL10;
-
 /**
  * A TextureQuad is a 3d plane with an associated texture, great for use as
  * for example a billboard or any other flat surface that is textured.
@@ -39,7 +37,7 @@ public class TextureQuad extends AbstractNode {
     }
     
     @Override
-    public void render(GL10 gl) {
-        model.render(gl);
+    public void render() {
+        model.render();
     }
 }

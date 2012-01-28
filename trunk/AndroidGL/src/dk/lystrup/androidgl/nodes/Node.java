@@ -9,7 +9,6 @@ import dk.lystrup.androidgl.actuators.Actuator;
 import dk.lystrup.androidgl.math.Quaternion;
 import dk.lystrup.androidgl.math.Vector3;
 import dk.lystrup.androidgl.textures.Texture;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * This interface represents a Node in the scene graph, it can be rendered
@@ -23,9 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
 public interface Node {
     /**
      * Recursively render this node and all its children
-     * @param gl The OpenGL variable to use for rendering
      */
-    public void recursiveRender(GL10 gl);
+    public void recursiveRender();
 
     /**
      * Recursively call the update method on all children to allow the actuator

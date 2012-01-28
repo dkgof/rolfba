@@ -19,6 +19,8 @@ public class Display {
     private int height;
 
     private Context context;
+    
+    private LAGLRenderer renderer;
 
     public static Display singleton() {
         if(singleton == null) {
@@ -59,5 +61,19 @@ public class Display {
      */
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    /**
+     * @return the renderer
+     */
+    public LAGLRenderer getRenderer() {
+        return renderer;
+    }
+
+    /**
+     * @param renderer the renderer to set
+     */
+    public void setRenderer(LAGLRenderer renderer) {
+        this.renderer = renderer;
     }
 }

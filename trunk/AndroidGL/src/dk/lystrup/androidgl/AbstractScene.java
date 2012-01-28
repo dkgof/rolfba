@@ -7,7 +7,6 @@ package dk.lystrup.androidgl;
 
 import dk.lystrup.androidgl.nodes.EmptyNode;
 import dk.lystrup.androidgl.nodes.Node;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Implementing class that handles the basic work of the Scene interface
@@ -35,8 +34,8 @@ public abstract class AbstractScene implements Scene {
         root.recursiveUpdate(deltaTime);
     }
     
-    public final void render(GL10 gl) {
-        root.recursiveRender(gl);
+    public final void render() {
+        root.recursiveRender();
     }
 
     protected abstract void customInit();

@@ -5,13 +5,11 @@
 
 package dk.lystrup.androidgl.nodes;
 
-import static android.opengl.GLES10.*;
-
+import android.opengl.GLES20;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * This Node renders a 3d-model described by a ModelData object.
@@ -63,26 +61,28 @@ public class ModelNode extends AbstractNode {
     }
 
     @Override
-    public void render(GL10 gl) {
+    public void render() {
+        /*
         if(vertexBuffer != null) {
             //Enable the needed vertex array
-            glEnableClientState(GL_VERTEX_ARRAY);
+            GLES20.glEnableClientState(GLES20.GL_VERTEX_ARRAY);
             //Setup pointer to the used array
-            glVertexPointer(3, GL_FLOAT, 0, vertexBuffer);
+            GLES20.glVertexPointer(3, GLES20.GL_FLOAT, 0, vertexBuffer);
         }
         
         if(texturecoordsBuffer != null) {
             //Enable the needed texture array
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            GLES20.glEnableClientState(GLES20.GL_TEXTURE_COORD_ARRAY);
             //Setup pointer to the used array
-            glTexCoordPointer(2, GL_FLOAT, 0, texturecoordsBuffer);
+            GLES20.glTexCoordPointer(2, GLES20.GL_FLOAT, 0, texturecoordsBuffer);
         }
 
         //Draw the elements of the model
-        glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_SHORT, indexBuffer);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesCount, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
 
         //Disable vertex and texture array support
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        GLES20.glDisableClientState(GLES20.GL_VERTEX_ARRAY);
+        GLES20.glDisableClientState(GLES20.GL_TEXTURE_COORD_ARRAY);
+        */
     }
 }
