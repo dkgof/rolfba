@@ -5,9 +5,9 @@
 
 package dk.lystrup.androidgl.textures;
 
+import static android.opengl.GLES10.GL_TEXTURE_2D;
+import static android.opengl.GLES10.glBindTexture;
 import android.util.Log;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -30,11 +30,11 @@ public class DynamicTexture implements Texture {
             Log.wtf("AndroidGL", "Unable to use a dynamic texture before initializing it.");
             System.exit(-1);
         }
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        glBindTexture(GL_TEXTURE_2D, textureId);
     }
 
     public void unbind(GL10 gl) {
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     public void setTextureId(int textureId) {

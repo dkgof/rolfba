@@ -1,6 +1,8 @@
 
 package dk.lystrup.androidgl.nodes;
 
+import static android.opengl.GLES10.*;
+
 import android.opengl.GLU;
 import dk.lystrup.androidgl.Display;
 import dk.lystrup.androidgl.math.Vector3;
@@ -61,11 +63,11 @@ public class CameraNode extends AbstractNode {
             aspect = Display.singleton().getWidth() / (Display.singleton().getHeight() * 1.0f);
         }
 
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-            gl.glLoadIdentity();
+        glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
             GLU.gluPerspective(gl, fieldOfView, aspect, nearPlane, farPlane);
             GLU.gluLookAt(gl, position.getX(), position.getY(), position.getZ(), direction.getX(), direction.getY(), direction.getZ(), 0, 1, 0);
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
+        glMatrixMode(GL_MODELVIEW);
     }
 
     /**
