@@ -4,8 +4,8 @@
  */
 package dk.lystrup.helloworld;
 
-import dk.lystrup.androidgl.LAGLActivity;
-import dk.lystrup.androidgl.Scene;
+import dk.lystrup.lagl.LAGLActivity;
+import dk.lystrup.lagl.Scene;
 
 /**
  *
