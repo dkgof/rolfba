@@ -4,14 +4,14 @@
  */
 package dk.lystrup.helloworld;
 
-import dk.lystrup.androidgl.GLActivity;
+import dk.lystrup.androidgl.LAGLActivity;
 import dk.lystrup.androidgl.Scene;
 
 /**
  *
  * @author Rolf
  */
-public class MainActivity extends GLActivity {
+public class MainActivity extends LAGLActivity {
 
     @Override
     protected Scene getScene() {

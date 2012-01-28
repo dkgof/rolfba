@@ -5,23 +5,21 @@
 
 package dk.lystrup.androidgl.nodes;
 
-import static android.opengl.GLES10.*;
-
+import android.opengl.GLES20;
+import dk.lystrup.androidgl.LAGLMatrix;
 import dk.lystrup.androidgl.actuators.Actuator;
-import dk.lystrup.androidgl.math.AxisAngle;
 import dk.lystrup.androidgl.math.Quaternion;
 import dk.lystrup.androidgl.math.Vector3;
 import dk.lystrup.androidgl.textures.Texture;
 import java.util.ArrayList;
 import java.util.List;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Implementing class with all the basic parts of the Node interface
  * @author Rolf
  */
 public abstract class AbstractNode implements Node {
-    public static final int[] TEXTURE_UNITS = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
+    public static final int[] TEXTURE_UNITS = {GLES20.GL_TEXTURE0, GLES20.GL_TEXTURE1, GLES20.GL_TEXTURE2, GLES20.GL_TEXTURE3};
 
     protected Vector3 position;
     protected Vector3 scale;
@@ -66,24 +64,23 @@ public abstract class AbstractNode implements Node {
     }
 
     @Override
-    public void recursiveRender(GL10 gl) {
-        glPushMatrix();
-            AxisAngle axisRotation = rotation.toAxisAngle();
-            glTranslatef(position.getX(), position.getY(), position.getZ());
-            glRotatef(axisRotation.getAngle(), axisRotation.getAxis().getX(), axisRotation.getAxis().getY(), axisRotation.getAxis().getZ());
-            glScalef(scale.getX(), scale.getY(), scale.getZ());
+    public void recursiveRender() {
+        LAGLMatrix.singleton().pushMatrix(LAGLMatrix.MatrixType.MODEL);
+            LAGLMatrix.singleton().translate(LAGLMatrix.MatrixType.MODEL, position);
+            LAGLMatrix.singleton().rotate(LAGLMatrix.MatrixType.MODEL, rotation);
+            LAGLMatrix.singleton().scale(LAGLMatrix.MatrixType.MODEL, scale);
 
             for(Node child : children) {
-                child.recursiveRender(gl);
+                child.recursiveRender();
             }
 
-            activateTextures(gl);
-            this.render(gl);
-            deactivateTextures(gl);
-        glPopMatrix();
+            activateTextures();
+            this.render();
+            deactivateTextures();
+        LAGLMatrix.singleton().popMatrix(LAGLMatrix.MatrixType.MODEL);
     }
 
-    public abstract void render(GL10 gl);
+    public abstract void render();
 
     @Override
     public void attachNode(Node n) {
@@ -106,33 +103,30 @@ public abstract class AbstractNode implements Node {
         }
     }
 
-    protected void activateTextures(GL10 gl) {
-        glEnable(GL_TEXTURE_2D);
+    protected void activateTextures() {
+        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
         int i = 0;
         for(Texture tex : textures) {
-            glActiveTexture(TEXTURE_UNITS[i]);
-            glClientActiveTexture(TEXTURE_UNITS[i]);
+            GLES20.glActiveTexture(TEXTURE_UNITS[i]);
 
-            tex.bind(gl);
+            tex.bind();
 
             i++;
         }
     }
 
-    protected void deactivateTextures(GL10 gl) {
-        glDisable(GL_TEXTURE_2D);
+    protected void deactivateTextures() {
+        GLES20.glDisable(GLES20.GL_TEXTURE_2D);
         int i = 0;
         for(Texture tex : textures) {
-            glActiveTexture(TEXTURE_UNITS[i]);
-            glClientActiveTexture(TEXTURE_UNITS[i]);
+            GLES20.glActiveTexture(TEXTURE_UNITS[i]);
 
-            tex.unbind(gl);
+            tex.unbind();
 
             i++;
         }
-        glActiveTexture(TEXTURE_UNITS[0]);
-        glClientActiveTexture(TEXTURE_UNITS[0]);
+        GLES20.glActiveTexture(TEXTURE_UNITS[0]);
     }
 
     @Override
