@@ -5,10 +5,7 @@
 package dk.lystrup.lagl;
 
 import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
 import android.util.Log;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * GLRenderer is the Core behind the AndroidGL system. It sets up the OpenGL context
@@ -35,7 +32,7 @@ public class LAGLRenderer {
         paused = false;
     }
 
-    public void surfaceCreated(EGLConfig glConfig) {
+    public void surfaceCreated() {
         // Set the background color to black ( rgba ).
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         

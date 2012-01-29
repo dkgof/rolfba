@@ -21,7 +21,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
     
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        laglRenderer.surfaceCreated(config);
+        laglRenderer.surfaceCreated();
     }
 
     public void onSurfaceChanged(GL10 unused, int w, int h) {
