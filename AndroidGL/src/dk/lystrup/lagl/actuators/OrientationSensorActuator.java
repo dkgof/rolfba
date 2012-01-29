@@ -4,7 +4,7 @@
  */
 package dk.lystrup.lagl.actuators;
 
-import dk.lystrup.lagl.SensorCore;
+import dk.lystrup.lagl.sensors.SensorCore;
 import dk.lystrup.lagl.math.Quaternion;
 import dk.lystrup.lagl.nodes.Node;
 
