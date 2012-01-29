@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package dk.lystrup.lagl;
+package dk.lystrup.lagl.wallpaper;
 
 import android.opengl.GLSurfaceView;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import dk.lystrup.lagl.BaseConfigChooser.ComponentSizeChooser;
-import dk.lystrup.lagl.BaseConfigChooser.SimpleEGLConfigChooser;
+import dk.lystrup.lagl.wallpaper.BaseConfigChooser.ComponentSizeChooser;
+import dk.lystrup.lagl.wallpaper.BaseConfigChooser.SimpleEGLConfigChooser;
 import java.io.Writer;
 import java.util.ArrayList;
 import javax.microedition.khronos.egl.*;
