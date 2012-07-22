@@ -47,18 +47,23 @@ public class Station {
         
         Statement stm = Database.singleton().createStatement();
         
-        ResultSet rs = stm.executeQuery("SELECT * FROM marketorders WHERE stationId = "+this.getId()+" AND bid = "+((type == OrderType.BUY)?1:0));
+        ResultSet rs = stm.executeQuery("SELECT * FROM marketorders JOIN invtypes ON invtypes.typeID = marketorders.typeId WHERE stationId = "+this.getId()+" AND bid = "+((type == OrderType.BUY)?1:0));
         
         while(rs.next()) {
-            foundOrders.add(new Order(
+            int groupId = rs.getInt("groupID");
+            
+            Order foundOrder = new Order(
                     rs.getLong("id"),
-                    rs.getLong("typeId"),
+                    rs.getLong("marketorders.typeId"),
                     rs.getDouble("volume"),
                     rs.getDouble("minVolume"),
                     rs.getDouble("price"),
                     rs.getLong("stationId"),
-                    rs.getInt("bid")==1
-                    ));
+                    rs.getInt("bid")==1,
+                    Order.getSpaceFromGroupId(groupId, rs.getDouble("volume"))
+                    );
+            
+            foundOrders.add(foundOrder);
         }
         
         return foundOrders;
@@ -69,18 +74,23 @@ public class Station {
         
         Statement stm = Database.singleton().createStatement();
         
-        ResultSet rs = stm.executeQuery("SELECT * FROM marketorders WHERE stationId = "+this.getId()+" AND bid = "+((orderType == OrderType.BUY)?1:0)+" AND typeId = "+itemType);
+        ResultSet rs = stm.executeQuery("SELECT * FROM marketorders JOIN invtypes ON invtypes.typeID = marketorders.typeId WHERE stationId = "+this.getId()+" AND bid = "+((orderType == OrderType.BUY)?1:0)+" AND marketorders.typeId = "+itemType);
         
         while(rs.next()) {
-            foundOrders.add(new Order(
+            int groupId = rs.getInt("groupID");
+            
+            Order foundOrder = new Order(
                     rs.getLong("id"),
-                    rs.getLong("typeId"),
+                    rs.getLong("marketorders.typeId"),
                     rs.getDouble("volume"),
                     rs.getDouble("minVolume"),
                     rs.getDouble("price"),
                     rs.getLong("stationId"),
-                    rs.getInt("bid")==1
-                    ));
+                    rs.getInt("bid")==1,
+                    Order.getSpaceFromGroupId(groupId, rs.getDouble("volume"))
+                    );
+            
+            foundOrders.add(foundOrder);
         }
         
         return foundOrders;
