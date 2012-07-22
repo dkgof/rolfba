@@ -47,6 +47,14 @@ public class Database {
         return singleton;
     }
     
+    public void clearMarketOrders() throws SQLException {
+        Statement stm = createStatement();
+        
+        stm.execute("TRUNCATE TABLE marketorders");
+        
+        stm.close();
+    }
+    
     public Statement createStatement() throws SQLException {
         return conn.createStatement();
     }

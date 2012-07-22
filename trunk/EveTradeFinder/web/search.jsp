@@ -4,6 +4,7 @@
     Author     : Rolf
 --%>
 
+<%@page import="dk.lystrup.evetradefinder.Search"%>
 <%@page import="dk.lystrup.evetradefinder.Region"%>
 <%@page import="dk.lystrup.evetradefinder.Deal"%>
 <%@page import="dk.lystrup.evetradefinder.DealFinder"%>
@@ -28,7 +29,7 @@
     <body>
         <h1><a class="home" href="index.jsp">Trade Finder</a></h1>
         
-        <a href="settings.jsp">Settings</a>
+        <a href="settings.jsp">Settings</a><br/>
         
         <%
             long start = System.currentTimeMillis();
@@ -38,6 +39,15 @@
             String from = request.getParameter("fromSystem");
             String to = request.getParameter("toSystem");
 
+            List<Search> recentSearches = (List<Search>) session.getAttribute("recentSearches");
+            if(recentSearches == null) {
+                recentSearches = new LinkedList<Search>();
+            }
+            
+            recentSearches.add(new Search(from, to, searchType));
+            
+            session.setAttribute("recentSearches", recentSearches);
+            
         %>
           
         <div class="route"><%= from %> -> <%= to %></div>

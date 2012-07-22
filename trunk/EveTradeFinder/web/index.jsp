@@ -4,6 +4,9 @@
     Author     : Rolf
 --%>
 
+<%@page import="java.util.LinkedList"%>
+<%@page import="dk.lystrup.evetradefinder.Search"%>
+<%@page import="java.util.List"%>
 <%@page import="dk.lystrup.evetradefinder.Region"%>
 <%@page import="dk.lystrup.evetradefinder.SolarSystem"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,7 +23,7 @@
     <body>
         <h1>Trade Finder</h1>
         
-        <a href="settings.jsp">Settings</a>
+        <a href="settings.jsp">Settings</a><br/>
         
         <form action="search.jsp" method="post">
             Type: <select id="searchType" name="searchType" onChange="updateSelections(this)">
@@ -36,6 +39,24 @@
             <input type="submit" value="Search">
         </form>
         
+        <br />
+        Recent searches:<br/>
+        <%
+            List<Search> recentSearches = (List<Search>) session.getAttribute("recentSearches");
+            if(recentSearches == null) {
+                recentSearches = new LinkedList<Search>();
+            }
+        
+            for(int i = 0; i<Math.min(5, recentSearches.size()); i++) {
+                Search s = recentSearches.get(i);
+                out.println("<a class=\"recentSearch\" href=\"search.jsp?toSystem="+s.getTo()+"&fromSystem="+s.getFrom()+"&searchType="+s.getType()+"\">"+s.getFrom()+" -> "+s.getTo()+"</a><br />");
+            }
+        %>
+        
+        <br />
+        <br />
+        <a href="clearOrders.jsp">Clear all market orders from database</a>
+
         <script>
             var systemChoices = [
             <%
