@@ -4,10 +4,13 @@
  */
 package dk.lystrup.evetradefinder;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,6 +62,14 @@ public class DealFinder {
             }
             
         });
+        
+        for(Deal d : foundDeals) {
+            try {
+                d.checkForScams();
+            } catch (SQLException ex) {
+                Logger.getLogger(DealFinder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         return foundDeals;
     }

@@ -4,11 +4,13 @@
  */
 package dk.lystrup.evetradefinder;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Rolf
  */
-public class Search {
+public class Search implements Serializable {
     private String from;
     private String to;
     private String type;

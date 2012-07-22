@@ -50,7 +50,7 @@
         double volume = Double.parseDouble(dataValues[volRemainingColumn]);
         boolean bid = Boolean.parseBoolean(dataValues[bidID]);
         long orderID = Long.parseLong(dataValues[orderIDColumn]);
-        long minVolume = Long.parseLong(dataValues[minVolColumn]);
+        double minVolume = Double.parseDouble(dataValues[minVolColumn]);
         
         Order order = new Order(orderID, typeID, volume, minVolume, price, stationID, bid);
         order.save();
