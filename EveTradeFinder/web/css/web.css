@@ -7,31 +7,22 @@
 */
 
 body {
-    background: #585858;
+    background: #101907;
     color: white;
 }
 
 a {
-    color: blue;
+    color: #FF8000;
     text-decoration: none;
 }
 
 a:hover {
-    color: red;
+    color: #F7D358;
 }
 
 a.home {
     color: white;
     text-decoration: none;
-}
-
-a.recentSearch {
-    color: blue;
-    text-decoration: none;
-}
-
-a.recentSearch:hover {
-    color: red;
 }
 
 div.route {
@@ -40,20 +31,18 @@ div.route {
 
 a.swap {
     font-size: 0.8em;
-    color: blue;
-    text-decoration: none;
 }
 
 div.spacer {
-    height: 2em;
-    width: 2em;
+    height: 1em;
+    width: 1em;
 }
 
-div.route a:hover {
-    color: red;
+.alert {
+    color: red !important;
 }
 
-div.alert {
+.scamAlert {
     color: red;
 }
 
@@ -61,7 +50,7 @@ div.order {
     margin-left: 1em;
     font-size: 0.8em;
     margin-bottom: 1em;
-    background: #101907;
+    background: #0A2A0A;
     display: inline-block;
 }
 

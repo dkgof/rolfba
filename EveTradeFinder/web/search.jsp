@@ -4,6 +4,7 @@
     Author     : Rolf
 --%>
 
+<%@page import="dk.lystrup.evetradefinder.Settings"%>
 <%@page import="dk.lystrup.evetradefinder.Search"%>
 <%@page import="dk.lystrup.evetradefinder.Region"%>
 <%@page import="dk.lystrup.evetradefinder.Deal"%>
@@ -53,6 +54,22 @@
         <div class="route"><%= from %> -> <%= to %></div>
         <a class="swap" href="search.jsp?fromSystem=<%=to%>&toSystem=<%=from%>&searchType=<%=searchType%>">Swap</a>
         <div class="spacer"></div>
+        <div style="font-size: 0.8em;">Show Possible Scams: <input type="checkbox" onChange="scamChange(this)"></div>
+        <br/>
+        <script>
+            function scamChange(obj) {
+                var scamCheck = jQuery(obj);
+                if(scamCheck.prop("checked")) {
+                    jQuery(".possibleScam").fadeIn(800);
+                } else {
+                    jQuery(".possibleScam").fadeOut(200);
+                }
+            }
+            
+            jQuery(function() {
+                jQuery(".possibleScam").hide();
+            });
+        </script>
         
         <%    
             try {
