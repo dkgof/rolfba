@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,23 +41,32 @@ public class DealFinder {
                 }
             });
         }
-
+        
+        itemTypes:
         for(long itemType : fromOrders.keySet()) {
             List<Order> fromOrderList = fromOrders.get(itemType);
-            for(Order fromOrder : fromOrderList) {
-                List<Order> toOrderList = toOrders.get(itemType);
-                for(Order toOrder : toOrderList) {
-                    if(fromOrder.getItemType() == toOrder.getItemType()) {
-                        double maxVolumeBasedOnCost = Settings.singleton().getMaxCost() / fromOrder.getPrice();
-                        double maxVolumeBasedOnSpace = Settings.singleton().getMaxVolume() / fromOrder.getSpacePerItem();
-                        double possibleVolume = Math.min(Math.min(Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft()), maxVolumeBasedOnCost), maxVolumeBasedOnSpace);
+            if(fromOrderList != null) {
+                for(Order fromOrder : fromOrderList) {
+                    List<Order> toOrderList = toOrders.get(itemType);
+                    if(toOrderList != null) {
+                        for(Order toOrder : toOrderList) {
+                            if(fromOrder.getItemType() == toOrder.getItemType()) {
+                                if(toOrder.getPrice() < fromOrder.getPrice()) {
+                                    //We reached an order where price no longer is favorable, since they are sorted all other is bad too
+                                    continue itemTypes;
+                                }
+                                double maxVolumeBasedOnCost = Settings.singleton().getMaxCost() / fromOrder.getPrice();
+                                double maxVolumeBasedOnSpace = Settings.singleton().getMaxVolume() / fromOrder.getSpacePerItem();
+                                double possibleVolume = Math.min(Math.min(Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft()), maxVolumeBasedOnCost), maxVolumeBasedOnSpace);
 
-                        Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
+                                Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
 
-                        if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
-                            foundDeals.add(possibleDeal);
-                            fromOrder.addUsedVolume(possibleVolume);
-                            toOrder.addUsedVolume(possibleVolume);
+                                if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
+                                    foundDeals.add(possibleDeal);
+                                    fromOrder.addUsedVolume(possibleVolume);
+                                    toOrder.addUsedVolume(possibleVolume);
+                                }
+                            }
                         }
                     }
                 }

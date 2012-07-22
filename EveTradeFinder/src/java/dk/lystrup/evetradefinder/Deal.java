@@ -79,7 +79,7 @@ public class Deal {
     public void checkForScams() throws SQLException {
         //Check if sell orders have lower price than buy order
         Station toStation = new Station(toOrder.getStationId());
-        for(Order testOrder : toStation.getOrders(Order.OrderType.SELL)) {
+        for(Order testOrder : toStation.getOrders(Order.OrderType.SELL, toOrder.getItemType())) {
             if(testOrder.getPrice() <= toOrder.getPrice()) {
                 System.out.println("Warning, sell prices are equal or lower than buy prices");
                 possibleScam = true;
