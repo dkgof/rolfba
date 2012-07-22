@@ -4,6 +4,8 @@
     Author     : Rolf
 --%>
 
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="dk.lystrup.evetradefinder.Settings"%>
 <%@page import="dk.lystrup.evetradefinder.Search"%>
 <%@page import="dk.lystrup.evetradefinder.Region"%>
@@ -95,15 +97,29 @@
                     }
                 }
 
-                List<Order> fromOrders = new LinkedList<Order>();
-                List<Order> toOrders = new LinkedList<Order>();
+                Map<Long,List<Order>> fromOrders = new HashMap<Long, List<Order>>();
+                Map<Long,List<Order>> toOrders = new HashMap<Long, List<Order>>();
 
                 for(Station st : fromStations) {
-                    fromOrders.addAll(st.getOrders(OrderType.SELL));
+                    for(Order o : st.getOrders(OrderType.SELL)) {
+                        List<Order> orderList = fromOrders.get(o.getItemType());
+                        if(orderList == null) {
+                            orderList = new LinkedList<Order>();
+                            fromOrders.put(o.getItemType(), orderList);
+                        }
+                        orderList.add(o);
+                    }
                 }
 
                 for(Station st : toStations) {
-                    toOrders.addAll(st.getOrders(OrderType.BUY));
+                    for(Order o : st.getOrders(OrderType.BUY)) {
+                        List<Order> orderList = toOrders.get(o.getItemType());
+                        if(orderList == null) {
+                            orderList = new LinkedList<Order>();
+                            toOrders.put(o.getItemType(), orderList);
+                        }
+                        orderList.add(o);
+                    }
                 }
                 
                 List<Deal> deals = DealFinder.findDeals(fromOrders, toOrders);
