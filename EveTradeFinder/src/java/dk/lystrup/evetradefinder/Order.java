@@ -92,7 +92,7 @@ public class Order {
         this.price = price;
         this.stationId = stationId;
         this.bid = bid;
-        //spacePerItem = Database.singleton().lookupSpace(itemType);
+        spacePerItem = Database.singleton().lookupSpace(itemType);
         
         usedVolume = 0;
     }

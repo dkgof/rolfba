@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author Rolf
  */
 public class DealFinder {
-    public static List<Deal> findDeals(Map<Long,List<Order>> fromOrders, Map<Long,List<Order>> toOrders) {
+    public static List<Deal> findDeals(Map<Long,List<Order>> fromOrders, Map<Long,List<Order>> toOrders) throws SQLException {
         List<Deal> foundDeals = new LinkedList<Deal>();
         
         //sort from orders lowest first
@@ -62,9 +62,11 @@ public class DealFinder {
                                 Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
 
                                 if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
-                                    foundDeals.add(possibleDeal);
-                                    fromOrder.addUsedVolume(possibleVolume);
-                                    toOrder.addUsedVolume(possibleVolume);
+                                    if(possibleDeal.getSpaceNeeded() <= Settings.singleton().getMaxVolume()) {
+                                        foundDeals.add(possibleDeal);
+                                        fromOrder.addUsedVolume(possibleVolume);
+                                        toOrder.addUsedVolume(possibleVolume);
+                                    }
                                 }
                             }
                         }

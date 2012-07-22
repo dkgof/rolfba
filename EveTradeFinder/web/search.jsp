@@ -112,7 +112,16 @@
 
                 double duration = (System.currentTimeMillis() - start) / 1000.0;
                 
-                out.println("<p class=\"info\">Searched "+fromOrders.size()+" sell orders and "+toOrders.size()+" buy orders</p>");
+                long sellOrders = 0;
+                long buyOrders = 0;
+                for(List<Order> fromOrderList : fromOrders.values()) {
+                    sellOrders += fromOrderList.size();
+                }
+                for(List<Order> toOrderList : toOrders.values()) {
+                    buyOrders += toOrderList.size();
+                }
+                
+                out.println("<p class=\"info\">Searched "+sellOrders+" sell orders and "+buyOrders+" buy orders</p>");
                 out.println("<p class=\"info\">Found "+deals.size()+" deals!</p>");
                 out.println("<p class=\"info\">Total profit: "+String.format("%.1fM", totalProfit/1000000) +"</p>");
                 out.println("<p class=\"info\">Search took: "+String.format("%.2fsec",duration)+" (Map creation: "+String.format("%.2fsec",mapCreationTime)+")</p>");
