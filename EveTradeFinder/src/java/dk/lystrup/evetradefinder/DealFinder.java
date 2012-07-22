@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,38 +18,46 @@ import java.util.logging.Logger;
  * @author Rolf
  */
 public class DealFinder {
-    public static List<Deal> findDeals(List<Order> fromOrders, List<Order> toOrders) {
+    public static List<Deal> findDeals(Map<Long,List<Order>> fromOrders, Map<Long,List<Order>> toOrders) {
         List<Deal> foundDeals = new LinkedList<Deal>();
         
         //sort from orders lowest first
-        Collections.sort(fromOrders, new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                return Double.compare(o1.getPrice(), o2.getPrice());
-            }
-        });
+        for(List<Order> orderList : fromOrders.values()) {
+            Collections.sort(orderList, new Comparator<Order>() {
+                @Override
+                public int compare(Order o1, Order o2) {
+                    return Double.compare(o1.getPrice(), o2.getPrice());
+                }
+            });
+        }
         
         //sort to orders highest first
-        Collections.sort(toOrders, new Comparator<Order>() {
-            @Override
-            public int compare(Order o1, Order o2) {
-                return Double.compare(o2.getPrice(), o1.getPrice());
-            }
-        });
+        for(List<Order> orderList : toOrders.values()) {
+            Collections.sort(orderList, new Comparator<Order>() {
+                @Override
+                public int compare(Order o1, Order o2) {
+                    return Double.compare(o2.getPrice(), o1.getPrice());
+                }
+            });
+        }
 
-        for(Order fromOrder : fromOrders) {
-            for(Order toOrder : toOrders) {
-                if(fromOrder.getItemType() == toOrder.getItemType()) {
-                    double maxVolumeBasedOnCost = Settings.singleton().getMaxCost() / fromOrder.getPrice();
-                    double maxVolumeBasedOnSpace = Settings.singleton().getMaxVolume() / fromOrder.getSpacePerItem();
-                    double possibleVolume = Math.min(Math.min(Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft()), maxVolumeBasedOnCost), maxVolumeBasedOnSpace);
-                    
-                    Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
-                    
-                    if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
-                        foundDeals.add(possibleDeal);
-                        fromOrder.addUsedVolume(possibleVolume);
-                        toOrder.addUsedVolume(possibleVolume);
+        for(long itemType : fromOrders.keySet()) {
+            List<Order> fromOrderList = fromOrders.get(itemType);
+            for(Order fromOrder : fromOrderList) {
+                List<Order> toOrderList = toOrders.get(itemType);
+                for(Order toOrder : toOrderList) {
+                    if(fromOrder.getItemType() == toOrder.getItemType()) {
+                        double maxVolumeBasedOnCost = Settings.singleton().getMaxCost() / fromOrder.getPrice();
+                        double maxVolumeBasedOnSpace = Settings.singleton().getMaxVolume() / fromOrder.getSpacePerItem();
+                        double possibleVolume = Math.min(Math.min(Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft()), maxVolumeBasedOnCost), maxVolumeBasedOnSpace);
+
+                        Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
+
+                        if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
+                            foundDeals.add(possibleDeal);
+                            fromOrder.addUsedVolume(possibleVolume);
+                            toOrder.addUsedVolume(possibleVolume);
+                        }
                     }
                 }
             }
