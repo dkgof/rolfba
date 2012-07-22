@@ -66,7 +66,8 @@ public class Region {
         
         Statement stm = Database.singleton().createStatement();
         
-        ResultSet rs = stm.executeQuery("SELECT regionID, regionName FROM mapregions");
+        //ResultSet rs = stm.executeQuery("SELECT regionID, regionName FROM mapregions");
+        ResultSet rs = stm.executeQuery("SELECT mapregions.regionID, mapregions.regionName FROM mapregions JOIN (marketorders, stastations) ON marketorders.stationId = stastations.stationID AND mapregions.regionID = stastations.regionID GROUP BY mapregions.regionID");
         
         while(rs.next()) {
             long id = rs.getLong("regionID");

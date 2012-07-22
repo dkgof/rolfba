@@ -61,11 +61,11 @@ public class SolarSystem {
         List<SolarSystem> systems = new LinkedList<SolarSystem>();
         
         Statement stm = Database.singleton().createStatement();
-        ResultSet rs = stm.executeQuery("SELECT solarSystemID, solarSystemName FROM mapsolarsystems");
+        ResultSet rs = stm.executeQuery("SELECT mapsolarsystems.solarSystemID, mapsolarsystems.solarSystemName FROM mapsolarsystems JOIN (marketorders, stastations) ON marketorders.stationId = stastations.stationID AND mapsolarsystems.solarSystemID = stastations.solarSystemID GROUP BY mapsolarsystems.solarSystemID");
         
         while(rs.next()) {
-            long id = rs.getLong("solarSystemID");
-            String name = rs.getString("solarSystemName");
+            long id = rs.getLong("mapsolarsystems.solarSystemID");
+            String name = rs.getString("mapsolarsystems.solarSystemName");
 
             systems.add(new SolarSystem(id, name));
         }
