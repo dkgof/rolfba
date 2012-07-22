@@ -118,10 +118,93 @@ public class Database {
         double space = -1;
         Statement stm = createStatement();
 
-        ResultSet rs = stm.executeQuery("SELECT volume FROM invtypes WHERE typeID = "+itemType);
+        ResultSet rs = stm.executeQuery("SELECT volume, groupID FROM invtypes WHERE typeID = "+itemType);
 
         rs.first();
-        space = rs.getDouble("volume");
+        int groupId = rs.getInt("groupID");
+        switch(groupId) {
+            case 485:
+            case 659:
+            case 883:
+            case 513:
+            case 902:
+                //Capital
+                space = 1000000;
+                break;
+                
+            case 941:
+                //Orca
+                space = 500000;
+                break;
+
+            case 30:
+                //Titan
+                space = 10000000;
+                break;
+            
+            case 419:
+            case 540:
+                //Battlecruiser
+                space = 15000;
+                break;
+
+            case 26:
+            case 832:
+            case 358:
+            case 894:
+            case 906:
+                //Cruiser
+                space = 10000;
+                break;
+                
+            case 963:
+                //Strategic Cruiser
+                space = 5000;
+                break;
+
+            case 31:
+                //Shuttle
+                space = 5000;
+                break;
+
+            case 543:
+            case 463:
+                //Barge
+                space = 3750;
+                break;
+
+            case 28:
+            case 380:
+                //Industrial
+                space = 20000;
+                break;
+
+            case 25:
+            case 324:
+            case 830:
+            case 893:
+            case 831:
+                //Frigate
+                space = 2500;
+                break;
+
+            case 541:
+            case 420:
+                //Destroyer
+                space = 5000;
+                break;
+
+            case 27:
+            case 898:
+            case 900:
+                //Battleship
+                space = 50000;
+                break;
+                
+            default:
+                space = rs.getDouble("volume");
+                break;
+        }
 
         stm.close();
         
