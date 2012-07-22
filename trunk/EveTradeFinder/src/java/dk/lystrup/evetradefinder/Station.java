@@ -63,4 +63,26 @@ public class Station {
         
         return foundOrders;
     }
+
+    public List<Order> getOrders(OrderType orderType, long itemType) throws SQLException {
+        List<Order> foundOrders = new LinkedList<Order>();
+        
+        Statement stm = Database.singleton().createStatement();
+        
+        ResultSet rs = stm.executeQuery("SELECT * FROM marketorders WHERE stationId = "+this.getId()+" AND bid = "+((orderType == OrderType.BUY)?1:0)+" AND typeId = "+itemType);
+        
+        while(rs.next()) {
+            foundOrders.add(new Order(
+                    rs.getLong("id"),
+                    rs.getLong("typeId"),
+                    rs.getDouble("volume"),
+                    rs.getDouble("minVolume"),
+                    rs.getDouble("price"),
+                    rs.getLong("stationId"),
+                    rs.getInt("bid")==1
+                    ));
+        }
+        
+        return foundOrders;
+    }
 }

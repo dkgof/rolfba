@@ -4,6 +4,11 @@
     Author     : Rolf
 --%>
 
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.TreeSet"%>
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.SortedSet"%>
+<%@page import="java.util.Set"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="dk.lystrup.evetradefinder.Settings"%>
@@ -75,53 +80,28 @@
         
         <%    
             try {
-                List<Station> fromStations = new LinkedList<Station>();
-                List<Station> toStations = new LinkedList<Station>();
-                
+                Map<Long,List<Order>> fromOrders = new HashMap<Long, List<Order>>();
+                Map<Long,List<Order>> toOrders = new HashMap<Long, List<Order>>();
+
+                long before = System.currentTimeMillis();
+                               
                 if(searchType.equals("systems")) {
                     SolarSystem fromSystem = SolarSystem.getSystemFromName(from);
                     SolarSystem toSystem = SolarSystem.getSystemFromName(to);
 
-                    fromStations.addAll(fromSystem.getStations());
-                    toStations.addAll(toSystem.getStations());
+                    fromOrders = fromSystem.getOrders(OrderType.SELL);
+                    toOrders = toSystem.getOrders(OrderType.BUY);
                 } else if(searchType.equals("regions")) {
                     Region fromRegion = Region.getRegionFromName(from);
                     Region toRegion = Region.getRegionFromName(to);
                     
-                    for(SolarSystem system : fromRegion.getAllSolarSystems()) {
-                        fromStations.addAll(system.getStations());
-                    }
-
-                    for(SolarSystem system : toRegion.getAllSolarSystems()) {
-                        toStations.addAll(system.getStations());
-                    }
+                    fromOrders = fromRegion.getOrders(OrderType.SELL);
+                    toOrders = toRegion.getOrders(OrderType.BUY);
                 }
 
-                Map<Long,List<Order>> fromOrders = new HashMap<Long, List<Order>>();
-                Map<Long,List<Order>> toOrders = new HashMap<Long, List<Order>>();
+                double time = (System.currentTimeMillis()-before) / 1000.0;
+                System.out.println("Order map creation: "+String.format("%.3f",time)+"sec");
 
-                for(Station st : fromStations) {
-                    for(Order o : st.getOrders(OrderType.SELL)) {
-                        List<Order> orderList = fromOrders.get(o.getItemType());
-                        if(orderList == null) {
-                            orderList = new LinkedList<Order>();
-                            fromOrders.put(o.getItemType(), orderList);
-                        }
-                        orderList.add(o);
-                    }
-                }
-
-                for(Station st : toStations) {
-                    for(Order o : st.getOrders(OrderType.BUY)) {
-                        List<Order> orderList = toOrders.get(o.getItemType());
-                        if(orderList == null) {
-                            orderList = new LinkedList<Order>();
-                            toOrders.put(o.getItemType(), orderList);
-                        }
-                        orderList.add(o);
-                    }
-                }
-                
                 List<Deal> deals = DealFinder.findDeals(fromOrders, toOrders);
 
                 double totalProfit = 0;

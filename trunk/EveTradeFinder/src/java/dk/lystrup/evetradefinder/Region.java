@@ -7,8 +7,10 @@ package dk.lystrup.evetradefinder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -27,6 +29,37 @@ public class Region {
         this.name = name;
     }
 
+    public Map<Long,List<Order>> getOrders(Order.OrderType type) throws SQLException {
+        Map<Long,List<Order>> foundOrders = new HashMap<Long,List<Order>>();
+        
+        Statement stm = Database.singleton().createStatement();
+        
+        
+        ResultSet rs = stm.executeQuery("SELECT * from marketorders JOIN stastations ON marketorders.stationId = stastations.stationID WHERE stastations.regionID = "+this.id+" AND bid = "+((type == Order.OrderType.BUY)?1:0));
+       
+        while(rs.next()) {
+            
+            Order foundOrder = new Order(
+                    rs.getLong("id"),
+                    rs.getLong("typeId"),
+                    rs.getDouble("volume"),
+                    rs.getDouble("minVolume"),
+                    rs.getDouble("price"),
+                    rs.getLong("stationId"),
+                    rs.getInt("bid")==1
+                    );
+            
+            List<Order> orderList = foundOrders.get(foundOrder.getItemType());
+            if(orderList == null) {
+                orderList = new LinkedList<Order>();
+                foundOrders.put(foundOrder.getItemType(), orderList);
+            }
+            orderList.add(foundOrder);
+        }
+        
+        return foundOrders;
+    }
+    
     public List<SolarSystem> getAllSolarSystems() throws SQLException {
         List<SolarSystem> systems = new LinkedList<SolarSystem>();
         
