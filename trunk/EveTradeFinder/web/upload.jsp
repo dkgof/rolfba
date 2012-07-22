@@ -18,6 +18,7 @@
     int typeIDColumn = -1;
     int bidID = -1;
     int orderIDColumn = -1;
+    int minVolColumn = -1;
     
     int i = 0;
     for(String column : dataColumns) {
@@ -33,6 +34,8 @@
             bidID = i;
         } else if(column.equals("orderID")) {
             orderIDColumn = i;
+        } else if(column.equals("minVolume")) {
+            minVolColumn = i;
         }
         
         i++;
@@ -47,8 +50,9 @@
         double volume = Double.parseDouble(dataValues[volRemainingColumn]);
         boolean bid = Boolean.parseBoolean(dataValues[bidID]);
         long orderID = Long.parseLong(dataValues[orderIDColumn]);
+        long minVolume = Long.parseLong(dataValues[minVolColumn]);
         
-        Order order = new Order(orderID, typeID, volume, price, stationID, bid);
+        Order order = new Order(orderID, typeID, volume, minVolume, price, stationID, bid);
         order.save();
     }
     

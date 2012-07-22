@@ -53,8 +53,11 @@ public class Deal {
         html += "<div class=\"station\">From: "+Database.singleton().lookupStationName(fromOrder.getStationId())+"</div>";
         html += "<div class=\"station\">To: "+Database.singleton().lookupStationName(toOrder.getStationId())+"</div>";
         
+        double minAmount = toOrder.getMinVolume();
+        
         html += "<div class=\"details\">";
         html += "<div class=\"amount\">Amount: "+String.format("%.1f",amount)+"</div>";
+        html += "<div class=\"minVolume"+((minAmount>1)?" alert":"")+"\">Min Amount: "+String.format("%.1f",minAmount)+"</div>";
         html += "<div class=\"profit\">Profit: <div>"+String.format("%.1fM",this.getAssumedProfit()/1000000)+"</div></div>";
         html += "<div class=\"profitUnit\">Profit/Unit: "+String.format("%.1f",this.getProfitPerUnit())+"</div>";
         html += "<div class=\"invest\">Invest: "+String.format("%.1fM",fromOrder.getPrice()*amount / 1000000)+"</div>";
