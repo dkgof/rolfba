@@ -47,9 +47,15 @@
                 recentSearches = new LinkedList<Search>();
             }
         
-            for(int i = 0; i<Math.min(5, recentSearches.size()); i++) {
+            int count = 0;
+            
+            for(int i = recentSearches.size()-1; i>=0; i--) {
                 Search s = recentSearches.get(i);
                 out.println("<a class=\"recentSearch\" href=\"search.jsp?toSystem="+s.getTo()+"&fromSystem="+s.getFrom()+"&searchType="+s.getType()+"\">"+s.getFrom()+" -> "+s.getTo()+"</a><br />");
+                count++;
+                if(count == 5) {
+                    break;
+                }
             }
         %>
         

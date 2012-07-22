@@ -54,6 +54,7 @@ public class Station {
                     rs.getLong("id"),
                     rs.getLong("typeId"),
                     rs.getDouble("volume"),
+                    rs.getDouble("minVolume"),
                     rs.getDouble("price"),
                     rs.getLong("stationId"),
                     rs.getInt("bid")==1

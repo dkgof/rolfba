@@ -61,6 +61,13 @@ public class Order {
         return spacePerItem;
     }
 
+    /**
+     * @return the minVolume
+     */
+    public double getMinVolume() {
+        return minVolume;
+    }
+
     public enum OrderType {
         SELL,
         BUY
@@ -69,6 +76,7 @@ public class Order {
     private long id;
     private long itemType;
     private double volume;
+    private final double minVolume;
     private double price;
     private long stationId;
     private boolean bid;
@@ -76,10 +84,11 @@ public class Order {
     
     private double usedVolume;
     
-    public Order(long id, long itemType, double volume, double price, long stationId, boolean bid) throws SQLException {
+    public Order(long id, long itemType, double volume, double minVolume, double price, long stationId, boolean bid) throws SQLException {
         this.id = id;
         this.itemType = itemType;
         this.volume = volume;
+        this.minVolume = minVolume;
         this.price = price;
         this.stationId = stationId;
         this.bid = bid;
@@ -106,7 +115,7 @@ public class Order {
     
     public void save() {
         try {
-            PreparedStatement stm = Database.singleton().createPreparedStatement("REPLACE INTO marketorders (id,typeId,stationId,volume,price,bid) VALUES (?,?,?,?,?,?)");
+            PreparedStatement stm = Database.singleton().createPreparedStatement("REPLACE INTO marketorders (id,typeId,stationId,volume,price,bid,minVolume) VALUES (?,?,?,?,?,?,?)");
             
             stm.setLong(1, id);
             stm.setLong(2, itemType);
@@ -114,6 +123,7 @@ public class Order {
             stm.setDouble(4, volume);
             stm.setDouble(5, price);
             stm.setInt(6, bid?1:0);
+            stm.setDouble(7, minVolume);
             
             stm.executeUpdate();
             

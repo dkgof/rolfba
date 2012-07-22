@@ -7,7 +7,7 @@
 */
 
 body {
-    background: black;
+    background: #585858;
     color: white;
 }
 
@@ -53,11 +53,15 @@ div.route a:hover {
     color: red;
 }
 
+div.alert {
+    color: red;
+}
+
 div.order {
     margin-left: 1em;
     font-size: 0.8em;
     margin-bottom: 1em;
-    background: #2E2E2E;
+    background: #101907;
     display: inline-block;
 }
 
