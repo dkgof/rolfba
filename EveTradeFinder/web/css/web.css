@@ -11,9 +11,27 @@ body {
     color: white;
 }
 
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+}
+
 a.home {
     color: white;
     text-decoration: none;
+}
+
+a.recentSearch {
+    color: blue;
+    text-decoration: none;
+}
+
+a.recentSearch:hover {
+    color: red;
 }
 
 div.route {

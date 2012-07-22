@@ -28,11 +28,11 @@ public class Settings {
     private double stationTax;
     
     private Settings() {
-        minProfit = 100000;
-        maxVolume = 1000;
-        maxCost = 10000000;
-        brokerFee = 0.015;
-        stationTax = 0.012;
+        minProfit = 1000000;
+        maxVolume = 30000;
+        maxCost = 400000000;
+        brokerFee = 0.0105;
+        stationTax = 0.0126;
     }
     
     public static Settings singleton() {
