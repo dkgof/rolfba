@@ -4,6 +4,7 @@
     Author     : Rolf
 --%>
 
+<%@page import="dk.lystrup.evetradefinder.Region"%>
 <%@page import="dk.lystrup.evetradefinder.Deal"%>
 <%@page import="dk.lystrup.evetradefinder.DealFinder"%>
 <%@page import="java.sql.SQLException"%>
@@ -25,20 +26,47 @@
         <title>Trade Finder - Search</title>
     </head>
     <body>
-        <h1>Trade Finder</h1>
+        <h1><a class="home" href="index.jsp">Trade Finder</a></h1>
+        
+        <a href="settings.jsp">Settings</a>
         
         <%
             long start = System.currentTimeMillis();
         
+            String searchType = request.getParameter("searchType");
+            
             String from = request.getParameter("fromSystem");
             String to = request.getParameter("toSystem");
 
+        %>
+          
+        <div class="route"><%= from %> -> <%= to %></div>
+        <a class="swap" href="search.jsp?fromSystem=<%=to%>&toSystem=<%=from%>&searchType=<%=searchType%>">Swap</a>
+        <div class="spacer"></div>
+        
+        <%    
             try {
-                SolarSystem fromSystem = SolarSystem.getSystemFromName(from);
-                SolarSystem toSystem = SolarSystem.getSystemFromName(to);
+                List<Station> fromStations = new LinkedList<Station>();
+                List<Station> toStations = new LinkedList<Station>();
+                
+                if(searchType.equals("systems")) {
+                    SolarSystem fromSystem = SolarSystem.getSystemFromName(from);
+                    SolarSystem toSystem = SolarSystem.getSystemFromName(to);
 
-                List<Station> fromStations = fromSystem.getStations();
-                List<Station> toStations = toSystem.getStations();
+                    fromStations.addAll(fromSystem.getStations());
+                    toStations.addAll(toSystem.getStations());
+                } else if(searchType.equals("regions")) {
+                    Region fromRegion = Region.getRegionFromName(from);
+                    Region toRegion = Region.getRegionFromName(to);
+                    
+                    for(SolarSystem system : fromRegion.getAllSolarSystems()) {
+                        fromStations.addAll(system.getStations());
+                    }
+
+                    for(SolarSystem system : toRegion.getAllSolarSystems()) {
+                        toStations.addAll(system.getStations());
+                    }
+                }
 
                 List<Order> fromOrders = new LinkedList<Order>();
                 List<Order> toOrders = new LinkedList<Order>();

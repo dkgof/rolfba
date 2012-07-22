@@ -14,8 +14,6 @@ import java.util.List;
  * @author Rolf
  */
 public class DealFinder {
-    private static final double MIN_PROFIT = 100000;
-    
     public static List<Deal> findDeals(List<Order> fromOrders, List<Order> toOrders) {
         List<Deal> foundDeals = new LinkedList<Deal>();
         
@@ -38,11 +36,13 @@ public class DealFinder {
         for(Order fromOrder : fromOrders) {
             for(Order toOrder : toOrders) {
                 if(fromOrder.getItemType() == toOrder.getItemType()) {
-                    double possibleVolume = Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft());
+                    double maxVolumeBasedOnCost = Settings.singleton().getMaxCost() / fromOrder.getPrice();
+                    double maxVolumeBasedOnSpace = Settings.singleton().getMaxVolume() / fromOrder.getSpacePerItem();
+                    double possibleVolume = Math.min(Math.min(Math.min(fromOrder.getVolumeLeft(), toOrder.getVolumeLeft()), maxVolumeBasedOnCost), maxVolumeBasedOnSpace);
                     
                     Deal possibleDeal = new Deal(fromOrder, toOrder, possibleVolume);
                     
-                    if(possibleDeal.getAssumedProfit() > MIN_PROFIT) {
+                    if(possibleDeal.getAssumedProfit() > Settings.singleton().getMinProfit()) {
                         foundDeals.add(possibleDeal);
                         fromOrder.addUsedVolume(possibleVolume);
                         toOrder.addUsedVolume(possibleVolume);
