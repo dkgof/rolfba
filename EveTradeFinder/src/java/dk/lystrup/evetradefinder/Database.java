@@ -79,6 +79,20 @@ public class Database {
         return foundName;
     }
 
+    public String lookupRegionName(long regionId) throws SQLException {
+        String foundName = null;
+        Statement stm = createStatement();
+
+        ResultSet rs = stm.executeQuery("SELECT regionName FROM mapregions WHERE regionID = "+regionId);
+
+        rs.first();
+        foundName = rs.getString("regionName");
+
+        stm.close();
+        
+        return foundName;
+    }
+
     private void connect() {
         try {
             conn = DriverManager.getConnection(url, usr, pwd);

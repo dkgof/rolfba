@@ -57,6 +57,10 @@ public class Order {
         return bid;
     }
 
+    public double getSpacePerItem() {
+        return spacePerItem;
+    }
+
     public enum OrderType {
         SELL,
         BUY
@@ -68,16 +72,18 @@ public class Order {
     private double price;
     private long stationId;
     private boolean bid;
+    private double spacePerItem;
     
     private double usedVolume;
     
-    public Order(long id, long itemType, double volume, double price, long stationId, boolean bid) {
+    public Order(long id, long itemType, double volume, double price, long stationId, boolean bid) throws SQLException {
         this.id = id;
         this.itemType = itemType;
         this.volume = volume;
         this.price = price;
         this.stationId = stationId;
         this.bid = bid;
+        spacePerItem = Database.singleton().lookupSpace(itemType);
         
         usedVolume = 0;
     }

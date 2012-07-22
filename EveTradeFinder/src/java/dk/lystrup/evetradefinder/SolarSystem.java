@@ -18,7 +18,7 @@ public class SolarSystem {
     private String name;
     private long id;
     
-    private SolarSystem(long id, String name) {
+    public SolarSystem(long id, String name) {
         this.id = id;
         this.name = name;
     }

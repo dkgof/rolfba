@@ -26,7 +26,7 @@ public class Deal {
     
     public double getAssumedProfit() {
         double cost = fromOrder.getPrice() * amount;
-        double tax = cost * 0.025;
+        double tax = cost * Settings.singleton().getBrokerFee() + cost * Settings.singleton().getStationTax();
         double income = toOrder.getPrice() * amount;
         
         return income - cost - tax;

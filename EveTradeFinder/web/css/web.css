@@ -11,6 +11,30 @@ body {
     color: white;
 }
 
+a.home {
+    color: white;
+    text-decoration: none;
+}
+
+div.route {
+    font-size: 1.2em;
+}
+
+a.swap {
+    font-size: 0.8em;
+    color: blue;
+    text-decoration: none;
+}
+
+div.spacer {
+    height: 2em;
+    width: 2em;
+}
+
+div.route a:hover {
+    color: red;
+}
+
 div.order {
     margin-left: 1em;
     font-size: 0.8em;
