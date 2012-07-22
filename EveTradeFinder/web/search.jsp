@@ -61,7 +61,7 @@
         <div class="route"><%= from %> -> <%= to %></div>
         <a class="swap" href="search.jsp?fromSystem=<%=to%>&toSystem=<%=from%>&searchType=<%=searchType%>">Swap</a>
         <div class="spacer"></div>
-        <div style="font-size: 0.8em;">Show Possible Scams: <input type="checkbox" onChange="scamChange(this)"></div>
+        <div style="font-size: 0.8em;">Show possible scams: <input type="checkbox" onChange="scamChange(this)"></div>
         <br/>
         <script>
             function scamChange(obj) {
@@ -83,7 +83,7 @@
                 Map<Long,List<Order>> fromOrders = new HashMap<Long, List<Order>>();
                 Map<Long,List<Order>> toOrders = new HashMap<Long, List<Order>>();
 
-                long before = System.currentTimeMillis();
+                long beforeMapCreation = System.currentTimeMillis();
                                
                 if(searchType.equals("systems")) {
                     SolarSystem fromSystem = SolarSystem.getSystemFromName(from);
@@ -99,8 +99,7 @@
                     toOrders = toRegion.getOrders(OrderType.BUY);
                 }
 
-                double time = (System.currentTimeMillis()-before) / 1000.0;
-                System.out.println("Order map creation: "+String.format("%.3f",time)+"sec");
+                double mapCreationTime = (System.currentTimeMillis()-beforeMapCreation) / 1000.0;
 
                 List<Deal> deals = DealFinder.findDeals(fromOrders, toOrders);
 
@@ -116,7 +115,7 @@
                 out.println("<p class=\"info\">Searched "+fromOrders.size()+" sell orders and "+toOrders.size()+" buy orders</p>");
                 out.println("<p class=\"info\">Found "+deals.size()+" deals!</p>");
                 out.println("<p class=\"info\">Total profit: "+String.format("%.1fM", totalProfit/1000000) +"</p>");
-                out.println("<p class=\"info\">Search took: "+String.format("%.2fsec",duration)+"</p>");
+                out.println("<p class=\"info\">Search took: "+String.format("%.2fsec",duration)+" (Map creation: "+String.format("%.2fsec",mapCreationTime)+")</p>");
                 
             } catch(SQLException e) {
                 out.println("Error looking up orders from systems");
