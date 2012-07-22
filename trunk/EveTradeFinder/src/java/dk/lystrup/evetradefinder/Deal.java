@@ -39,7 +39,7 @@ public class Deal {
     }
     
     public double getSpaceNeeded() throws SQLException {
-        return Database.singleton().lookupSpace(fromOrder.getItemType()) * amount;
+        return fromOrder.getSpacePerItem() * amount;
     }
     
     public double getProfitPerUnit() {
