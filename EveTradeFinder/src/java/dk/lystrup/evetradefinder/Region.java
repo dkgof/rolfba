@@ -35,9 +35,11 @@ public class Region {
         Statement stm = Database.singleton().createStatement();
         
         
-        ResultSet rs = stm.executeQuery("SELECT * from marketorders JOIN stastations ON marketorders.stationId = stastations.stationID WHERE stastations.regionID = "+this.id+" AND bid = "+((type == Order.OrderType.BUY)?1:0));
+        ResultSet rs = stm.executeQuery("SELECT * from marketorders JOIN (stastations,invtypes) ON marketorders.stationId = stastations.stationID AND invtypes.typeID = marketorders.typeId WHERE stastations.regionID = "+this.id+" AND bid = "+((type == Order.OrderType.BUY)?1:0));
        
         while(rs.next()) {
+            
+            int groupId = rs.getInt("groupID");
             
             Order foundOrder = new Order(
                     rs.getLong("id"),
@@ -46,7 +48,8 @@ public class Region {
                     rs.getDouble("minVolume"),
                     rs.getDouble("price"),
                     rs.getLong("stationId"),
-                    rs.getInt("bid")==1
+                    rs.getInt("bid")==1,
+                    Order.getSpaceFromGroupId(groupId, rs.getDouble("volume"))
                     );
             
             List<Order> orderList = foundOrders.get(foundOrder.getItemType());
