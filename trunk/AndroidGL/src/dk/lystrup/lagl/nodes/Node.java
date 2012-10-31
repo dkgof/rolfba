@@ -8,6 +8,7 @@ package dk.lystrup.lagl.nodes;
 import dk.lystrup.lagl.actuators.Actuator;
 import dk.lystrup.lagl.math.Quaternion;
 import dk.lystrup.lagl.math.Vector3;
+import dk.lystrup.lagl.shaders.Shader;
 import dk.lystrup.lagl.textures.Texture;
 
 /**
@@ -84,11 +85,34 @@ public interface Node {
      */
     public void setScale(float x, float y, float z);
     
+    /**
+     * Sets an actuator to act on this node
+     * @param act the actuator
+     */
     public void setActuator(Actuator act);
 
+    /**
+     * Add the given texture to the textures on this node
+     * @param tex the texture to add
+     */
     public void addTexture(Texture tex);
 
+    /**
+     * Sets the given texture as the only texture on this node
+     * @param tex the texture to set
+     */
     public void setTexture(Texture tex);
 
+    /**
+     * Sets the given texture on the specified texture unit
+     * @param tex the texture to set
+     * @param textureUnit the texture unit to set the texture on
+     */
     public void setTexture(Texture tex, int textureUnit);
+
+    /**
+     * Sets the shader to be used when rendering this node
+     * @param shader the shader to be used
+     */
+    public void setShader(Shader shader);
 }

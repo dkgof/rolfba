@@ -5,8 +5,9 @@
 
 package dk.lystrup.lagl.actuators;
 
-import dk.lystrup.lagl.math.AxisAngle;
+import android.util.Log;
 import dk.lystrup.lagl.math.Quaternion;
+import dk.lystrup.lagl.math.Vector3;
 import dk.lystrup.lagl.nodes.Node;
 
 /**
@@ -15,20 +16,24 @@ import dk.lystrup.lagl.nodes.Node;
  */
 public class ConstantRotationActuator implements Actuator {
 
-    private AxisAngle rotation;
+    private float speedX;
+    private float speedY;
+    private float speedZ;
 
-    /**
-     * Create a new ConstantRotationActuator that rotates with the given
-     * Quaternion each second
-     * @param rot the Quaternion to rotate / second
-     */
-    public ConstantRotationActuator(AxisAngle rot) {
-        rotation = rot;
+    public ConstantRotationActuator(float xSpeed, float ySpeed, float zSpeed) {
+        this.speedX = xSpeed;
+        this.speedY = ySpeed;
+        this.speedZ = zSpeed;
     }
 
     public void update(Node node, float deltaTime) {
-        Quaternion newRotation = Quaternion.createFromAxisAngle(rotation.getAngle() * deltaTime, rotation.getAxis());
-        node.setRotation(node.getRotation().mult(newRotation));
+        Quaternion xRot = Quaternion.createFromAxisAngle(speedX * deltaTime, Vector3.UnitX);
+        Quaternion yRot = Quaternion.createFromAxisAngle(speedY * deltaTime, Vector3.UnitY);
+        Quaternion zRot = Quaternion.createFromAxisAngle(speedZ * deltaTime, Vector3.UnitZ);
+        
+        node.setRotation(xRot.mult(yRot).mult(zRot).mult(node.getRotation()));
+        
+        //Log.i("LAGL", "Rotation set: "+node.getRotation());
     }
 
 }

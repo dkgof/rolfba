@@ -7,6 +7,7 @@ package dk.lystrup.lagl.textures;
 
 import android.opengl.GLES20;
 import android.util.Log;
+import dk.lystrup.lagl.LAGLUtil;
 
 /**
  * A DynamicTexture represents something where the texture id is allowed to change,
@@ -25,14 +26,16 @@ public class DynamicTexture implements Texture {
     
     public void bind() {
         if(!initialized) {
-            Log.wtf("AndroidGL", "Unable to use a dynamic texture before initializing it.");
+            Log.wtf("LAGL", "Unable to use a dynamic texture before initializing it.");
             System.exit(-1);
         }
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        LAGLUtil.checkGlError("glBindTexture");
     }
 
     public void unbind() {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        LAGLUtil.checkGlError("glBindTexture");
     }
     
     public void setTextureId(int textureId) {

@@ -5,6 +5,7 @@ import android.opengl.GLU;
 import android.opengl.Matrix;
 import dk.lystrup.lagl.Display;
 import dk.lystrup.lagl.LAGLMatrix;
+import dk.lystrup.lagl.LAGLUtil;
 import dk.lystrup.lagl.math.Vector3;
 
 /**
@@ -52,6 +53,8 @@ public class CameraNode extends AbstractNode {
         this.farPlane = far;
 
         recalculateAspect = true;
+        
+        shader = null;
     }
 
     @Override
@@ -62,8 +65,11 @@ public class CameraNode extends AbstractNode {
             aspect = Display.singleton().getWidth() / (Display.singleton().getHeight() * 1.0f);
         }
 
-        Matrix.frustumM(LAGLMatrix.singleton().getMatrix(LAGLMatrix.MatrixType.PROJECTION), 0, -aspect, aspect, -1, 1, nearPlane, farPlane); 
+        Matrix.perspectiveM(LAGLMatrix.singleton().getMatrix(LAGLMatrix.MatrixType.PROJECTION), 0, fieldOfView, aspect, nearPlane, farPlane);
         Matrix.setLookAtM(LAGLMatrix.singleton().getMatrix(LAGLMatrix.MatrixType.VIEW), 0, position.getX(), position.getY(), position.getZ(), direction.getX(), direction.getY(), direction.getZ(), 0, 1, 0);
+
+        
+        LAGLUtil.checkGlError("Camera render");
     }
 
     /**

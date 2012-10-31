@@ -22,7 +22,7 @@ public abstract class LAGLActivity extends Activity {
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
         
-        Log.i("AndroidGL", "Creating GLActivity");
+        Log.i("LAGL", "Creating GLActivity");
 
         SensorCore.create(this);
 
@@ -38,7 +38,7 @@ public abstract class LAGLActivity extends Activity {
         super.onPause();
         SensorCore.singleton().pause();
         glView.onPause();
-        Log.i("AndroidGL", "Paused");
+        Log.i("LAGL", "Paused");
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class LAGLActivity extends Activity {
         super.onResume();
         SensorCore.singleton().resume();
         glView.onResume();
-        Log.i("AndroidGL", "Resumed");
+        Log.i("LAGL", "Resumed");
     }
 
     protected abstract Scene getScene();

@@ -44,4 +44,8 @@ public class AxisAngle {
         return axis;
     }
 
+    @Override
+    public String toString() {
+        return "Angle: "+angle+" - Axis: "+axis;
+    }
 }

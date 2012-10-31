@@ -4,6 +4,8 @@
  */
 package dk.lystrup.lagl.wallpaper;
 
+import android.content.Context;
+import dk.lystrup.lagl.Display;
 import dk.lystrup.lagl.LAGLRenderer;
 import dk.lystrup.lagl.Scene;
 import dk.lystrup.lagl.wallpaper.GLWallpaperService;
@@ -32,6 +34,10 @@ public class WallpaperGLRenderer implements GLWallpaperService.Renderer {
 
     public void onDrawFrame(GL10 unused) {
         laglRenderer.drawFrame();
+    }
+
+    public void setContext(Context ctx) {
+        Display.singleton().setContext(ctx);
     }
     
 }

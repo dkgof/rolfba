@@ -34,6 +34,8 @@ public class SensorCore implements SensorEventListener {
         
         quaternionArray = new float[4];
         currentRotation = new Quaternion();
+        
+        resume();
     }
 
     /**

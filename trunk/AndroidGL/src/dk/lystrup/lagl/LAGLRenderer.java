@@ -35,6 +35,12 @@ public class LAGLRenderer {
     public void surfaceCreated() {
         // Set the background color to black ( rgba ).
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClearDepthf(1.0f);
+        
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);   // Enables depth-buffer for hidden surface removal
+        GLES20.glDepthFunc(GLES20.GL_LEQUAL);    // The type of depth testing to do
+        
+        LAGLUtil.checkGlError("Init");
         
         renderScene.init();
         
@@ -44,6 +50,7 @@ public class LAGLRenderer {
     public void surfaceChanged(int width, int height) {
         // Sets the current view port to the new size.
         GLES20.glViewport(0, 0, width, height);
+        LAGLUtil.checkGlError("glViewport");
 
         Display.singleton().setResolution(width, height);
     }
@@ -55,14 +62,15 @@ public class LAGLRenderer {
 
             //Clear the screen color and depth buffer
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
+            LAGLUtil.checkGlError("glClear");
+            
             // Reset the model matrix
             LAGLMatrix.singleton().resetToIdentity(LAGLMatrix.MatrixType.MODEL);
 
             //Debug framerate to logcat
-            if(count == 100) {
+            if(count > 100) {
                 float fps = 1.0f / delta;
-                Log.i("AndroidGL", "Framerate: "+fps);
+                Log.i("LAGL", "Framerate: "+fps);
                 count = 0;
             }
             count++;
@@ -77,5 +85,10 @@ public class LAGLRenderer {
     
     public void setPaused(boolean p) {
         paused = p;
+        
+        if(!paused) {
+            //We are being unpaused, reset timer
+            timer.reset();
+        }
     }
 }
