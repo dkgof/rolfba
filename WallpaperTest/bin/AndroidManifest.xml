@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="dk.lystrup.wallpapers">
+    
+    <uses-sdk android:minSdkVersion="10" />
+    <uses-feature android:name="android.software.live_wallpaper" />
+    
+    <application android:label="@string/app_name" >
+        <service
+            android:label="@string/app_name"
+            android:name=".WallpaperTest"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper" android:resource="@xml/wallpaper" />
+        </service>    
+    </application>
+</manifest> 
