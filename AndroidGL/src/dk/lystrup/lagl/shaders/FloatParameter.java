@@ -5,6 +5,7 @@
 package dk.lystrup.lagl.shaders;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 /**
  *

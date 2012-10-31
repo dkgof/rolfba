@@ -13,7 +13,7 @@ import dk.lystrup.lagl.shaders.IntParameter;
 public class DefaultShader extends GLSLShader {
 
     public DefaultShader() {
-        parameters.add(new IntParameter("vTextureCoord", 0));
+        parameters.add(new IntParameter("uTexture", 0));
     }
     
     @Override

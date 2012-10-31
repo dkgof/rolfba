@@ -171,4 +171,9 @@ public abstract class AbstractNode implements Node {
     public void setShader(Shader shader) {
         this.shader = shader;
     }
+    
+    @Override
+    public Shader getShader() {
+        return shader;
+    }
 }
