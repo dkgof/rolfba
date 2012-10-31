@@ -55,11 +55,20 @@ public class LAGLRenderer {
         Display.singleton().setResolution(width, height);
     }
 
+    private float frameTime;
+    
     public void drawFrame() {
         if(!paused) {
             //Get delta time in seconds since last frame
             delta = timer.getDelta();
 
+            //If we see more than 10sec / frame, guess we are during loading and reset
+            if(delta > 10) {
+                delta = 0;
+            }
+            
+            frameTime += delta;
+            
             //Clear the screen color and depth buffer
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
             LAGLUtil.checkGlError("glClear");
@@ -68,16 +77,17 @@ public class LAGLRenderer {
             LAGLMatrix.singleton().resetToIdentity(LAGLMatrix.MatrixType.MODEL);
 
             //Debug framerate to logcat
-            if(count > 100) {
-                float fps = 1.0f / delta;
+            if(frameTime > 1) {
+                float fps = count / frameTime;
                 Log.i("LAGL", "Framerate: "+fps);
                 count = 0;
+                frameTime = 0;
             }
             count++;
 
             //Update scenegraph
             renderScene.update(delta);
-            
+
             //Render scenegraph
             renderScene.render();
         }

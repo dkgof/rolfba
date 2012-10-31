@@ -115,4 +115,6 @@ public interface Node {
      * @param shader the shader to be used
      */
     public void setShader(Shader shader);
+    
+    public Shader getShader();
 }
