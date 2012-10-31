@@ -5,10 +5,10 @@
 
 package dk.lystrup.lagl;
 
-import dk.lystrup.lagl.sensors.SensorCore;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import dk.lystrup.lagl.sensors.SensorCore;
 
 /**
  *
