@@ -19,7 +19,7 @@ public class Display {
     private int height;
 
     private Context context;
-    
+
     public static Display singleton() {
         if(singleton == null) {
             singleton = new Display();
@@ -47,17 +47,11 @@ public class Display {
         return height;
     }
 
-    /**
-     * @return the context
-     */
+    public void setContext(Context ctx) {
+        this.context = ctx;
+    }
+    
     public Context getContext() {
         return context;
-    }
-
-    /**
-     * @param context the context to set
-     */
-    public void setContext(Context context) {
-        this.context = context;
     }
 }

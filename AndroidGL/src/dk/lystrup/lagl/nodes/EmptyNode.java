@@ -15,6 +15,10 @@ package dk.lystrup.lagl.nodes;
  */
 public class EmptyNode extends AbstractNode {
 
+    public EmptyNode() {
+        shader = null;
+    }
+    
     @Override
     public void render() {
         //EmptyNode does nothing on render

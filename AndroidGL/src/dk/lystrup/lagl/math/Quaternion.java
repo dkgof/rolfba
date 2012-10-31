@@ -137,4 +137,9 @@ public class Quaternion {
     public Vector3 getV() {
         return v;
     }
+    
+    @Override
+    public String toString() {
+        return this.toAxisAngle().toString();
+    }
 }

@@ -7,9 +7,12 @@ package dk.lystrup.lagl.nodes;
 
 import android.opengl.GLES20;
 import dk.lystrup.lagl.LAGLMatrix;
+import dk.lystrup.lagl.LAGLUtil;
 import dk.lystrup.lagl.actuators.Actuator;
 import dk.lystrup.lagl.math.Quaternion;
 import dk.lystrup.lagl.math.Vector3;
+import dk.lystrup.lagl.shaders.Shader;
+import dk.lystrup.lagl.shaders.glsl.DefaultShader;
 import dk.lystrup.lagl.textures.Texture;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +31,17 @@ public abstract class AbstractNode implements Node {
 
     protected final List<Node> children;
 
-    private final List<Texture> textures;
+    protected Shader shader;
 
+    private final List<Texture> textures;
+    
     public AbstractNode() {
         children = new ArrayList<Node>();
         position = new Vector3();
         scale = new Vector3(1,1,1);
         rotation = Quaternion.createFromAxisAngle(0, Vector3.UnitX);
         textures = new ArrayList<Texture>();
+        shader = new DefaultShader();
     }
 
     @Override
@@ -75,7 +81,13 @@ public abstract class AbstractNode implements Node {
             }
 
             activateTextures();
+            if(shader != null) {
+                shader.bind();
+            }
             this.render();
+            if(shader != null) {
+                shader.unbind();
+            }
             deactivateTextures();
         LAGLMatrix.singleton().popMatrix(LAGLMatrix.MatrixType.MODEL);
     }
@@ -104,11 +116,10 @@ public abstract class AbstractNode implements Node {
     }
 
     protected void activateTextures() {
-        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
-
         int i = 0;
         for(Texture tex : textures) {
             GLES20.glActiveTexture(TEXTURE_UNITS[i]);
+            LAGLUtil.checkGlError("glActiveTexture - "+TEXTURE_UNITS[i]);
 
             tex.bind();
 
@@ -117,16 +128,17 @@ public abstract class AbstractNode implements Node {
     }
 
     protected void deactivateTextures() {
-        GLES20.glDisable(GLES20.GL_TEXTURE_2D);
         int i = 0;
         for(Texture tex : textures) {
             GLES20.glActiveTexture(TEXTURE_UNITS[i]);
+            LAGLUtil.checkGlError("glActiveTexture - "+TEXTURE_UNITS[i]);
 
             tex.unbind();
 
             i++;
         }
         GLES20.glActiveTexture(TEXTURE_UNITS[0]);
+        LAGLUtil.checkGlError("glActiveTexture - "+TEXTURE_UNITS[0]);
     }
 
     @Override
@@ -153,5 +165,10 @@ public abstract class AbstractNode implements Node {
     @Override
     public void setScale(float x, float y, float z) {
         this.scale = new Vector3(x, y, z);
+    }
+    
+    @Override
+    public void setShader(Shader shader) {
+        this.shader = shader;
     }
 }

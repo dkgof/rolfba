@@ -153,4 +153,9 @@ public class Vector3 {
         float lengthScale = 1.0f / this.length();
         return this.scale(lengthScale);
     }
+    
+    @Override
+    public String toString() {
+        return x+", "+y+", "+z;
+    }
 }

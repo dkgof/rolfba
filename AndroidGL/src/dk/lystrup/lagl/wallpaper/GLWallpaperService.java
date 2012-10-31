@@ -16,6 +16,7 @@
 
 package dk.lystrup.lagl.wallpaper;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -184,7 +185,7 @@ public class GLWallpaperService extends WallpaperService {
 	}
 
 	public interface Renderer extends GLSurfaceView.Renderer {
-
+            public void setContext(Context ctx);
 	}
 }
 

@@ -6,6 +6,7 @@
 package dk.lystrup.lagl.nodes;
 
 import android.opengl.GLES20;
+import dk.lystrup.lagl.LAGLUtil;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -29,7 +30,7 @@ public class ModelNode extends AbstractNode {
     public ModelNode(ModelData data) {
         if(data.getVertices() != null) {
             //Create a byte buffer in native memory and wrap it into a float buffer
-            ByteBuffer vbb = ByteBuffer.allocateDirect(data.getVertices().length * 4);
+            ByteBuffer vbb = ByteBuffer.allocateDirect(data.getVertices().length * (Float.SIZE / 8));
             vbb.order(ByteOrder.nativeOrder());
             vertexBuffer = vbb.asFloatBuffer();
             vertexBuffer.put(data.getVertices());
@@ -40,7 +41,7 @@ public class ModelNode extends AbstractNode {
 
         if(data.getTexturecoords() != null) {
             //Create a byte buffer in native memory and wrap it into a float buffer
-            ByteBuffer tbb = ByteBuffer.allocateDirect(data.getTexturecoords().length * 4);
+            ByteBuffer tbb = ByteBuffer.allocateDirect(data.getTexturecoords().length * (Float.SIZE / 8));
             tbb.order(ByteOrder.nativeOrder());
             texturecoordsBuffer = tbb.asFloatBuffer();
             texturecoordsBuffer.put(data.getTexturecoords());
@@ -50,7 +51,7 @@ public class ModelNode extends AbstractNode {
         }
 
         //Create a byte buffer in native memory and wrap it into a short buffer
-        ByteBuffer ibb = ByteBuffer.allocateDirect(data.getIndices().length * 2);
+        ByteBuffer ibb = ByteBuffer.allocateDirect(data.getIndices().length * (Short.SIZE / 8));
         ibb.order(ByteOrder.nativeOrder());
         indexBuffer = ibb.asShortBuffer();
         indexBuffer.put(data.getIndices());
@@ -62,27 +63,31 @@ public class ModelNode extends AbstractNode {
 
     @Override
     public void render() {
-        /*
+        int vertexAttribPosition = shader.getVertexAttrib();
+        int textureCoordAttribPosition = shader.getTexCoordAttrib();
+        
         if(vertexBuffer != null) {
-            //Enable the needed vertex array
-            GLES20.glEnableClientState(GLES20.GL_VERTEX_ARRAY);
-            //Setup pointer to the used array
-            GLES20.glVertexPointer(3, GLES20.GL_FLOAT, 0, vertexBuffer);
+            GLES20.glVertexAttribPointer(vertexAttribPosition, 3, GLES20.GL_FLOAT, false, 3 * (Float.SIZE / 8), vertexBuffer);
+            LAGLUtil.checkGlError("glVertexAttribPointer - vertexBuffer");
+            GLES20.glEnableVertexAttribArray(vertexAttribPosition);
+            LAGLUtil.checkGlError("glEnableVertexAttribArray - vertexBuffer");
         }
         
         if(texturecoordsBuffer != null) {
-            //Enable the needed texture array
-            GLES20.glEnableClientState(GLES20.GL_TEXTURE_COORD_ARRAY);
-            //Setup pointer to the used array
-            GLES20.glTexCoordPointer(2, GLES20.GL_FLOAT, 0, texturecoordsBuffer);
+            GLES20.glVertexAttribPointer(textureCoordAttribPosition, 2, GLES20.GL_FLOAT, false, 2 * (Float.SIZE / 8), texturecoordsBuffer);
+            LAGLUtil.checkGlError("glVertexAttribPointer - texturecoordsBuffer");
+            GLES20.glEnableVertexAttribArray(textureCoordAttribPosition);
+            LAGLUtil.checkGlError("glEnableVertexAttribArray - texturecoordsBuffer");
         }
 
         //Draw the elements of the model
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indicesCount, GLES20.GL_UNSIGNED_SHORT, indexBuffer);
+        LAGLUtil.checkGlError("glDrawElements");
 
         //Disable vertex and texture array support
-        GLES20.glDisableClientState(GLES20.GL_VERTEX_ARRAY);
-        GLES20.glDisableClientState(GLES20.GL_TEXTURE_COORD_ARRAY);
-        */
+        GLES20.glDisableVertexAttribArray(vertexAttribPosition);
+        LAGLUtil.checkGlError("glDisableVertexAttribArray - vertexBuffer");
+        GLES20.glDisableVertexAttribArray(textureCoordAttribPosition);
+        LAGLUtil.checkGlError("glDisableVertexAttribArray - texturecoordsBuffer");
     }
 }
