@@ -5,6 +5,7 @@
 package dk.lystrup.lagl.wallpaper;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import dk.lystrup.lagl.Display;
 import dk.lystrup.lagl.LAGLRenderer;
@@ -65,5 +66,14 @@ public class WallpaperGLRenderer implements GLWallpaperService.Renderer {
     
     public void setFps(float fps) {
         this.fps = fps;
+    }
+
+    public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
+        Log.i("LAGL", "onCommand: "+action+" ("+x+","+y+","+z+") - "+extras);
+        return null;
+    }
+
+    public void onOffsetsChanged(float xOffset, float yOffset, float xOffsetStep, float yOffsetStep, int xPixelOffset, int yPixelOffset) {
+        Log.i("LAGL", "onOffsetChanged - Off: ("+xOffset+","+yOffset+") - OffStep: ("+xOffsetStep+","+yOffsetStep+") - PixOff: ("+xPixelOffset+","+yPixelOffset+")");
     }
 }
