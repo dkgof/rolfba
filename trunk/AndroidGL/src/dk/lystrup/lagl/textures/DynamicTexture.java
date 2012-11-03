@@ -20,8 +20,12 @@ public class DynamicTexture implements Texture {
     private boolean initialized;
     
     public DynamicTexture() {
-        initialized = false;
-        textureId = -1;
+        this(-1);
+    }
+
+    public DynamicTexture(int textureId) {
+        initialized = textureId != -1;
+        this.textureId = textureId;
     }
     
     public void bind() {
