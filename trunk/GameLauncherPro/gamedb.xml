@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<games>
+	<game name="Starcraft II" launchPath="D:\Spil\StarCraft II\StarCraft II.exe" coverPath="D:\Spil\GameCovers\starcraft-2-wings-of-liberty-cover.jpg" screenshotPath="null" />
+	<game name="World of Warcraft" launchPath="D:\Spil\World of Warcraft\World of Warcraft Launcher.exe" coverPath="D:\Spil\GameCovers\mop_cover_by_waylander.jpg" screenshotPath="null" />
+	<game name="" launchPath="" coverPath="" screenshotPath="" />
+</games>
