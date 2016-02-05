@@ -1,0 +1,1 @@
+All my weird projects gathered in 1 place.
